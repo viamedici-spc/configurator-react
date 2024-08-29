@@ -1,7 +1,7 @@
 {
   "name": "@viamedici-spc/configurator-react",
   "version": "0.0.0",
-  "description": "React TypeScript library to build configurator web applications based on the Viamedici Headless Configuration API (HCA).",
+  "description": "React library to build configurator web applications based on the Viamedici Headless Configuration Engine (HCE).",
   "sideEffects": false,
   "files": [
     "dist"
@@ -28,7 +28,7 @@
     "product",
     "configuration",
     "spc",
-    "hca",
+    "hce",
     "csp",
     "constraint",
     "satisfaction",
