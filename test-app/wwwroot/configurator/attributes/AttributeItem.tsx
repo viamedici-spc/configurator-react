@@ -34,7 +34,7 @@ export default function AttributeItem({attributeId}: { attributeId: GlobalAttrib
                 <AttributeTypeSelector attribute={attribute}/>
             </activeAttributeContext.Provider>
         </Root>
-    )
+    );
 }
 
 function AttributeTypeSelector(props: { attribute: Attribute }) {

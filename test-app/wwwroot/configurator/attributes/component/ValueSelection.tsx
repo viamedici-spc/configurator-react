@@ -1,6 +1,6 @@
 import {useActiveAttribute} from "../AttributeItem";
 import {useComponentAttribute} from "@viamedici-spc/configurator-react";
-import {AttributeInterpreter, ComponentDecisionState, DecisionKind, ExplainQuestionType} from "@viamedici-spc/configurator-ts";
+import {ComponentDecisionState, DecisionKind, ExplainQuestionType} from "@viamedici-spc/configurator-ts";
 import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
 import {attributeIdToString} from "../../../common/Naming";
 import CommonValueSelection, {Value} from "../CommonValueSelection";
@@ -26,7 +26,7 @@ export default function ValueSelection() {
         } else {
             const state = valueId === includedValueId ? ComponentDecisionState.Included : ComponentDecisionState.Excluded;
 
-            if (AttributeInterpreter.isComponentStatePossible(attribute, state)) {
+            if (attribute.possibleDecisionStates.includes(state)) {
                 console.info("Make decision for %s: %s", attributeIdToString(attribute.id), state.toString());
 
                 await handleDecisionResponse(() => makeDecision(state));
@@ -44,8 +44,8 @@ export default function ValueSelection() {
             ? excludedValueId
             : nothingValueId;
 
-    const isIncludedStatePossible = AttributeInterpreter.isComponentStatePossible(attribute, ComponentDecisionState.Included);
-    const isExcludedStatePossible = AttributeInterpreter.isComponentStatePossible(attribute, ComponentDecisionState.Excluded);
+    const isIncludedStatePossible = attribute.possibleDecisionStates.includes(ComponentDecisionState.Included);
+    const isExcludedStatePossible = attribute.possibleDecisionStates.includes(ComponentDecisionState.Excluded);
 
     const excludedValue: Value<string> = {
         id: excludedValueId,

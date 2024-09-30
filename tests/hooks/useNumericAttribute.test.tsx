@@ -3,7 +3,7 @@ import {useNumericAttribute} from "../../src";
 import {
     AttributeType,
     Configuration,
-    IConfigurationSession, ExplicitDecision, ExplicitNumericDecision
+    IConfigurationSession, ExplicitNumericDecision
 } from "@viamedici-spc/configurator-ts";
 import {booleanAttribute, numericAttribute, WrappingComponent} from "./Common";
 import {describe, it, expect, afterEach, vi} from "vitest";
@@ -16,15 +16,19 @@ afterEach(async () => {
 describe("useNumericAttribute tests", () => {
     it("Command partial application and unmodified attribute passing", async () => {
         const session = {
-            makeDecision: vi.fn() as (decision: ExplicitDecision) => Promise<void>
+            makeDecision: vi.fn() as IConfigurationSession["makeDecision"],
+            makeManyDecisions: vi.fn() as IConfigurationSession["makeManyDecisions"],
+            explain: vi.fn() as IConfigurationSession["explain"],
+            applySolution: vi.fn() as IConfigurationSession["applySolution"],
+            getDecisions: vi.fn() as IConfigurationSession["getDecisions"],
         } as IConfigurationSession;
 
-        const configuration = {
+        const configuration: Configuration = {
             isSatisfied: true,
-            attributes: [
-                numericAttribute
-            ]
-        } as Configuration;
+            attributes: new Map([
+                [numericAttribute.key, numericAttribute]
+            ])
+        };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}), {
             wrapper: WrappingComponent,
@@ -35,13 +39,13 @@ describe("useNumericAttribute tests", () => {
         });
 
         await act(async () => {
-            await result.current.makeDecision(1);
-            await result.current.makeDecision(2);
-            await result.current.makeDecision(null);
-            await result.current.makeDecision(undefined);
+            await result.current?.makeDecision(1);
+            await result.current?.makeDecision(2);
+            await result.current?.makeDecision(null);
+            await result.current?.makeDecision(undefined);
         });
 
-        expect(result.current.attribute).toBe(numericAttribute);
+        expect(result.current?.attribute).toBe(numericAttribute);
         expect(session.makeDecision).toHaveBeenCalledTimes(4);
         expect(session.makeDecision).toHaveBeenNthCalledWith(1, {
             type: AttributeType.Numeric,
@@ -68,10 +72,10 @@ describe("useNumericAttribute tests", () => {
     it("Attribute not found", async () => {
         const session = {} as IConfigurationSession;
 
-        const configuration = {
+        const configuration: Configuration = {
             isSatisfied: true,
-            attributes: []
-        } as Configuration;
+            attributes: new Map()
+        };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}), {
             wrapper: WrappingComponent,
@@ -87,12 +91,12 @@ describe("useNumericAttribute tests", () => {
     it("Attribute of wrong type", async () => {
         const session = {} as IConfigurationSession;
 
-        const configuration = {
+        const configuration: Configuration = {
             isSatisfied: true,
-            attributes: [
-                booleanAttribute
-            ]
-        } as Configuration;
+            attributes: new Map([
+                [booleanAttribute.key, booleanAttribute]
+            ])
+        };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}), {
             wrapper: WrappingComponent,

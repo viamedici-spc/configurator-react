@@ -1,47 +1,60 @@
 import {
-    PropsWithChildren
+    PropsWithChildren, useMemo, useRef
 } from "react";
 import {
-    AllowedInExplain,
-    AttributeRelations,
-    ConfigurationModelSource,
-    IConfiguratorClient, SessionContext
+    SessionContext
 } from "@viamedici-spc/configurator-ts";
-import {
-    ConfigurationContext,
-    ConfigurationInitializationContext,
-    ConfigurationSessionContext, ConfigurationUpdatingContext
-} from "./internal/contexts";
-import {useConfigurationManagement} from "./internal/configurationManagement";
+import {AtomsContext, StoreContext, useConfiguratorStore} from "./internal/contexts";
+import EffectLoader from "./internal/EffectLoader";
+import {createAtoms} from "./internal/jotai/Atoms";
+import {getDefaultStore, Provider} from "jotai";
+import {createStore} from "jotai";
+import SessionManagementInitializer from "./internal/SessionManagementInitializer";
 
 export type ConfigurationProps = {
     /**
-     * The client that is used to create a configuration session.
-     * When the instance changes, the old session is disposed and a new session is created. All decisions are discarded in this case.
+     * The SessionContext that should be used to create the session. Every time the SessionContext change, a new Session is created and all decisions are tried to restore.
+     * @remarks A change to the SessionContext is detected using referentially equality. Consider using {@link useMemo} or {@link useRef} to keep the SessionContext unchanged during rendering.
      */
-    configuratorClient: IConfiguratorClient,
-    configurationModelSource: ConfigurationModelSource,
-    attributeRelations?: AttributeRelations | null,
-    usageRuleParameters?: Record<string, string> | null
-    allowedInExplain?: AllowedInExplain | null
+    sessionContext: SessionContext;
+    /**
+     * An optional Jotai store where all Atoms will be stored in. Defaults to the result of {@link getDefaultStore()}.
+     */
+    jotaiStore?: ReturnType<typeof createStore>;
 };
 
 export default function Configuration(props: PropsWithChildren<ConfigurationProps>) {
-    const {configuratorClient, ...sessionContext} = props;
-    const {configurationInitialization, configurationUpdating, session, configuration} = useConfigurationManagement({
-        configuratorClient: configuratorClient,
-        sessionContext: sessionContext
-    })
+    const atoms = useMemo(() => createAtoms(), []);
+
+    return <>
+        <AtomsContext.Provider value={atoms}>
+            <ConfiguratorStoreProvider jotaiStore={props.jotaiStore}>
+                <JotaiStoreProvider>
+                    <SessionManagementInitializer sessionContext={props.sessionContext}/>
+                    <EffectLoader/>
+                    {props.children}
+                </JotaiStoreProvider>
+            </ConfiguratorStoreProvider>
+        </AtomsContext.Provider>
+    </>
+}
+
+function ConfiguratorStoreProvider(props: PropsWithChildren<{ jotaiStore: ReturnType<typeof createStore> | undefined }>) {
+    return props.jotaiStore
+        ? <StoreContext.Provider value={props.jotaiStore}>
+            {props.children}
+        </StoreContext.Provider>
+        : (<>
+            {props.children}
+        </>);
+}
+
+function JotaiStoreProvider(props: PropsWithChildren<{}>) {
+    const store = useConfiguratorStore();
 
     return (
-        <ConfigurationInitializationContext.Provider value={configurationInitialization}>
-            <ConfigurationUpdatingContext.Provider value={configurationUpdating}>
-                <ConfigurationSessionContext.Provider value={session}>
-                    <ConfigurationContext.Provider value={configuration}>
-                        {props.children}
-                    </ConfigurationContext.Provider>
-                </ConfigurationSessionContext.Provider>
-            </ConfigurationUpdatingContext.Provider>
-        </ConfigurationInitializationContext.Provider>
+        <Provider store={store}>
+            {props.children}
+        </Provider>
     );
 }

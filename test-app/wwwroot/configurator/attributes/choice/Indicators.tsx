@@ -6,7 +6,7 @@ import {useAttributes, useChoiceAttribute} from "@viamedici-spc/configurator-rea
 
 export function MandatoryIndicator() {
     const activeAttribute = useActiveAttribute();
-    const [attribute] = useAttributes([activeAttribute]);
+    const [attribute] = useAttributes([activeAttribute], false);
     const color = AttributeInterpreter.isMandatory(attribute) ? "var(--color-mandatory)" : "var(--color-optional)";
 
     return (
@@ -18,19 +18,19 @@ export function MandatoryIndicator() {
 
 export function SelectionModeIndicator() {
     const activeAttribute = useActiveAttribute();
-    const [attribute] = useAttributes([activeAttribute]);
+    const {isMultiSelect} = useChoiceAttribute(activeAttribute);
 
     return (
         <span style={{color: "var(--color-selection-mode)"}}>
-            {AttributeInterpreter.isMultiSelect(attribute) ? "multi-select" : "single-select"}
+            {isMultiSelect() ? "multi-select" : "single-select"}
         </span>
     )
 }
 
 export function AvailableValuesIndicator() {
     const activeAttribute = useActiveAttribute();
-    const {attribute} = useChoiceAttribute(activeAttribute);
-    const allowed = AttributeInterpreter.getAllowedChoiceValues(attribute);
+    const {getAllowedChoiceValues} = useChoiceAttribute(activeAttribute);
+    const allowed = getAllowedChoiceValues();
 
     return (
         <span style={{color: "var(--color-allowed-values)"}}>

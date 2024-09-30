@@ -33,7 +33,8 @@ For a complete list of features, please refer to the base library [configurator-
 
 ## Demo App
 
-The [Demo App](https://github.com/viamedici-spc/configurator-react-demo) is a comprehensive showcase of the features provided by this library and the HCE. It demonstrates how to effectively integrate and utilize this library within a React-based Single Page Application (SPA).
+The [Demo App](https://github.com/viamedici-spc/configurator-react-demo) is a comprehensive showcase of the features provided by this library and the HCE. It demonstrates how to effectively integrate
+and utilize this library within a React-based Single Page Application (SPA).
 
 ## Getting Started
 
@@ -46,69 +47,61 @@ npm install @viamedici-spc/configurator-react
 yarn add @viamedici-spc/configurator-react
    ```
 
-### 2. Create a Client
+### 2. Define the Session Context
 
-Set up the connection parameters for the HCE by creating a client.
+Create a `SessionContext` to set up the connection parameters for the HCE and defining the _Configuration Model_ you want to use.
+
+**Note:** If defined inside a component, make sure to memorize the session context object, e.g. with `useMemo` or `useRef`.
 
 ```typescript
-import {createClient} from "@viamedici-spc/configurator-ts";
-
-const client = createClient({
-    sessionHandler: {
+const sessionContext: SessionContext = {
+    sessionInitialisationOptions: {
         accessToken: "<your access token>",
     },
-    hcaEngineBaseUrl: "https://spc.cloud.ceventis.de/hca/api/engine",
-});
+    configurationModelSource: {
+        type: ConfigurationModelSourceType.Channel,
+        deploymentName: "Car-Root",
+        channel: "release"
+    }
+}
 ```
 
-### 3. Define a Configuration Model
-
-Define the Configuration Model you want to use.
-
-```typescript
-const configurationModelSource = {
-    type: ConfigurationModelSourceType.Channel,
-    deploymentName: "Car-Root",
-    channel: "release",
-} satisfies ConfigurationModelFromChannel;
-```
-
-### 4. Setup Configuration Component
+### 3. Setup Configuration Component
 
 Wrap the configuration area with the `Configuration` component as its root component.
-
 This component manages the configuration state and provides a configuration context for all child components.
 
 Use React’s Suspense feature to render configuration-related components only when the configuration is ready.
 
+
+**Note:** Make sure your suspense barrier is located inside the `Configuration` component when using _suspended hooks_. Otherwise,
+the `Configuration` component will freeze forever.
+
 ```tsx
-<Configuration configuratorClient={configuratorClient}
-               configurationModelSource={configurationModelSource}>
+<Configuration sessionContext={sessionContext}>
     <Suspense fallback={<span>Configuration loading …</span>}>
-        <ConfigurationSuspender>
-            <PaintingColorAttribute/>
-        </ConfigurationSuspender>
+        <PaintingColorAttribute/>
     </Suspense>
 </Configuration>
 ```
 
-### 5. Create an Attribute Component
+### 4. Create an Attribute Component
 
 Now, create a component for the `PaintingColor` attribute of the _Configuration Model_.
 
 This component displays the currently selected value of the attribute.
 
-The button triggers a decision to select (include) the value Green.
+The button triggers a decision to select (_include_) the value `Green`.
 
 ```tsx
 function PaintingColorAttribute() {
-    const {attribute, makeDecision} = useChoiceAttribute({localId: "Painting Color"});
-    const selectedValue = AttributeInterpreter.getSelectedChoiceValues(attribute)[0] ?? "<nothing>"
+    const {makeDecision, getIncludedChoiceValues} = useChoiceAttribute({localId: "Painting Color"});
+    const includedValue = getIncludedChoiceValues()[0] ?? "<nothing>"
 
     return (
         <div>
             <div>
-                Selected value: {selectedValue}
+                Selected value: {includedValue}
             </div>
             <button onClick={() => makeDecision("Green", ChoiceValueDecisionState.Included)}>
                 Select Green

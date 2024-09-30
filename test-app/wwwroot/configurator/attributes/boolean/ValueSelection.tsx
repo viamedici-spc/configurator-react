@@ -1,6 +1,6 @@
 import {useActiveAttribute} from "../AttributeItem";
 import {useBooleanAttribute} from "@viamedici-spc/configurator-react";
-import {AttributeInterpreter, DecisionKind, ExplainQuestionType} from "@viamedici-spc/configurator-ts";
+import {DecisionKind, ExplainQuestionType} from "@viamedici-spc/configurator-ts";
 import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
 import {attributeIdToString} from "../../../common/Naming";
 import CommonValueSelection, {Value} from "../CommonValueSelection";
@@ -15,7 +15,7 @@ const falseValueId = "false";
 
 export default function ValueSelection() {
     const activeAttribute = useActiveAttribute();
-    const {attribute, makeDecision, explain,applySolution} = useBooleanAttribute(activeAttribute);
+    const {attribute, makeDecision, explain, applySolution} = useBooleanAttribute(activeAttribute);
 
     const onChange = async (valueId: string) => {
         if (valueId === nothingValueId) {
@@ -26,14 +26,14 @@ export default function ValueSelection() {
         } else {
             const value = valueId === trueValueId;
 
-            if (AttributeInterpreter.isBooleanValuePossible(attribute, value)) {
+            if (attribute.possibleDecisionStates.includes(value)) {
                 console.info("Make decision for %s: %s", attributeIdToString(attribute.id), value.toString());
 
                 await handleDecisionResponse(() => makeDecision(value));
             } else {
                 console.info("Explain blocked value for %s: %s", attributeIdToString(attribute.id), value.toString());
 
-                handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"),applySolution);
+                handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
             }
         }
     };
@@ -44,8 +44,8 @@ export default function ValueSelection() {
             ? falseValueId
             : nothingValueId;
 
-    const isTrueValuePossible = AttributeInterpreter.isBooleanValuePossible(attribute, true);
-    const isFalseValuePossible = AttributeInterpreter.isBooleanValuePossible(attribute, false);
+    const isTrueValuePossible = attribute.possibleDecisionStates.includes(true);
+    const isFalseValuePossible = attribute.possibleDecisionStates.includes(false);
     const falseValue: Value<string> = {
         id: falseValueId,
         name: "no",

@@ -25,6 +25,7 @@ export default function Attributes() {
             <AttributeItem attributeId={{localId: "HeavyDuty"}}/>
             <AttributeItem attributeId={{localId: "HorsePower"}}/>
             <AttributeItem attributeId={{localId: "Accessories"}}/>
+            <AttributeItem attributeId={{localId: "SpareWheel"}}/>
         </Root>
     )
 }
