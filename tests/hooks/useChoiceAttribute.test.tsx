@@ -4,8 +4,7 @@ import {
     AttributeType,
     ChoiceValueDecisionState,
     Configuration,
-    ExplicitChoiceDecision, ExplicitDecision,
-    IConfigurationSession
+    ExplicitChoiceDecision, IConfigurationSession
 } from "@viamedici-spc/configurator-ts";
 import {booleanAttribute, choiceAttribute, WrappingComponent} from "./Common";
 import {afterEach, describe, expect, it, vi} from "vitest";
@@ -18,17 +17,18 @@ afterEach(async () => {
 describe("useChoiceAttribute tests", () => {
     it("Command partial application and unmodified attribute passing", async () => {
         const session = {
-            makeDecision: vi.fn() as (decision: ExplicitDecision) => Promise<void>,
-            // explain: vi.fn() as ((explain: ExplainChoice) => Promise<ChoiceExplanationResult>)
-            //     | ((explain: ExplainChoiceValue) => Promise<ReadonlyArray<ChoiceValueExplanationResult>>)
+            makeDecision: vi.fn() as IConfigurationSession["makeDecision"],
+            setMany: vi.fn() as IConfigurationSession["setMany"],
+            explain: vi.fn() as IConfigurationSession["explain"],
+            applySolution: vi.fn() as IConfigurationSession["applySolution"]
         } as IConfigurationSession;
 
-        const configuration = {
+        const configuration: Configuration = {
             isSatisfied: true,
-            attributes: [
-                choiceAttribute
-            ]
-        } as Configuration;
+            attributes: new Map([
+                [choiceAttribute.key, choiceAttribute]
+            ])
+        };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}), {
             wrapper: WrappingComponent,
@@ -39,9 +39,9 @@ describe("useChoiceAttribute tests", () => {
         });
 
         await act(async () => {
-            await result.current.makeDecision("V1", ChoiceValueDecisionState.Included);
-            await result.current.makeDecision("V1", ChoiceValueDecisionState.Excluded);
-            await result.current.makeDecision("V1", null);
+            await result.current?.makeDecision("V1", ChoiceValueDecisionState.Included);
+            await result.current?.makeDecision("V1", ChoiceValueDecisionState.Excluded);
+            await result.current?.makeDecision("V1", null);
 
             // await result.current.explainConsequence("V1", ExplainMode.WhyMustBeIncluded);
             // await result.current.explainConsequence("V1", ExplainMode.WhyCanNotBeIncluded);
@@ -50,7 +50,7 @@ describe("useChoiceAttribute tests", () => {
             // await result.current.explainConsequences(ExplainMode.WhyCanNotBeIncluded);
         });
 
-        expect(result.current.attribute).toBe(choiceAttribute);
+        expect(result.current?.attribute).toBe(choiceAttribute);
         expect(session.makeDecision).toHaveBeenCalledTimes(3);
         expect(session.makeDecision).toHaveBeenNthCalledWith(1, {
             type: AttributeType.Choice,
@@ -100,10 +100,10 @@ describe("useChoiceAttribute tests", () => {
     it("Attribute not found", async () => {
         const session = {} as IConfigurationSession;
 
-        const configuration = {
+        const configuration: Configuration = {
             isSatisfied: true,
-            attributes: []
-        } as Configuration;
+            attributes: new Map()
+        };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}), {
             wrapper: WrappingComponent,
@@ -119,12 +119,12 @@ describe("useChoiceAttribute tests", () => {
     it("Attribute of wrong type", async () => {
         const session = {} as IConfigurationSession;
 
-        const configuration = {
+        const configuration: Configuration = {
             isSatisfied: true,
-            attributes: [
-                booleanAttribute
-            ]
-        } as Configuration;
+            attributes: new Map([
+                [booleanAttribute.key, booleanAttribute]
+            ])
+        };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}), {
             wrapper: WrappingComponent,

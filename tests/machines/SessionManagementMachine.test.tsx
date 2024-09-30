@@ -1,190 +1,83 @@
 import {cleanup} from "@testing-library/react-hooks";
-import * as Contract from "@viamedici-spc/configurator-ts";
-import {
-    FailureResult,
-    FailureType,
-    IConfiguratorClient,
-    IConfigurationSession,
-    SessionContext
-} from "@viamedici-spc/configurator-ts";
+import {ConfigurationModelNotFound, ConfiguratorError, ConfiguratorErrorType, IConfigurationSession, ISessionFactory, SessionContext, SessionFactory} from "@viamedici-spc/configurator-ts";
 import {emptyModel, modelWithOneAttribute} from "../hooks/Common";
-import {
-    ActorRefFrom,
-    assign,
-    createMachine,
-    interpret,
-    InterpreterStatus,
-    spawn
-} from "xstate";
-import {sessionManagementMachine, SessionManagementStateChangedEvent} from "../../src/internal/sessionManagement";
+import {Actor, createActor} from "xstate";
 import {waitFor} from "@testing-library/react";
-import {describe, it, expect, afterEach, beforeEach, vi, Mocked} from "vitest";
+import {afterEach, beforeEach, describe, expect, it, Mocked, vi} from "vitest";
+import {sessionManagementMachine} from "../../src/internal/sessionManagementMachine";
 
-const testMachine = createMachine({
-    predictableActionArguments: true,
-    schema: {
-        context: {} as {
-            child: ActorRefFrom<typeof sessionManagementMachine>,
-            lastChildMessage: SessionManagementStateChangedEvent
-        },
-        events: {} as SessionManagementStateChangedEvent
-    },
-    context: {
-        child: null,
-        lastChildMessage: null
-    },
-    entry: [
-        assign({
-            child: () => spawn(sessionManagementMachine())
-        })
-    ],
-    on: {
-        SessionManagementStateChanged: {
-            actions: [
-                assign({
-                    lastChildMessage: (_, event) => event
-                })
-            ]
-        }
-    },
-    initial: "Idle",
-    states: {
-        Idle: {}
-    }
+vi.mock("@viamedici-spc/configurator-ts", async (importOriginal) => {
+    return {
+        ...(await importOriginal()),
+        SessionFactory: {
+            createSession: vi.fn()
+        } satisfies ISessionFactory
+    };
 });
 
-let sut = interpret(testMachine);
+const createSessionMock = vi.mocked(SessionFactory.createSession);
 
-const sendToChild: ActorRefFrom<typeof sessionManagementMachine>["send"] = (event) => sut.getSnapshot().context.child.send(event);
-const getLastMessage = () => sut.getSnapshot().context.lastChildMessage;
+globalThis.fetch = () => {
+    console.log("Fetch got called");
+    throw new Error("");
+}
 
-beforeEach(() => {
-    sut = interpret(testMachine);
-});
+describe("SessionManagementMachine tests", () => {
+    let sut: Actor<typeof sessionManagementMachine>;
 
-afterEach(async () => {
-    vi.clearAllMocks();
-    await cleanup();
-
-    if (sut.status === InterpreterStatus.Running)
-        sut.stop();
-});
-
-describe("sessionManagementMachine tests", () => {
-    it("Session is created only once", async () => {
-        const sessionMock = vi.fn().mockImplementation(async (sessionContext) => {
-            return {
-                getSessionContext: () => sessionContext,
-                getConfiguration: () => ({isSatisfied: true, attributes: []} as Contract.Configuration),
-                setOnConfigurationChangedHandler: (_) => {
-                },
-                close: () => Promise.resolve()
-            } as IConfigurationSession;
-        });
-
-        const configuratorClient: IConfiguratorClient = {
-            createSession: sessionMock
-        };
-
-        sut.start();
-        sendToChild({type: "ChangeConfigurationClient", client: configuratorClient});
-        sendToChild({type: "ChangeSessionContext", sessionContext: {configurationModelSource: emptyModel}});
-
-        await waitFor(() => expect(sessionMock).toBeCalledTimes(1));
+    beforeEach(() => {
+        sut = createActor(sessionManagementMachine);
     });
 
-    it("Session is closed on umount", async () => {
-        const closeMock = vi.fn().mockImplementation(() => Promise.resolve());
+    afterEach(async () => {
+        vi.clearAllMocks();
+        vi.resetAllMocks();
+        await cleanup();
 
-        const configuratorClient: IConfiguratorClient = {
-            createSession: (sessionContext) => {
-                return Promise.resolve({
-                    getSessionContext: () => sessionContext,
-                    getConfiguration: () => ({isSatisfied: true, attributes: []} as Contract.Configuration),
-                    setOnConfigurationChangedHandler: (_) => {
-                    },
-                    close: () => closeMock()
-                } as IConfigurationSession);
-            }
-        };
+        if (sut.getSnapshot().status === "active")
+            sut.stop();
+    });
+
+    it("Session is closed on Shutdown", async () => {
+        const closeMock = vi.fn().mockImplementation(() => Promise.resolve());
+        createSessionMock.mockImplementation((sessionContext) => Promise.resolve({
+            getSessionContext: () => sessionContext,
+            close: () => closeMock()
+        } as IConfigurationSession));
 
         sut.start();
-        sendToChild({type: "ChangeConfigurationClient", client: configuratorClient});
-        sendToChild({type: "ChangeSessionContext", sessionContext: {configurationModelSource: emptyModel}});
+        sut.send({type: "SessionContextChanged", sessionContext: {sessionInitialisationOptions: {accessToken: ""}, configurationModelSource: emptyModel}});
+        await waitFor(() => expect(createSessionMock).toBeCalledTimes(1));
 
-        await waitFor(() => expect(getLastMessage().sessionInitialization.isInitializing).toBe(false));
-        sut.stop();
-
+        sut.send({type: "Shutdown"});
         await waitFor(() => expect(closeMock).toBeCalledTimes(1));
     });
 
-    it("Session gets disposed and recreated on Client change", async () => {
-        const closeMock = vi.fn().mockImplementation(() => Promise.resolve());
-
-        const sessionMock = vi.fn().mockImplementation(async (sessionContext) => {
-            return {
-                getSessionContext: () => sessionContext,
-                getConfiguration: () => ({isSatisfied: true, attributes: []} as Contract.Configuration),
-                setOnConfigurationChangedHandler: (_) => {
-                },
-                close: () => closeMock()
-            } as IConfigurationSession;
-        });
-
-        const configuratorClient1: IConfiguratorClient = {
-            createSession: sessionMock
-        };
-
-        const configuratorClient2: IConfiguratorClient = {
-            createSession: sessionMock
-        };
-
-        sut.start();
-        sendToChild({type: "ChangeConfigurationClient", client: configuratorClient1});
-        sendToChild({type: "ChangeSessionContext", sessionContext: {configurationModelSource: emptyModel}});
-
-        await waitFor(() => expect(sessionMock).toBeCalledTimes(1), {timeout: 5000});
-
-        sendToChild({type: "ChangeConfigurationClient", client: configuratorClient2});
-
-        await waitFor(() => expect(closeMock).toBeCalledTimes(1), {timeout: 5000});
-        await waitFor(() => expect(sessionMock).toBeCalledTimes(2), {timeout: 5000});
-    });
-
     it("Session gets updated on Context change", async () => {
-        const createSessionMock = vi.fn().mockImplementation((sessionContext) => {
+        createSessionMock.mockImplementation((sessionContext) => {
             let currentContext = sessionContext;
-            return {
+            return Promise.resolve({
                 getSessionContext: () => currentContext,
-                getConfiguration: () => ({isSatisfied: true, attributes: []} as Contract.Configuration),
-                setOnConfigurationChangedHandler: (_) => {
-                },
                 close: vi.fn(() => Promise.resolve()) as () => Promise<void>,
-                setSessionContext: vi.fn((c) => new Promise((resolve) => {
+                setSessionContext: vi.fn((c) => new Promise<void>((resolve) => {
                     currentContext = c;
                     resolve();
                 })) as (sessionContext: SessionContext) => Promise<void>
-            } as IConfigurationSession;
+            } as IConfigurationSession);
         });
 
-        const configuratorClient: IConfiguratorClient = {
-            createSession: (context) => Promise.resolve(createSessionMock(context))
-        };
-
         sut.start();
-        sendToChild({type: "ChangeConfigurationClient", client: configuratorClient});
-        sendToChild({type: "ChangeSessionContext", sessionContext: {configurationModelSource: emptyModel}});
+        sut.send({type: "SessionContextChanged", sessionContext: {sessionInitialisationOptions: {accessToken: ""}, configurationModelSource: emptyModel}});
+        sut.send({type: "SessionContextChanged", sessionContext: {sessionInitialisationOptions: {accessToken: ""}, configurationModelSource: modelWithOneAttribute}});
 
-        sendToChild({type: "ChangeSessionContext", sessionContext: {configurationModelSource: modelWithOneAttribute}});
-
-        expect(createSessionMock).toBeCalledTimes(1);
+        await waitFor(() => expect(createSessionMock).toBeCalledTimes(1));
         const initialSessionContext = createSessionMock.mock.calls[0][0] as SessionContext;
         expect(initialSessionContext.configurationModelSource).toBe(emptyModel);
         expect(initialSessionContext.attributeRelations).toBeUndefined();
         expect(initialSessionContext.usageRuleParameters).toBeUndefined();
 
-        const session = createSessionMock.mock.results[0].value as Mocked<IConfigurationSession>;
-        await waitFor(() => expect(session.setSessionContext).toBeCalledTimes(1), {timeout: 5000});
+        const session = (await createSessionMock.mock.results[0].value) as Mocked<IConfigurationSession>;
+        await waitFor(() => expect(session.setSessionContext).toBeCalledTimes(1));
         const updatedSessionContext = session.setSessionContext.mock.calls[0][0] as SessionContext;
         expect(updatedSessionContext.configurationModelSource).toBe(modelWithOneAttribute);
         expect(updatedSessionContext.attributeRelations).toBeUndefined();
@@ -203,42 +96,39 @@ describe("sessionManagementMachine tests", () => {
                     currentContext = c;
                 },
                 close: () => Promise.resolve(null)
-            } as IConfigurationSession;
+            } as any as IConfigurationSession;
         };
 
-        const configuratorClient: IConfiguratorClient = {
-            createSession: vi.fn() as (sessionContext: SessionContext) => Promise<IConfigurationSession>
-        };
-
-        vi.mocked(configuratorClient.createSession)
+        createSessionMock
             .mockImplementationOnce(() => Promise.reject({
-                type: FailureType.ConfigurationModelNotFound
-            } as FailureResult))
+                type: ConfiguratorErrorType.ConfigurationModelNotFound,
+                title: "",
+                detail: ""
+            } satisfies ConfigurationModelNotFound))
             .mockImplementationOnce(c => Promise.resolve(getSession(c)));
 
         sut.start();
-        sendToChild({type: "ChangeConfigurationClient", client: configuratorClient});
-        sendToChild({type: "ChangeSessionContext", sessionContext: {configurationModelSource: emptyModel}});
+        sut.send({type: "SessionContextChanged", sessionContext: {sessionInitialisationOptions: {accessToken: ""}, configurationModelSource: emptyModel}});
 
-        await waitFor(() => expect(getLastMessage().sessionInitialization.isInitializing).toBeFalsy());
-        await waitFor(() => expect(getLastMessage().sessionInitialization.failureResult).toBeTruthy());
-        expect(getLastMessage().sessionInitialization.failureResult.type).toBe(FailureType.ConfigurationModelNotFound);
-        expect(configuratorClient.createSession).toHaveBeenCalledTimes(1);
+        // Expect that there is an error
+        await waitFor(() => expect(sut.getSnapshot().context.sessionCreateOrUpdateError?.configurationError).toBeTruthy());
+        expect(sut.getSnapshot().context.sessionCreateOrUpdateError?.configurationError.type).toBe(ConfiguratorErrorType.ConfigurationModelNotFound);
+        expect(createSessionMock).toHaveBeenCalledTimes(1);
 
-        sendToChild({type: "RetrySessionCreation"});
+        sut.send({type: "Retry"});
 
-        await waitFor(() => expect(getLastMessage().sessionInitialization.isInitializing).toBeFalsy());
-        await waitFor(() => expect(getLastMessage().sessionInitialization.failureResult).toBeFalsy());
-        expect(configuratorClient.createSession).toHaveBeenCalledTimes(2);
-        expect(getLastMessage().session).toBeTruthy();
+        // The error must be gone after the retry.
+        await waitFor(() => expect(sut.getSnapshot().context.sessionCreateOrUpdateError).toBeFalsy());
+        expect(createSessionMock).toHaveBeenCalledTimes(2);
+        expect(sut.getSnapshot().context.configurationSession).toBeTruthy();
     });
 
     it("Session updating error - Retry", async () => {
         let currentContext: SessionContext;
         const setSessionContextMock = vi.fn()
             .mockImplementationOnce(() => Promise.reject({
-                type: FailureType.ConfigurationModelNotFound
-            } as FailureResult))
+                type: ConfiguratorErrorType.ConfigurationModelNotFound
+            } as ConfiguratorError))
             .mockImplementationOnce(c => {
                 currentContext = c;
                 return Promise.resolve();
@@ -250,31 +140,28 @@ describe("sessionManagementMachine tests", () => {
                 getSessionContext: () => currentContext,
                 setSessionContext: setSessionContextMock as IConfigurationSession["setSessionContext"],
                 close: () => Promise.resolve(null)
-            } as IConfigurationSession;
+            } as any as IConfigurationSession;
         };
 
-        const configuratorClient: IConfiguratorClient = {
-            createSession: vi.fn()
-                .mockImplementation(c => Promise.resolve(getSession(c))) as IConfiguratorClient["createSession"]
-        };
+        createSessionMock.mockImplementation(c => Promise.resolve(getSession(c)));
 
         sut.start();
-        sendToChild({type: "ChangeConfigurationClient", client: configuratorClient});
-        sendToChild({type: "ChangeSessionContext", sessionContext: {configurationModelSource: emptyModel}});
+        // Create a session by setting the session context
+        sut.send({type: "SessionContextChanged", sessionContext: {sessionInitialisationOptions: {accessToken: ""}, configurationModelSource: emptyModel}});
+        await waitFor(() => expect(sut.getSnapshot().context.sessionCreateOrUpdateError).toBeFalsy());
 
-        sendToChild({type: "ChangeSessionContext", sessionContext: {configurationModelSource: modelWithOneAttribute}});
+        // Updating the session context should fail
+        sut.send({type: "SessionContextChanged", sessionContext: {sessionInitialisationOptions: {accessToken: ""}, configurationModelSource: modelWithOneAttribute}});
+        await waitFor(() => expect(sut.getSnapshot().context.sessionCreateOrUpdateError?.configurationError).toBeTruthy());
+        expect(sut.getSnapshot().context.sessionCreateOrUpdateError?.configurationError.type).toBe(ConfiguratorErrorType.ConfigurationModelNotFound);
 
-        await waitFor(() => expect(getLastMessage().sessionUpdating.isUpdating).toBeFalsy());
-        await waitFor(() => expect(getLastMessage().sessionUpdating.failureResult).toBeTruthy());
-        expect(getLastMessage().sessionUpdating.failureResult.type).toBe(FailureType.ConfigurationModelNotFound);
+        sut.send({type: "Retry"});
 
-        sendToChild({type: "RetrySessionUpdate"});
-
-        await waitFor(() => expect(getLastMessage().sessionUpdating.isUpdating).toBeFalsy());
-        await waitFor(() => expect(getLastMessage().sessionUpdating.failureResult).toBeFalsy());
+        // The error must be gone after the retry.
+        await waitFor(() => expect(sut.getSnapshot().context.sessionCreateOrUpdateError).toBeFalsy());
         expect(setSessionContextMock).toHaveBeenCalledTimes(2);
-        expect(getLastMessage().session).toBeTruthy();
+        expect(sut.getSnapshot().context.configurationSession).toBeTruthy();
 
-        expect(configuratorClient.createSession).toHaveBeenCalledTimes(1);
+        expect(createSessionMock).toHaveBeenCalledTimes(1);
     });
 });

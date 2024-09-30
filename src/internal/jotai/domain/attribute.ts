@@ -1,0 +1,225 @@
+import {
+    Attribute,
+    AttributeInterpreter,
+    AttributeRefinements,
+    AttributeType,
+    BooleanAttribute,
+    ChoiceAttribute,
+    ChoiceValue,
+    ChoiceValueDecisionState,
+    ChoiceValueId,
+    ChoiceValueInterpreter,
+    ComponentAttribute,
+    ComponentDecisionState,
+    ConstraintsExplainAnswer,
+    DecisionsExplainAnswer,
+    ExplainQuestion,
+    ExplainQuestionSubject,
+    ExplainQuestionType,
+    ExplainSolution, ExplicitBooleanDecision,
+    ExplicitChoiceDecision, ExplicitComponentDecision,
+    ExplicitNumericDecision,
+    FullExplainAnswer,
+    GlobalAttributeIdKey,
+    NumericAttribute,
+    SetManyResult,
+    WhyIsAttributeNotSatisfied,
+    WhyIsBooleanStateNotPossible,
+    WhyIsChoiceValueStateNotPossible,
+    WhyIsComponentStateNotPossible,
+    WhyIsNumericStateNotPossible,
+    WhyIsStateNotPossible
+} from "@viamedici-spc/configurator-ts";
+import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import {atomFamily} from "jotai/utils";
+import {getDefaultStore, Getter} from "jotai";
+import {Selectors} from "../Selectors";
+import {constVoid, O, pipe, RA, T} from "@viamedici-spc/fp-ts-extensions";
+import {Refinement} from "fp-ts/Refinement";
+import {getChoiceAttributeResetDecisions} from "../../attributeHelper";
+import {match} from "ts-pattern";
+import {ConfigurationUninitialized, GuardedAtom} from "../../../types";
+import atomWithGuard, {GuardedGetter} from "../helper/atomWithGuard";
+
+export type SimplifiedExplainQuestion<T extends ExplainQuestion> = Omit<T, "attributeId" | "subject">;
+
+export type ExplainQuestionParam<T extends WhyIsStateNotPossible> = SimplifiedExplainQuestion<WhyIsAttributeNotSatisfied> | SimplifiedExplainQuestion<T>;
+
+export type UseAttributeExplainResult<T extends WhyIsStateNotPossible> = {
+    explain: {
+        (question: ExplainQuestionParam<T>, answerType: "decisions"): Promise<DecisionsExplainAnswer>;
+        (question: ExplainQuestionParam<T>, answerType: "constraints"): Promise<ConstraintsExplainAnswer>;
+        (question: ExplainQuestionParam<T>, answerType: "full"): Promise<FullExplainAnswer>;
+    },
+    applySolution(solution: ExplainSolution): Promise<SetManyResult>,
+};
+
+export type UseChoiceAttributeResult = UseAttributeExplainResult<WhyIsChoiceValueStateNotPossible> & {
+    attribute: ChoiceAttribute;
+    makeDecision: (choiceValueId: ChoiceValueId, state: ChoiceValueDecisionState | null | undefined) => Promise<void>;
+    clearDecisions: () => Promise<void>;
+    isMultiSelect: () => boolean;
+    isMandatory: () => boolean;
+    getAllowedChoiceValues: () => ReadonlyArray<ChoiceValue>;
+    getBlockedChoiceValues: () => ReadonlyArray<ChoiceValue>;
+    getIncludedChoiceValues: () => ReadonlyArray<ChoiceValue>;
+    isChoiceValueAllowed: (choiceValue: ChoiceValue) => boolean;
+    isChoiceValueBlocked: (choiceValue: ChoiceValue) => boolean;
+};
+
+export type UseNumericAttributeResult = UseAttributeExplainResult<WhyIsNumericStateNotPossible> & {
+    attribute: NumericAttribute;
+    makeDecision: (state: number | null | undefined) => Promise<void>;
+    isMandatory: () => boolean;
+};
+
+export type UseBooleanAttributeResult = UseAttributeExplainResult<WhyIsBooleanStateNotPossible> & {
+    attribute: BooleanAttribute;
+    makeDecision: (state: boolean | null | undefined) => Promise<void>;
+    isMandatory: () => boolean;
+};
+
+export type UseComponentAttributeResult = UseAttributeExplainResult<WhyIsComponentStateNotPossible> & {
+    attribute: ComponentAttribute;
+    makeDecision: (state: ComponentDecisionState | null | undefined) => Promise<void>;
+    isMandatory: () => boolean;
+};
+
+export function createUseChoiceAttributeHookAtom(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>> {
+    return createAttributeAtomFamily<ChoiceAttribute, WhyIsChoiceValueStateNotPossible, Omit<UseChoiceAttributeResult, "attribute" | "explain" | "applySolution" | "isMandatory">>(
+        guardedAttributesAtom,
+        useExplainAtom,
+        AttributeRefinements.choiceAttributeRefinement,
+        ExplainQuestionSubject.choiceValue,
+        (attribute, _, getGuarded) => {
+            const {makeDecision, setManyDecision} = getGuarded(useDecisionAtom);
+
+            return {
+                makeDecision: (v, s) => makeDecision({
+                    type: AttributeType.Choice,
+                    attributeId: attribute.id,
+                    choiceValueId: v,
+                    state: s
+                } satisfies ExplicitChoiceDecision),
+                clearDecisions: () => pipe(
+                    attribute,
+                    getChoiceAttributeResetDecisions,
+                    // Only setMany if there are decisions to clear.
+                    O.fromPredicate(RA.isNonEmpty),
+                    O.match(
+                        () => () => Promise.resolve(),
+                        d => pipe(() => setManyDecision(d, {type: "KeepExistingDecisions"}), T.map(constVoid))
+                    ),
+                )(),
+                isMultiSelect: () => AttributeInterpreter.isChoiceAttributeMultiSelect(attribute),
+                isMandatory: () => AttributeInterpreter.isMandatory(attribute),
+                getAllowedChoiceValues: () => AttributeInterpreter.getAllowedChoiceValues(attribute),
+                getIncludedChoiceValues: () => AttributeInterpreter.getIncludedChoiceValues(attribute),
+                getBlockedChoiceValues: () => AttributeInterpreter.getBlockedChoiceValues(attribute),
+                isChoiceValueAllowed: (v) => ChoiceValueInterpreter.isAllowed(v),
+                isChoiceValueBlocked: (v) => ChoiceValueInterpreter.isBlocked(v),
+            };
+        }) satisfies AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
+}
+
+export function createUseNumericAttributeHookAtom(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>> {
+    return createAttributeAtomFamily<NumericAttribute, WhyIsNumericStateNotPossible, Pick<UseNumericAttributeResult, "makeDecision">>(
+        guardedAttributesAtom,
+        useExplainAtom,
+        AttributeRefinements.numericAttributeRefinement,
+        ExplainQuestionSubject.numeric,
+        (attribute, _, getGuarded) => {
+            const {makeDecision} = getGuarded(useDecisionAtom);
+
+            return {
+                makeDecision: (s) => makeDecision({
+                    type: AttributeType.Numeric,
+                    attributeId: attribute.id,
+                    state: s
+                } satisfies ExplicitNumericDecision)
+            };
+        }) satisfies AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
+}
+
+export function createUseBooleanAttributeHookAtom(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>> {
+    return createAttributeAtomFamily<BooleanAttribute, WhyIsBooleanStateNotPossible, Pick<UseBooleanAttributeResult, "makeDecision">>(
+        guardedAttributesAtom,
+        useExplainAtom,
+        AttributeRefinements.booleanAttributeRefinement,
+        ExplainQuestionSubject.boolean,
+        (attribute, _, getGuarded) => {
+            const {makeDecision} = getGuarded(useDecisionAtom);
+
+            return {
+                makeDecision: (s) => makeDecision({
+                    type: AttributeType.Boolean,
+                    attributeId: attribute.id,
+                    state: s
+                } satisfies ExplicitBooleanDecision)
+            };
+        }) satisfies AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
+}
+
+export function createUseComponentAttributeHookAtom(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>> {
+    return createAttributeAtomFamily<ComponentAttribute, WhyIsComponentStateNotPossible, Pick<UseComponentAttributeResult, "makeDecision">>(
+        guardedAttributesAtom,
+        useExplainAtom,
+        AttributeRefinements.componentAttributeRefinement,
+        ExplainQuestionSubject.component,
+        (attribute, _, getGuarded) => {
+            const {makeDecision} = getGuarded(useDecisionAtom);
+
+            return {
+                makeDecision: (s) => makeDecision({
+                    type: AttributeType.Component,
+                    attributeId: attribute.id,
+                    state: s
+                } satisfies ExplicitComponentDecision),
+            };
+        }) satisfies AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>>;
+}
+
+
+function createAttributeAtomFamily<A extends Attribute, E extends WhyIsStateNotPossible, TAdd>(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useExplainAtom: Selectors["useExplainAtom"], refinement: Refinement<Attribute, A>, whyIsStateNotPossibleSubject: E["subject"], getAdditional: (attribute: A, get: Getter, getGuarded: GuardedGetter) => TAdd | ConfigurationUninitialized) {
+    type Result = UseAttributeExplainResult<E> & TAdd & {
+        attribute: A;
+        isMandatory: () => boolean;
+    };
+    return atomFamily<GlobalAttributeIdKey, GuardedAtom<Result | undefined>>(key => atomWithGuard<Result | undefined>((get, getGuarded) => {
+        const attributes = getGuarded(guardedAttributesAtom);
+
+        const attribute = get(attributes(key));
+        if (!attribute || !refinement(attribute)) {
+            return undefined;
+        }
+        const {explain, applySolution} = getGuarded(useExplainAtom);
+        const additional = getAdditional(attribute, get, getGuarded);
+        if (additional === ConfigurationUninitialized) {
+            return ConfigurationUninitialized;
+        }
+
+        return {
+            attribute: attribute,
+            isMandatory: () => AttributeInterpreter.isMandatory(attribute),
+            explain: (question: ExplainQuestionParam<E>, answerType: "decisions" | "constraints" | "full"): Promise<any> => {
+                const subject = match(question.question)
+                    .with(ExplainQuestionType.whyIsNotSatisfied, () => ExplainQuestionSubject.attribute)
+                    .otherwise(() => whyIsStateNotPossibleSubject);
+
+                const explainQuestion = {
+                    ...question,
+                    subject: subject,
+                    attributeId: attribute.id
+                } as ExplainQuestion;
+
+                return match(answerType)
+                    .with("decisions", a => explain(explainQuestion, a))
+                    .with("constraints", a => explain(explainQuestion, a))
+                    .with("full", a => explain(explainQuestion, a))
+                    .exhaustive();
+            },
+            applySolution: applySolution,
+            ...additional
+        };
+    }));
+}

@@ -80,7 +80,7 @@ Wrap the configuration area with the `Configuration` component as its root compo
 This component manages the configuration state and provides a configuration context for all child components.
 
 Use React’s Suspense feature to render configuration-related components only when the configuration is ready.
-
+ TODO: State that their must be a Suspense barrier inside the Configuration when using suspended hooks. Otherwise, the configuration will freeze.
 ```tsx
 <Configuration configuratorClient={configuratorClient}
                configurationModelSource={configurationModelSource}>

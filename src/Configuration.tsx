@@ -1,47 +1,42 @@
 import {
-    PropsWithChildren
+    PropsWithChildren, useEffect, useMemo
 } from "react";
 import {
-    AllowedInExplain,
-    AttributeRelations,
-    ConfigurationModelSource,
-    IConfiguratorClient, SessionContext
+    SessionContext
 } from "@viamedici-spc/configurator-ts";
-import {
-    ConfigurationContext,
-    ConfigurationInitializationContext,
-    ConfigurationSessionContext, ConfigurationUpdatingContext
-} from "./internal/contexts";
-import {useConfigurationManagement} from "./internal/configurationManagement";
+import {AtomsContext} from "./internal/contexts";
+import EffectLoader from "./internal/EffectLoader";
+import {createAtoms} from "./internal/jotai/Atoms";
+import {Provider, useStore} from "jotai";
+import {createStore} from "jotai";
+import SessionManagementInitializer from "./internal/SessionManagementInitializer";
 
 export type ConfigurationProps = {
-    /**
-     * The client that is used to create a configuration session.
-     * When the instance changes, the old session is disposed and a new session is created. All decisions are discarded in this case.
-     */
-    configuratorClient: IConfiguratorClient,
-    configurationModelSource: ConfigurationModelSource,
-    attributeRelations?: AttributeRelations | null,
-    usageRuleParameters?: Record<string, string> | null
-    allowedInExplain?: AllowedInExplain | null
+    // TODO: Kommentieren, dass immer die selbe Referenz übergeben werden sollte. Wenn sich die Referenz ändert, wird die Session neu erstellt. Man soll bspw. useMemo benutzen.
+    sessionContext: SessionContext;
+    jotaiStore?: ReturnType<typeof createStore>;
 };
 
 export default function Configuration(props: PropsWithChildren<ConfigurationProps>) {
-    const {configuratorClient, ...sessionContext} = props;
-    const {configurationInitialization, configurationUpdating, session, configuration} = useConfigurationManagement({
-        configuratorClient: configuratorClient,
-        sessionContext: sessionContext
-    })
+    const atoms = useMemo(() => createAtoms(), []);
 
-    return (
-        <ConfigurationInitializationContext.Provider value={configurationInitialization}>
-            <ConfigurationUpdatingContext.Provider value={configurationUpdating}>
-                <ConfigurationSessionContext.Provider value={session}>
-                    <ConfigurationContext.Provider value={configuration}>
-                        {props.children}
-                    </ConfigurationContext.Provider>
-                </ConfigurationSessionContext.Provider>
-            </ConfigurationUpdatingContext.Provider>
-        </ConfigurationInitializationContext.Provider>
-    );
+    const children = (<>
+        <SessionManagementInitializer sessionContext={props.sessionContext}/>
+        <EffectLoader/>
+        {props.children}
+    </>);
+
+    // TODO: Hier lieber fest eine Suspense barriere einbauen, da eine Barriere außerhalb der Configuration die Ausführung blockiert?
+    return <>
+        <AtomsContext.Provider value={atoms}>
+            {
+                props.jotaiStore
+                    ? (<Provider store={props.jotaiStore}>
+                        {children}
+                    </Provider>)
+                    : children
+            }
+
+        </AtomsContext.Provider>
+    </>
 }

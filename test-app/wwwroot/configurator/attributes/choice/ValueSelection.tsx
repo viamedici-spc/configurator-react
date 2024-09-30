@@ -17,8 +17,8 @@ export default function ValueSelection() {
     const allowedChoiceValues = AttributeInterpreter.getAllowedChoiceValues(attribute)
         .map(v => ({id: v.id, isImplicit: v.decision?.kind === DecisionKind.Implicit} satisfies Value<ChoiceValueId>));
     const blockedChoiceValues = AttributeInterpreter.getBlockedChoiceValues(attribute);
-    const isMultiselect = AttributeInterpreter.isMultiSelect(attribute);
-    const selectedChoiceValueIds = AttributeInterpreter.getSelectedChoiceValues(attribute)
+    const isMultiselect = AttributeInterpreter.isChoiceAttributeMultiSelect(attribute);
+    const selectedChoiceValueIds = AttributeInterpreter.getIncludedChoiceValues(attribute)
         .map(a => a.id satisfies ChoiceValueId);
     const selectedChoiceValueId = selectedChoiceValueIds[0] ?? nothingChoiceValueId;
 

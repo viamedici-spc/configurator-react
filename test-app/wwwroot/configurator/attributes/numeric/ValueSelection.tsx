@@ -3,7 +3,7 @@ import {useState} from "react";
 import {useActiveAttribute} from "../AttributeItem";
 import {useNumericAttribute} from "@viamedici-spc/configurator-react";
 import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
-import {ExplainQuestionType, FailureType} from "@viamedici-spc/configurator-ts";
+import {ExplainQuestionType} from "@viamedici-spc/configurator-ts";
 import {attributeIdToString} from "../../../common/Naming";
 import {handleExplain} from "../../../common/Explain";
 
@@ -33,7 +33,7 @@ export default function ValueSelection() {
         console.info("Make decision for %s: %s", attributeIdToString(attribute.id), value !== undefined ? value.toString() : "Undefined");
 
         await handleDecisionResponse(() => makeDecision(value), e => {
-            if (e.type === FailureType.ConfigurationModelNotFeasible || e.type === FailureType.ConfigurationConflict) {
+            if (e.type === "SetDecisionConflict") {
                 return () => handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
             }
 

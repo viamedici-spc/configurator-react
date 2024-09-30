@@ -2,7 +2,7 @@ import styled from "styled-components/macro";
 import {useActiveAttribute} from "../AttributeItem";
 import {useChoiceAttribute} from "@viamedici-spc/configurator-react";
 import {handleError} from "../../../common/PromiseErrorHandling";
-import {DecisionKind} from "@viamedici-spc/configurator-ts";
+import {AttributeInterpreter, ChoiceValueInterpreter, DecisionKind} from "@viamedici-spc/configurator-ts";
 
 const Root = styled.div`
     grid-area: label;
@@ -15,7 +15,7 @@ export default function DecisionClearing() {
     const activeAttribute = useActiveAttribute();
     const {attribute, clearDecisions} = useChoiceAttribute(activeAttribute);
 
-    if (attribute.values.filter(v => v.decision?.kind === DecisionKind.Explicit).length <= 1) {
+    if ([...attribute.values.values()].filter(v => v.decision?.kind === DecisionKind.Explicit).length <= 1) {
         return;
     }
 

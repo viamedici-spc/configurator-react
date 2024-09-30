@@ -1,5 +1,5 @@
 import styled from "styled-components/macro";
-import {useConfiguration, useConfigurationInitialization, useExplain} from "@viamedici-spc/configurator-react";
+import {useConfiguration, useConfigurationInitialization, useConfigurationSatisfaction, useExplain} from "@viamedici-spc/configurator-react";
 import {handleExplain} from "../common/Explain";
 
 const Root = styled.div`
@@ -28,12 +28,11 @@ export default function ConfigurationSatisfactionIndicator() {
 }
 
 function Indicator() {
-    const {configuration} = useConfiguration();
-    const {explain, applySolution} = useExplain();
-    const isSatisfied = configuration.isSatisfied;
+    const {isSatisfied, explain} = useConfigurationSatisfaction();
+    const {applySolution} = useExplain();
 
     const onExplain = () => {
-        handleExplain(() => explain(b => b.whyIsNotSatisfied.configuration, "full"), applySolution);
+        handleExplain(() => explain("full"), applySolution);
     };
 
     return (

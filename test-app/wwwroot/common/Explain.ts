@@ -6,16 +6,16 @@ import {
     DecisionExplanation,
     DecisionsExplainAnswer,
     ExplainAnswer,
-    ExplainSolution
+    ExplainSolution, SetManyResult
 } from "@viamedici-spc/configurator-ts";
 import {attributeIdToString, constraintIdToString} from "./Naming";
 import {handleError} from "./PromiseErrorHandling";
 
-export function handleExplain(explain: () => Promise<ExplainAnswer>, applySolution: (solution: ExplainSolution) => Promise<void>) {
+export function handleExplain(explain: () => Promise<ExplainAnswer>, applySolution: (solution: ExplainSolution) => Promise<SetManyResult>) {
     return handleError(explain, r => processExplainAnswer(r, applySolution));
 }
 
-export async function processExplainAnswer(answer: ExplainAnswer, applySolution: (solution: ExplainSolution) => Promise<void>) {
+export async function processExplainAnswer(answer: ExplainAnswer, applySolution: (solution: ExplainSolution) => Promise<SetManyResult>) {
     const decisionsExplainAnswer = answer as DecisionsExplainAnswer;
     const constraintsExplainAnswer = answer as ConstraintsExplainAnswer;
 

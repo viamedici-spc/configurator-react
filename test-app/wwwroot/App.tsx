@@ -2,6 +2,10 @@ import { createRoot } from 'react-dom/client';
 import Configurator from "./configurator/Configurator";
 import styled from "styled-components/macro";
 import {GlobalStyle} from "./GlobalStyle";
+import {Suspense} from "react";
+import {Logger} from "@viamedici-spc/configurator-ts";
+
+Logger.setLogLevel("debug");
 
 const Root = styled.div`
   height: 100vh;
