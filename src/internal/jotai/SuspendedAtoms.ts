@@ -11,7 +11,7 @@ import {atomFamily} from "jotai/utils";
 import {PromiseOrValue} from "../Types";
 import atomWithSuspend from "./helper/atomWithSuspend";
 import {UseConfigurationSatisfactionResult} from "./domain/useConfigurationSatisfaction";
-import {UseConfigurationReinitializationResult} from "./domain/useSessionReinitialization";
+import {UseSessionReinitializationResult} from "./domain/useSessionReinitialization";
 
 export type SuspendedAtoms = {
     configurationAtom: Atom<PromiseOrValue<Configuration>>;
@@ -19,7 +19,7 @@ export type SuspendedAtoms = {
     useConfigurationSatisfactionAtom: Atom<PromiseOrValue<UseConfigurationSatisfactionResult>>;
     useDecisionAtom: Atom<PromiseOrValue<UseDecisionResult>>;
     useConfigurationResetAtom: Atom<PromiseOrValue<UseConfigurationResetResult>>;
-    useConfigurationReinitializationAtom: Atom<PromiseOrValue<UseConfigurationReinitializationResult>>;
+    useSessionReinitializationAtom: Atom<PromiseOrValue<UseSessionReinitializationResult>>;
     useExplainAtom: Atom<PromiseOrValue<UseExplainResult>>;
     useChoiceAttribute: AtomFamily<GlobalAttributeIdKey, Atom<PromiseOrValue<UseChoiceAttributeResult | undefined>>>;
     useNumericAttribute: AtomFamily<GlobalAttributeIdKey, Atom<PromiseOrValue<UseNumericAttributeResult | undefined>>>;
@@ -34,7 +34,7 @@ export function createSuspendedAtoms(selectors: Selectors): SuspendedAtoms {
         useConfigurationSatisfactionAtom: atomWithSuspend(selectors.useConfigurationSatisfactionAtom),
         useDecisionAtom: atomWithSuspend(selectors.useDecisionAtom),
         useConfigurationResetAtom: atomWithSuspend(selectors.useConfigurationResetAtom),
-        useConfigurationReinitializationAtom: atomWithSuspend(selectors.useConfigurationReinitializationAtom),
+        useSessionReinitializationAtom: atomWithSuspend(selectors.useSessionReinitializationAtom),
         useExplainAtom: atomWithSuspend(selectors.useExplainAtom),
         useChoiceAttribute: atomFamily(key => atomWithSuspend(selectors.useChoiceAttribute(key))),
         useNumericAttribute: atomFamily(key => atomWithSuspend(selectors.useNumericAttribute(key))),

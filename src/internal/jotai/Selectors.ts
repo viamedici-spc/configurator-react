@@ -28,7 +28,7 @@ import {
     SessionUpdatingAtomType
 } from "./domain/SessionManagement";
 import {createUseConfigurationSatisfactionAtom, UseConfigurationSatisfactionResult} from "./domain/useConfigurationSatisfaction";
-import {createUseSessionReinitializationHookAtom, UseConfigurationReinitializationResult} from "./domain/useSessionReinitialization";
+import {createUseSessionReinitializationHookAtom, UseSessionReinitializationResult} from "./domain/useSessionReinitialization";
 
 export type Selectors = {
     configurationSessionAtom: ConfigurationSessionAtomType;
@@ -48,7 +48,7 @@ export type Selectors = {
     useConfigurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
     useDecisionAtom: GuardedAtom<UseDecisionResult>;
     useConfigurationResetAtom: GuardedAtom<UseConfigurationResetResult>;
-    useConfigurationReinitializationAtom: GuardedAtom<UseConfigurationReinitializationResult>;
+    useSessionReinitializationAtom: GuardedAtom<UseSessionReinitializationResult>;
     useExplainAtom: GuardedAtom<UseExplainResult>;
     useChoiceAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
     useNumericAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
@@ -89,7 +89,7 @@ export function createSelectors(primitives: Primitives): Selectors {
         useConfigurationSatisfactionAtom: createUseConfigurationSatisfactionAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedIsSatisfiedAtom),
         useConfigurationStoringAtom: createUseConfigurationStoringHookAtom(guardedAtoms.guardedConfigurationSessionAtom),
         useConfigurationResetAtom: createUseConfigurationResetHookAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedCanResetAtom),
-        useConfigurationReinitializationAtom: createUseSessionReinitializationHookAtom(guardedAtoms.guardedConfigurationSessionAtom),
+        useSessionReinitializationAtom: createUseSessionReinitializationHookAtom(guardedAtoms.guardedConfigurationSessionAtom),
         useChoiceAttribute: createUseChoiceAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),
         useNumericAttribute: createUseNumericAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),
         useBooleanAttribute: createUseBooleanAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),

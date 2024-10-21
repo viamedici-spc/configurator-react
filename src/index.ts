@@ -20,8 +20,8 @@ import {UseConfigurationSatisfactionResult} from "./internal/jotai/domain/useCon
 import {UseConfigurationStoringResult} from "./internal/jotai/domain/useConfigurationStoring";
 import useConfigurationReset from "./hooks/useConfigurationReset";
 import {UseConfigurationResetResult} from "./internal/jotai/domain/useConfigurationReset";
-import {UseConfigurationReinitializationResult} from "./internal/jotai/domain/useSessionReinitialization";
-import useConfigurationReinitialization from "./hooks/useConfigurationReinitialization";
+import {UseSessionReinitializationResult} from "./internal/jotai/domain/useSessionReinitialization";
+import useSessionReinitialization from "./hooks/useSessionReinitialization";
 
 export {
     // attribute
@@ -64,8 +64,8 @@ export {
     useConfigurationReset,
 
     // reinitialization
-    type UseConfigurationReinitializationResult,
-    useConfigurationReinitialization,
+    type UseSessionReinitializationResult,
+    useSessionReinitialization,
 
     // types
     type ConfigurationInitialization,

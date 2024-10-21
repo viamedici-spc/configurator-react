@@ -12,7 +12,7 @@ import {UseExplainResult} from "../internal/jotai/domain/useExplain";
 import {ConfigurationInitialization, ConfigurationUpdating, GuardedAtom} from "../types";
 import {UseConfigurationStoringResult} from "../internal/jotai/domain/useConfigurationStoring";
 import {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/useConfigurationSatisfaction";
-import {UseConfigurationReinitializationResult} from "../internal/jotai/domain/useSessionReinitialization";
+import {UseSessionReinitializationResult} from "../internal/jotai/domain/useSessionReinitialization";
 
 /**
  * TODO
@@ -39,7 +39,7 @@ export type UseJotaiAtomsResult = {
     getConfigurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
     getDecisionAtom: GuardedAtom<UseDecisionResult>;
     getConfigurationResetAtom: GuardedAtom<UseConfigurationResetResult>;
-    getConfigurationReinitializationAtom: GuardedAtom<UseConfigurationReinitializationResult>;
+    getSessionReinitializationAtom: GuardedAtom<UseSessionReinitializationResult>;
     getExplainAtom: GuardedAtom<UseExplainResult>;
 };
 
@@ -59,7 +59,7 @@ export function useJotaiAtoms(): UseJotaiAtomsResult {
         getConfigurationStoringAtom: selectors.useConfigurationStoringAtom,
         getDecisionAtom: selectors.useDecisionAtom,
         getConfigurationResetAtom: selectors.useConfigurationResetAtom,
-        getConfigurationReinitializationAtom: selectors.useConfigurationReinitializationAtom,
+        getSessionReinitializationAtom: selectors.useSessionReinitializationAtom,
         getExplainAtom: selectors.useExplainAtom,
     }), [selectors]);
 }
