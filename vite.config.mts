@@ -5,7 +5,7 @@ import {externalizeDeps} from "vite-plugin-externalize-deps";
 export default defineConfig(() => ({
     build: {
         outDir: "dist",
-        minify: false,
+        minify: true,
         lib: {
             entry: "src/index.ts",
             formats: ["es", "cjs"],
