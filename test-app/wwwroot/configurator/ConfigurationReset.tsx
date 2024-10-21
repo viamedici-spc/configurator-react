@@ -28,13 +28,13 @@ export default function ConfigurationReset() {
     const {getConfigurationResetAtom} = useJotaiAtoms();
     const result = useAtomValue(getConfigurationResetAtom);
 
-    const text = result === ConfigurationUninitialized ? "uninitialized" : (result.canReset ? "yes" : "no");
+    const text = result === ConfigurationUninitialized ? "uninitialized" : (result.canResetConfiguration ? "yes" : "no");
     const execute = () => {
         if (result !== ConfigurationUninitialized) {
-            handleError(() => result.reset());
+            handleError(() => result.resetConfiguration());
         }
     };
-    const canReset = result === ConfigurationUninitialized ? ConfigurationUninitialized : result.canReset;
+    const canReset = result === ConfigurationUninitialized ? ConfigurationUninitialized : result.canResetConfiguration;
 
     return (
         <Root className={clsx(canReset === true && "canReset", canReset === false && "canNotReset")}>

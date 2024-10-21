@@ -10,6 +10,8 @@ export function createUseSessionReinitializationHookAtom(configurationSessionAto
     return atomWithGuard((_, getGuarded) => {
         const session = getGuarded(configurationSessionAtom);
 
-        return session.reinitialize.bind(session);
+        return {
+            reinitializeSession: session.reinitialize.bind(session)
+        };
     });
 }
