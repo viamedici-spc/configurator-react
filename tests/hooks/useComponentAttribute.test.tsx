@@ -21,7 +21,8 @@ describe("useComponentAttribute tests", () => {
             makeDecision: vi.fn() as IConfigurationSession["makeDecision"],
             setMany: vi.fn() as IConfigurationSession["setMany"],
             explain: vi.fn() as IConfigurationSession["explain"],
-            applySolution: vi.fn() as IConfigurationSession["applySolution"]
+            applySolution: vi.fn() as IConfigurationSession["applySolution"],
+            getDecisions: vi.fn() as IConfigurationSession["getDecisions"],
         } as IConfigurationSession;
 
         const configuration = {
