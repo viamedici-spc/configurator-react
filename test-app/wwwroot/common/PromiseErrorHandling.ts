@@ -1,8 +1,10 @@
-export function handleDecisionResponse<T>(lazyPromise: () => Promise<T>, explain?: (error: any) => (() => void) | null): Promise<void> {
-    return handleError(lazyPromise, null, explain, "Press Ok to Explain");
+import {ConfiguratorError} from "@viamedici-spc/configurator-ts";
+
+export function handleDecisionResponse<T>(lazyPromise: () => Promise<T>, explain?: (error: ConfiguratorError) => (() => void) | null): Promise<void> {
+    return handleError(lazyPromise, undefined, explain, "Press Ok to Explain");
 }
 
-export function handleError<T>(lazyPromise: () => Promise<T>, onResult?: (result: T) => void, onError?: (error: any) => (() => void) | null, errorMessageAddition?: string): Promise<void> {
+export function handleError<T>(lazyPromise: () => Promise<T>, onResult?: (result: T) => void, onError?: (error: ConfiguratorError) => (() => void) | null, errorMessageAddition?: string): Promise<void> {
     return lazyPromise()
         .then(r => {
             if (onResult) {
@@ -13,9 +15,9 @@ export function handleError<T>(lazyPromise: () => Promise<T>, onResult?: (result
             console.error(error);
 
             const message = "An error occurred while executing the request:\n" + JSON.stringify(error, null, 4);
-            const execute = onError && onError(error);
+            const execute = 'type' in error && onError && onError(error);
             if (execute != null) {
-                const confirmed = confirm(message + errorMessageAddition ? `\n\n${errorMessageAddition}` : "");
+                const confirmed = confirm(message + (errorMessageAddition ? `\n\n${errorMessageAddition}` : ""));
                 if (confirmed) {
                     execute();
                 }

@@ -2,12 +2,16 @@ import {UseExplainResult} from "../internal/jotai/domain/useExplain";
 import {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
-/**
- * Gets commands for explaining consequences.
- * @throws If configuration is initializing.
- */
 const useExplain: {
+    /**
+     * Gets commands for explaining circumstances.
+     * @remarks Will suspend until the configuration is fully initialized.
+     */
     (): UseExplainResult;
+    /**
+     * Gets commands for explaining circumstances.
+     * @param suspend Whether to disable the Suspense api.
+     */
     (suspend: false): UseExplainResult | ConfigurationUninitialized;
 } = prepareAtomValueUsageWithSuspense<UseExplainResult>(s => s.useExplainAtom, s => s.useExplainAtom);
 

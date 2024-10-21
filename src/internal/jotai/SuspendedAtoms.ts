@@ -1,7 +1,7 @@
 import {Selectors} from "./Selectors";
 import {UseConfigurationStoringResult} from "./domain/useConfigurationStoring";
 import {UseDecisionResult} from "./domain/useDecision";
-import {UseResetConfigurationResult} from "./domain/useResetConfiguration";
+import {UseConfigurationResetResult} from "./domain/useConfigurationReset";
 import {UseExplainResult} from "./domain/useExplain";
 import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
 import {Configuration, GlobalAttributeIdKey} from "@viamedici-spc/configurator-ts";
@@ -11,13 +11,15 @@ import {atomFamily} from "jotai/utils";
 import {PromiseOrValue} from "../Types";
 import atomWithSuspend from "./helper/atomWithSuspend";
 import {UseConfigurationSatisfactionResult} from "./domain/useConfigurationSatisfaction";
+import {UseConfigurationReinitializationResult} from "./domain/useSessionReinitialization";
 
 export type SuspendedAtoms = {
     configurationAtom: Atom<PromiseOrValue<Configuration>>;
     useConfigurationStoringAtom: Atom<PromiseOrValue<UseConfigurationStoringResult>>;
     useConfigurationSatisfactionAtom: Atom<PromiseOrValue<UseConfigurationSatisfactionResult>>;
     useDecisionAtom: Atom<PromiseOrValue<UseDecisionResult>>;
-    useResetConfigurationAtom: Atom<PromiseOrValue<UseResetConfigurationResult>>;
+    useConfigurationResetAtom: Atom<PromiseOrValue<UseConfigurationResetResult>>;
+    useConfigurationReinitializationAtom: Atom<PromiseOrValue<UseConfigurationReinitializationResult>>;
     useExplainAtom: Atom<PromiseOrValue<UseExplainResult>>;
     useChoiceAttribute: AtomFamily<GlobalAttributeIdKey, Atom<PromiseOrValue<UseChoiceAttributeResult | undefined>>>;
     useNumericAttribute: AtomFamily<GlobalAttributeIdKey, Atom<PromiseOrValue<UseNumericAttributeResult | undefined>>>;
@@ -31,7 +33,8 @@ export function createSuspendedAtoms(selectors: Selectors): SuspendedAtoms {
         useConfigurationStoringAtom: atomWithSuspend(selectors.useConfigurationStoringAtom),
         useConfigurationSatisfactionAtom: atomWithSuspend(selectors.useConfigurationSatisfactionAtom),
         useDecisionAtom: atomWithSuspend(selectors.useDecisionAtom),
-        useResetConfigurationAtom: atomWithSuspend(selectors.useResetConfigurationAtom),
+        useConfigurationResetAtom: atomWithSuspend(selectors.useConfigurationResetAtom),
+        useConfigurationReinitializationAtom: atomWithSuspend(selectors.useConfigurationReinitializationAtom),
         useExplainAtom: atomWithSuspend(selectors.useExplainAtom),
         useChoiceAttribute: atomFamily(key => atomWithSuspend(selectors.useChoiceAttribute(key))),
         useNumericAttribute: atomFamily(key => atomWithSuspend(selectors.useNumericAttribute(key))),

@@ -3,7 +3,7 @@ import {Attribute, Configuration, GlobalAttributeIdKey, IConfigurationSession} f
 import {Primitives} from "./PrimitveAtoms";
 import {ConfigurationInitialization, ConfigurationUninitialized, ConfigurationUpdating, GuardedAtom} from "../../types";
 import {createUseDecisionHookAtom, UseDecisionResult} from "./domain/useDecision";
-import {createUseResetConfigurationHookAtom, UseResetConfigurationResult} from "./domain/useResetConfiguration";
+import {createUseConfigurationResetHookAtom, UseConfigurationResetResult} from "./domain/useConfigurationReset";
 import {createUseExplainHookAtom, UseExplainResult} from "./domain/useExplain";
 import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
 import {
@@ -28,6 +28,7 @@ import {
     SessionUpdatingAtomType
 } from "./domain/SessionManagement";
 import {createUseConfigurationSatisfactionAtom, UseConfigurationSatisfactionResult} from "./domain/useConfigurationSatisfaction";
+import {createUseSessionReinitializationHookAtom, UseConfigurationReinitializationResult} from "./domain/useSessionReinitialization";
 
 export type Selectors = {
     configurationSessionAtom: ConfigurationSessionAtomType;
@@ -46,7 +47,8 @@ export type Selectors = {
     useConfigurationStoringAtom: GuardedAtom<UseConfigurationStoringResult>;
     useConfigurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
     useDecisionAtom: GuardedAtom<UseDecisionResult>;
-    useResetConfigurationAtom: GuardedAtom<UseResetConfigurationResult>;
+    useConfigurationResetAtom: GuardedAtom<UseConfigurationResetResult>;
+    useConfigurationReinitializationAtom: GuardedAtom<UseConfigurationReinitializationResult>;
     useExplainAtom: GuardedAtom<UseExplainResult>;
     useChoiceAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
     useNumericAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
@@ -86,7 +88,8 @@ export function createSelectors(primitives: Primitives): Selectors {
 
         useConfigurationSatisfactionAtom: createUseConfigurationSatisfactionAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedIsSatisfiedAtom),
         useConfigurationStoringAtom: createUseConfigurationStoringHookAtom(guardedAtoms.guardedConfigurationSessionAtom),
-        useResetConfigurationAtom: createUseResetConfigurationHookAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedCanResetAtom),
+        useConfigurationResetAtom: createUseConfigurationResetHookAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedCanResetAtom),
+        useConfigurationReinitializationAtom: createUseSessionReinitializationHookAtom(guardedAtoms.guardedConfigurationSessionAtom),
         useChoiceAttribute: createUseChoiceAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),
         useNumericAttribute: createUseNumericAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),
         useBooleanAttribute: createUseBooleanAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),

@@ -1,5 +1,5 @@
 import styled from "styled-components/macro";
-import {useConfiguration, useConfigurationInitialization, useConfigurationSatisfaction, useExplain} from "@viamedici-spc/configurator-react";
+import {useConfigurationInitialization, useConfigurationSatisfaction, useExplain} from "@viamedici-spc/configurator-react";
 import {handleExplain} from "../common/Explain";
 
 const Root = styled.div`
@@ -37,10 +37,8 @@ function Indicator() {
 
     return (
         <Root className={isSatisfied && "satisfied"}>
-            <div>{isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"}</div>
-            {!isSatisfied && <div>
-                <button onClick={onExplain}>Explain</button>
-            </div>}
+            <span>{isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"} </span>
+            {!isSatisfied && <button onClick={onExplain}>Explain</button>}
         </Root>
     )
 }

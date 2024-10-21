@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import {Suspense} from "react";
 import {useJotaiAtoms} from "../../../src/atoms/useJotaiAtoms";
-import {useAtomValue} from "jotai/react";
+import {useAtomValue} from "jotai";
 import {ConfigurationUninitialized} from "../../../src";
-import clsx from "clsx";
 import {handleError} from "../common/PromiseErrorHandling";
 
 const Root = styled.div`

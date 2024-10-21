@@ -7,7 +7,6 @@ import {useAtomValue} from "jotai";
 
 /**
  * Gets the initialization information for the configuration.
- * This is safe to use if the configuration is initializing.
  */
 export function useConfigurationInitialization(): ConfigurationInitialization {
     const {selectors: {configurationInitializationAtom}} = useAtomsContext();
@@ -16,7 +15,6 @@ export function useConfigurationInitialization(): ConfigurationInitialization {
 
 /**
  * Gets the updating information for the configuration.
- * This is safe to use if the configuration is initializing.
  */
 export function useConfigurationUpdating(): ConfigurationUpdating {
     const {selectors: {configurationUpdatingAtom}} = useAtomsContext();

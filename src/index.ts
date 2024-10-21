@@ -18,6 +18,10 @@ import {UseDecisionResult} from "./internal/jotai/domain/useDecision";
 import {UseExplainResult} from "./internal/jotai/domain/useExplain";
 import {UseConfigurationSatisfactionResult} from "./internal/jotai/domain/useConfigurationSatisfaction";
 import {UseConfigurationStoringResult} from "./internal/jotai/domain/useConfigurationStoring";
+import useConfigurationReset from "./hooks/useConfigurationReset";
+import {UseConfigurationResetResult} from "./internal/jotai/domain/useConfigurationReset";
+import {UseConfigurationReinitializationResult} from "./internal/jotai/domain/useSessionReinitialization";
+import useConfigurationReinitialization from "./hooks/useConfigurationReinitialization";
 
 export {
     // attribute
@@ -54,6 +58,14 @@ export {
     // storing
     type UseConfigurationStoringResult,
     useConfigurationStoring,
+
+    // reset
+    type UseConfigurationResetResult,
+    useConfigurationReset,
+
+    // reinitialization
+    type UseConfigurationReinitializationResult,
+    useConfigurationReinitialization,
 
     // types
     type ConfigurationInitialization,

@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import {Suspense} from "react";
 import {useJotaiAtoms} from "../../../src/atoms/useJotaiAtoms";
-import {useAtomValue} from "jotai/react";
+import {useAtomValue} from "jotai";
 import {ConfigurationUninitialized} from "../../../src";
 import clsx from "clsx";
 import {handleError} from "../common/PromiseErrorHandling";
@@ -14,7 +13,6 @@ const Root = styled.div`
     font-weight: bolder;
     box-shadow: var(--shadow-card);
 
-    // TODO: Andere Farben nehmen?
     &.canNotReset {
         background-color: var(--color-satisfied-bg);
         color: var(--color-satisfied);
@@ -27,8 +25,8 @@ const Root = styled.div`
 `
 
 export default function ConfigurationReset() {
-    const {getResetConfigurationAtom} = useJotaiAtoms();
-    const result = useAtomValue(getResetConfigurationAtom);
+    const {getConfigurationResetAtom} = useJotaiAtoms();
+    const result = useAtomValue(getConfigurationResetAtom);
 
     const text = result === ConfigurationUninitialized ? "uninitialized" : (result.canReset ? "yes" : "no");
     const execute = () => {
@@ -40,10 +38,8 @@ export default function ConfigurationReset() {
 
     return (
         <Root className={clsx(canReset === true && "canReset", canReset === false && "canNotReset")}>
-            <div>canReset: {text}</div>
-            {canReset === true && <div>
-                <button onClick={execute}>Reset</button>
-            </div>}
+            <span>canReset: {text} </span>
+            {canReset === true && <button onClick={execute}>Reset</button>}
         </Root>
     );
 }

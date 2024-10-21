@@ -7,11 +7,12 @@ import {Attribute, Configuration, GlobalAttributeId, GlobalAttributeIdKey} from 
 import {Atom} from "jotai";
 import {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "../internal/jotai/domain/attribute";
 import {UseDecisionResult} from "../internal/jotai/domain/useDecision";
-import {UseResetConfigurationResult} from "../internal/jotai/domain/useResetConfiguration";
+import {UseConfigurationResetResult} from "../internal/jotai/domain/useConfigurationReset";
 import {UseExplainResult} from "../internal/jotai/domain/useExplain";
 import {ConfigurationInitialization, ConfigurationUpdating, GuardedAtom} from "../types";
 import {UseConfigurationStoringResult} from "../internal/jotai/domain/useConfigurationStoring";
 import {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/useConfigurationSatisfaction";
+import {UseConfigurationReinitializationResult} from "../internal/jotai/domain/useSessionReinitialization";
 
 /**
  * TODO
@@ -37,7 +38,8 @@ export type UseJotaiAtomsResult = {
     getConfigurationStoringAtom: GuardedAtom<UseConfigurationStoringResult>;
     getConfigurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
     getDecisionAtom: GuardedAtom<UseDecisionResult>;
-    getResetConfigurationAtom: GuardedAtom<UseResetConfigurationResult>;
+    getConfigurationResetAtom: GuardedAtom<UseConfigurationResetResult>;
+    getConfigurationReinitializationAtom: GuardedAtom<UseConfigurationReinitializationResult>;
     getExplainAtom: GuardedAtom<UseExplainResult>;
 };
 
@@ -56,7 +58,8 @@ export function useJotaiAtoms(): UseJotaiAtomsResult {
         getConfigurationSatisfactionAtom: selectors.useConfigurationSatisfactionAtom,
         getConfigurationStoringAtom: selectors.useConfigurationStoringAtom,
         getDecisionAtom: selectors.useDecisionAtom,
-        getResetConfigurationAtom: selectors.useResetConfigurationAtom,
+        getConfigurationResetAtom: selectors.useConfigurationResetAtom,
+        getConfigurationReinitializationAtom: selectors.useConfigurationReinitializationAtom,
         getExplainAtom: selectors.useExplainAtom,
     }), [selectors]);
 }

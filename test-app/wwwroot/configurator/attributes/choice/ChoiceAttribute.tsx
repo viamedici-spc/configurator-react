@@ -1,7 +1,7 @@
 import styled from "styled-components/macro";
 import {AvailableValuesIndicator, MandatoryIndicator, SelectionModeIndicator} from "./Indicators";
 import ValueSelection from "./ValueSelection";
-import {SatisfactionIndicator} from "../Indicators";
+import SatisfactionIndicator from "../SatisfactionIndicator";
 import DecisionClearing from "./DecisionClearing";
 
 const Root = styled.div`

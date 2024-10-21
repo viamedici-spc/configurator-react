@@ -73,7 +73,6 @@ export async function processExplainAnswer(answer: ExplainAnswer, applySolution:
     }
 }
 
-
 type Explanation = {
     text: string,
     solution: ExplainSolution | null
@@ -82,7 +81,7 @@ type Explanation = {
 function mapDecisionExplanations(answer: { decisionExplanations: ReadonlyArray<DecisionExplanation> }): Explanation[] {
     return answer.decisionExplanations
         .map(e => {
-            const causingDecisions = e.causedByDecisions.map(d => xyz(d));
+            const causingDecisions = e.causedByDecisions.map(mapCausedByDecision);
             const text = [
                 "Decisions:",
                 indent(causingDecisions.join("\n"))
@@ -95,7 +94,7 @@ function mapDecisionExplanations(answer: { decisionExplanations: ReadonlyArray<D
         });
 }
 
-function xyz(cause: CausedByDecision) {
+function mapCausedByDecision(cause: CausedByDecision) {
     switch (cause.type) {
         case AttributeType.Boolean:
         case AttributeType.Numeric:
@@ -136,8 +135,8 @@ function mapConstraintExplanations(answer: { constraintExplanations: ReadonlyArr
 }
 
 function indent(str: string, indent: number = 2): string {
-    const indentation = [...Array(indent)].map(() => ' ').join('');
-    const lineEnding = '\n';
+    const indentation = [...Array(indent)].map(() => " ").join("");
+    const lineEnding = "\n";
 
     return str
         .split(lineEnding)

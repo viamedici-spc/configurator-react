@@ -17,7 +17,7 @@ const Root = styled.div`
     display: grid;
     gap: 1.5em;
     grid-template-rows: [header] auto [session-context-parameters main-start] auto [configuration-parameters] auto [model-satisfaction] auto [configuration-reset] auto [configuration-storing] auto 1fr [main-end];
-    grid-template-columns: [header-start session-context-parameters configuration-parameters model-satisfaction configuration-reset configuration-storing] 300px [gap] 0 [main] 1fr [header-end];
+    grid-template-columns: [header-start session-context-parameters configuration-parameters model-satisfaction configuration-reset configuration-storing] 350px [gap] 0 [main] 1fr [header-end];
 `;
 
 const Header = styled.div`
@@ -60,7 +60,7 @@ export default function Configurator() {
     return (
         <Root>
             <Header>
-                <h1>Simple Configurator</h1>
+                <h1>Test Configurator</h1>
             </Header>
 
             <SessionContextParameters accessTokenState={accessTokenState} deploymentNameState={deploymentNameState} channelState={channelState}/>

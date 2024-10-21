@@ -1,8 +1,14 @@
 import {useActiveAttribute} from "./AttributeItem";
 import {useAttributes, useExplain} from "@viamedici-spc/configurator-react";
 import {handleExplain} from "../../common/Explain";
+import styled from "styled-components/macro";
 
-export function SatisfactionIndicator() {
+const ExplainButton = styled.button`
+    margin-left: 0.4em;
+    padding: 0;
+`
+
+export default function SatisfactionIndicator() {
     const activeAttribute = useActiveAttribute();
     const [attribute] = useAttributes([activeAttribute], false);
     const {explain, applySolution} = useExplain();
@@ -16,6 +22,6 @@ export function SatisfactionIndicator() {
         <span style={{color: color}}>
             {attribute.isSatisfied ? (`satisfied${attribute.canContributeToConfigurationSatisfaction ? " (can contribute)" : ""}`) : "unsatisfied "}
         </span>
-        {!attribute.isSatisfied && <button onClick={onExplain}>Explain</button>}
+        {!attribute.isSatisfied && <ExplainButton onClick={onExplain}>Explain</ExplainButton>}
     </>);
 }

@@ -1,6 +1,6 @@
 import styled from "styled-components/macro";
 import ValueSelection from "./ValueSelection";
-import {SatisfactionIndicator} from "../Indicators";
+import SatisfactionIndicator from "../SatisfactionIndicator";
 
 const Root = styled.div`
   grid-area: selection;
