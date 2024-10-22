@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {useJotaiAtoms} from "../../../src/atoms/useJotaiAtoms";
+import {useJotaiAtoms} from "../../../src/hooks/useJotaiAtoms";
 import {useAtomValue} from "jotai";
 import {ConfigurationUninitialized} from "../../../src";
 import clsx from "clsx";
