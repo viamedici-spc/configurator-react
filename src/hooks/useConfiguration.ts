@@ -4,13 +4,13 @@ import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
 const useConfiguration: {
     /**
-     * Gets the current configuration data.
+     * Gets the current configuration state.
      * @remarks Will suspend until the configuration is fully initialized.
      */
     (): Configuration;
     /**
-     * Gets the current configuration data.
-     * @param suspend Whether to disable the Suspense api.
+     * Gets the current configuration state.
+     * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): Configuration | ConfigurationUninitialized;
 } = prepareAtomValueUsageWithSuspense<Configuration>(s => s.guardedConfigurationAtom, s => s.configurationAtom);

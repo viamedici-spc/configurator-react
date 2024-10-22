@@ -31,13 +31,14 @@ export function useAttributes(attributes: "all"): ReadonlyArray<Attribute>
 /**
  * Retrieves all existing attributes.
  * @param attributes Set to "all" to retrieve all existing attributes.
- * @param suspend Whether to disable the Suspense api.
+ * @param suspend Whether to disable the Suspense API.
  */
 export function useAttributes(attributes: "all", suspend: false): ReadonlyArray<Attribute> | ConfigurationUninitialized
 /**
  * Retrieves the requested attributes.
  * @param attributes The attributes to return.
  * @param filterMissingAttributes Whether to ignore that requested attributes are missing. Missing attributes will be filtered out of the result.
+ * @returns The requested attributes in the order of the {@link attributes} parameter.
  * @remarks Will suspend until the configuration is fully initialized.
  */
 export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: true): ReadonlyArray<Attribute>
@@ -45,6 +46,7 @@ export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | Glob
  * Retrieves the requested attributes.
  * @param attributes The attributes to return.
  * @param filterMissingAttributes Whether to ignore that requested attributes are missing. Missing attributes appear as undefined in the result.
+ * @returns The requested attributes in the order of the {@link attributes} parameter.
  * @remarks Will suspend until the configuration is fully initialized.
  */
 export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: false): ReadonlyArray<Attribute | undefined>
@@ -52,14 +54,16 @@ export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | Glob
  * Retrieves the requested attributes.
  * @param attributes The attributes to return.
  * @param filterMissingAttributes Whether to ignore that requested attributes are missing. Missing attributes will be filtered out of the result.
- * @param suspend Whether to disable the Suspense api.
+ * @returns The requested attributes in the order of the {@link attributes} parameter.
+ * @param suspend Whether to disable the Suspense API.
  */
 export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: true, suspend: false): ReadonlyArray<Attribute | undefined> | ConfigurationUninitialized
 /**
  * Retrieves the requested attributes.
  * @param attributes The attributes to return.
  * @param filterMissingAttributes Whether to ignore that requested attributes are missing. Missing attributes appear as undefined in the result.
- * @param suspend Whether to disable the Suspense api.
+ * @returns The requested attributes in the order of the {@link attributes} parameter.
+ * @param suspend Whether to disable the Suspense API.
  */
 export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: false, suspend: false): ReadonlyArray<Attribute> | ConfigurationUninitialized
 export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> | "all", suspendOrFilterMissingAttributesOrUndefined?: boolean, suspendOrUndefined?: boolean): ReadonlyArray<Attribute | undefined> | ConfigurationUninitialized {
@@ -71,16 +75,16 @@ export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | Glob
 
 export const useChoiceAttribute: {
     /**
-     * Gets the requested choice attribute with commands for making decisions or explaining consequences.
+     * Gets the requested choice attribute with specific commands and queries.
      * @param attributeIdOrKey The id or key of the choice attribute.
      * @returns Undefined if attribute doesn't exist, or it is not a choice attribute.
      * @remarks Will suspend until the configuration is fully initialized.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey): UseChoiceAttributeResult | undefined;
     /**
-     * Gets the requested choice attribute with commands for making decisions or explaining consequences.
+     * Gets the requested choice attribute with specific commands and queries.
      * @param attributeIdOrKey The id or key of the choice attribute.
-     * @param suspend Whether to disable the Suspense api.
+     * @param suspend Whether to disable the Suspense API.
      * @returns Undefined if attribute doesn't exist, or it is not a choice attribute.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseChoiceAttributeResult | undefined | ConfigurationUninitialized;
@@ -88,16 +92,16 @@ export const useChoiceAttribute: {
 
 export const useNumericAttribute: {
     /**
-     * Gets the requested numeric attribute with the command to make decisions.
+     * Gets the requested numeric attribute with specific commands and queries.
      * @param attributeIdOrKey The id or key of the numeric attribute.
      * @returns Undefined if attribute doesn't exist, or it is not a numeric attribute.
      * @remarks Will suspend until the configuration is fully initialized.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey): UseNumericAttributeResult | undefined;
     /**
-     * Gets the requested numeric attribute with the command to make decisions.
+     * Gets the requested numeric attribute with specific commands and queries.
      * @param attributeIdOrKey The id or key of the numeric attribute.
-     * @param suspend Whether to disable the Suspense api.
+     * @param suspend Whether to disable the Suspense API.
      * @returns Undefined if attribute doesn't exist, or it is not a numeric attribute.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseNumericAttributeResult | undefined | ConfigurationUninitialized;
@@ -105,16 +109,16 @@ export const useNumericAttribute: {
 
 export const useBooleanAttribute: {
     /**
-     * Gets the requested boolean attribute with the command to make decisions.
+     * Gets the requested boolean attribute with specific commands and queries.
      * @param attributeIdOrKey The id of the boolean attribute.
      * @returns Undefined if attribute doesn't exist, or it is not a boolean attribute.
      * @remarks Will suspend until the configuration is fully initialized.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey): UseBooleanAttributeResult | undefined;
     /**
-     * Gets the requested boolean attribute with the command to make decisions.
+     * Gets the requested boolean attribute with specific commands and queries.
      * @param attributeIdOrKey The id of the boolean attribute.
-     * @param suspend Whether to disable the Suspense api.
+     * @param suspend Whether to disable the Suspense API.
      * @returns Undefined if attribute doesn't exist, or it is not a boolean attribute.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseBooleanAttributeResult | undefined | ConfigurationUninitialized;
@@ -122,16 +126,16 @@ export const useBooleanAttribute: {
 
 export const useComponentAttribute: {
     /**
-     * Gets the requested component attribute with the command to make decisions.
+     * Gets the requested component attribute with specific commands and queries.
      * @param attributeIdOrKey The id of the component attribute.
      * @returns Undefined if attribute doesn't exist, or it is not a component attribute.
      * @remarks Will suspend until the configuration is fully initialized.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey): UseComponentAttributeResult | undefined;
     /**
-     * Gets the requested component attribute with the command to make decisions.
+     * Gets the requested component attribute with specific commands and queries.
      * @param attributeIdOrKey The id of the component attribute.
-     * @param suspend Whether to disable the Suspense api.
+     * @param suspend Whether to disable the Suspense API.
      * @returns Undefined if attribute doesn't exist, or it is not a component attribute.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseComponentAttributeResult | undefined | ConfigurationUninitialized;

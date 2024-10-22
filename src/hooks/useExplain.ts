@@ -10,7 +10,7 @@ const useExplain: {
     (): UseExplainResult;
     /**
      * Gets commands for explaining circumstances.
-     * @param suspend Whether to disable the Suspense api.
+     * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseExplainResult | ConfigurationUninitialized;
 } = prepareAtomValueUsageWithSuspense<UseExplainResult>(s => s.explainAtom, s => s.explainAtom);

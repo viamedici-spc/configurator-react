@@ -10,7 +10,7 @@ const useConfigurationStoring: {
     (): UseConfigurationStoringResult;
     /**
      * Gets commands to store and restore a configuration.
-     * @param suspend Whether to disable the Suspense api.
+     * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseConfigurationStoringResult | ConfigurationUninitialized;
 } = prepareAtomValueUsageWithSuspense<UseConfigurationStoringResult>(s => s.configurationStoringAtom, s => s.configurationStoringAtom);

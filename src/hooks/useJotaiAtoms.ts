@@ -35,6 +35,10 @@ export type UseJotaiAtomsResult = {
     getExplainAtom: GuardedAtom<UseExplainResult>;
 };
 
+/**
+ * Gets all Jotai based atoms and atom families of the configuration session.
+ * They can be used to build more advanced reactive pipelines with Jotai.
+ */
 export function useJotaiAtoms(): UseJotaiAtomsResult {
     const {selectors} = useAtomsContext();
 
