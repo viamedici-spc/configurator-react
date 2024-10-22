@@ -1,11 +1,11 @@
-import {SetManyResult, StoredConfiguration} from "@viamedici-spc/configurator-ts";
+import {SetManyMode, SetManyResult, StoredConfiguration} from "@viamedici-spc/configurator-ts";
 import {Selectors} from "../Selectors";
 import {GuardedAtom} from "../../../types";
 import atomWithGuard from "../helper/atomWithGuard";
 
 export type UseConfigurationStoringResult = {
     storeConfiguration: () => Promise<StoredConfiguration>;
-    restoreConfiguration: (storedConfiguration: StoredConfiguration) => Promise<SetManyResult>;
+    restoreConfiguration: (storedConfiguration: StoredConfiguration, mode: SetManyMode) => Promise<SetManyResult>;
 };
 
 export function createConfigurationStoringAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseConfigurationStoringResult> {

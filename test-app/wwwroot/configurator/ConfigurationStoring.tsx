@@ -29,7 +29,7 @@ export default function ConfigurationStoring() {
         if (result !== ConfigurationUninitialized) {
             handleError(async () => {
                 const text = await navigator.clipboard.readText();
-                await result.restoreConfiguration(JSON.parse(text));
+                await result.restoreConfiguration(JSON.parse(text), {type: "DropExistingDecisions", conflictHandling: {type: "Automatic"}});
             })
         }
     };
