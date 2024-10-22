@@ -84,7 +84,7 @@ export const useChoiceAttribute: {
      * @returns Undefined if attribute doesn't exist, or it is not a choice attribute.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseChoiceAttributeResult | undefined | ConfigurationUninitialized;
-} = prepareAttributeUsageWithSuspense<UseChoiceAttributeResult | undefined>(s => s.useChoiceAttribute, s => s.useChoiceAttribute);
+} = prepareAttributeUsageWithSuspense<UseChoiceAttributeResult | undefined>(s => s.choiceAttributeAtomFamily, s => s.choiceAttributeAtomFamily);
 
 export const useNumericAttribute: {
     /**
@@ -101,7 +101,7 @@ export const useNumericAttribute: {
      * @returns Undefined if attribute doesn't exist, or it is not a numeric attribute.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseNumericAttributeResult | undefined | ConfigurationUninitialized;
-} = prepareAttributeUsageWithSuspense<UseNumericAttributeResult | undefined>(s => s.useNumericAttribute, s => s.useNumericAttribute);
+} = prepareAttributeUsageWithSuspense<UseNumericAttributeResult | undefined>(s => s.numericAttributeAtomFamily, s => s.numericAttributeAtomFamily);
 
 export const useBooleanAttribute: {
     /**
@@ -118,7 +118,7 @@ export const useBooleanAttribute: {
      * @returns Undefined if attribute doesn't exist, or it is not a boolean attribute.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseBooleanAttributeResult | undefined | ConfigurationUninitialized;
-} = prepareAttributeUsageWithSuspense<UseBooleanAttributeResult | undefined>(s => s.useBooleanAttribute, s => s.useBooleanAttribute);
+} = prepareAttributeUsageWithSuspense<UseBooleanAttributeResult | undefined>(s => s.booleanAttributeAtomFamily, s => s.booleanAttributeAtomFamily);
 
 export const useComponentAttribute: {
     /**
@@ -135,4 +135,4 @@ export const useComponentAttribute: {
      * @returns Undefined if attribute doesn't exist, or it is not a component attribute.
      */
     (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseComponentAttributeResult | undefined | ConfigurationUninitialized;
-} = prepareAttributeUsageWithSuspense<UseComponentAttributeResult | undefined>(s => s.useComponentAttribute, s => s.useComponentAttribute);
+} = prepareAttributeUsageWithSuspense<UseComponentAttributeResult | undefined>(s => s.componentAttributeAtomFamily, s => s.componentAttributeAtomFamily);

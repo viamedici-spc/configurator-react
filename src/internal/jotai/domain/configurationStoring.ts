@@ -8,7 +8,7 @@ export type UseConfigurationStoringResult = {
     restoreConfiguration: (storedConfiguration: StoredConfiguration) => Promise<SetManyResult>;
 };
 
-export function createUseConfigurationStoringHookAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseConfigurationStoringResult> {
+export function createConfigurationStoringAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseConfigurationStoringResult> {
     return atomWithGuard((_, getGuarded) => {
         const session = getGuarded(configurationSessionAtom);
 

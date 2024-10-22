@@ -85,7 +85,7 @@ export type UseComponentAttributeResult = UseAttributeExplainResult<WhyIsCompone
     isMandatory: () => boolean;
 };
 
-export function createUseChoiceAttributeHookAtom(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>> {
+export function createChoiceAttributeAtomFamily(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>> {
     return createAttributeAtomFamily<ChoiceAttribute, WhyIsChoiceValueStateNotPossible, Omit<UseChoiceAttributeResult, "attribute" | "explain" | "applySolution" | "isMandatory">>(
         guardedAttributesAtom,
         useExplainAtom,
@@ -122,7 +122,7 @@ export function createUseChoiceAttributeHookAtom(guardedAttributesAtom: Selector
         }) satisfies AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
 }
 
-export function createUseNumericAttributeHookAtom(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>> {
+export function createNumericAttributeAtomFamily(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>> {
     return createAttributeAtomFamily<NumericAttribute, WhyIsNumericStateNotPossible, Pick<UseNumericAttributeResult, "makeDecision">>(
         guardedAttributesAtom,
         useExplainAtom,
@@ -141,7 +141,7 @@ export function createUseNumericAttributeHookAtom(guardedAttributesAtom: Selecto
         }) satisfies AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
 }
 
-export function createUseBooleanAttributeHookAtom(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>> {
+export function createBooleanAttributeAtomFamily(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>> {
     return createAttributeAtomFamily<BooleanAttribute, WhyIsBooleanStateNotPossible, Pick<UseBooleanAttributeResult, "makeDecision">>(
         guardedAttributesAtom,
         useExplainAtom,
@@ -160,14 +160,14 @@ export function createUseBooleanAttributeHookAtom(guardedAttributesAtom: Selecto
         }) satisfies AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
 }
 
-export function createUseComponentAttributeHookAtom(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useDecisionAtom: Selectors["useDecisionAtom"], useExplainAtom: Selectors["useExplainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>> {
+export function createComponentAttributeAtomFamily(guardedAttributesAtom: Selectors["guardedAttributesAtom"], decisionAtom: Selectors["decisionAtom"], explainAtom: Selectors["explainAtom"]): AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>> {
     return createAttributeAtomFamily<ComponentAttribute, WhyIsComponentStateNotPossible, Pick<UseComponentAttributeResult, "makeDecision">>(
         guardedAttributesAtom,
-        useExplainAtom,
+        explainAtom,
         AttributeRefinements.componentAttributeRefinement,
         ExplainQuestionSubject.component,
         (attribute, _, getGuarded) => {
-            const {makeDecision} = getGuarded(useDecisionAtom);
+            const {makeDecision} = getGuarded(decisionAtom);
 
             return {
                 makeDecision: (s) => makeDecision({
@@ -180,7 +180,7 @@ export function createUseComponentAttributeHookAtom(guardedAttributesAtom: Selec
 }
 
 
-function createAttributeAtomFamily<A extends Attribute, E extends WhyIsStateNotPossible, TAdd>(guardedAttributesAtom: Selectors["guardedAttributesAtom"], useExplainAtom: Selectors["useExplainAtom"], refinement: Refinement<Attribute, A>, whyIsStateNotPossibleSubject: E["subject"], getAdditional: (attribute: A, get: Getter, getGuarded: GuardedGetter) => TAdd | ConfigurationUninitialized) {
+function createAttributeAtomFamily<A extends Attribute, E extends WhyIsStateNotPossible, TAdd>(guardedAttributesAtom: Selectors["guardedAttributesAtom"], explainAtom: Selectors["explainAtom"], refinement: Refinement<Attribute, A>, whyIsStateNotPossibleSubject: E["subject"], getAdditional: (attribute: A, get: Getter, getGuarded: GuardedGetter) => TAdd | ConfigurationUninitialized) {
     type Result = UseAttributeExplainResult<E> & TAdd & {
         attribute: A;
         isMandatory: () => boolean;
@@ -192,7 +192,7 @@ function createAttributeAtomFamily<A extends Attribute, E extends WhyIsStateNotP
         if (!attribute || !refinement(attribute)) {
             return undefined;
         }
-        const {explain, applySolution} = getGuarded(useExplainAtom);
+        const {explain, applySolution} = getGuarded(explainAtom);
         const additional = getAdditional(attribute, get, getGuarded);
         if (additional === ConfigurationUninitialized) {
             return ConfigurationUninitialized;

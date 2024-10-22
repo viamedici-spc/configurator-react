@@ -22,15 +22,15 @@ export type Effects = {
  */
 function createCleanupAtomFamiliesEffect(primitives: Primitives, selectors: Selectors, suspended: SuspendedAtoms) {
     const families = [
-        selectors.useChoiceAttribute,
-        selectors.useBooleanAttribute,
-        selectors.useNumericAttribute,
-        selectors.useComponentAttribute,
+        selectors.choiceAttributeAtomFamily,
+        selectors.booleanAttributeAtomFamily,
+        selectors.numericAttributeAtomFamily,
+        selectors.componentAttributeAtomFamily,
 
-        suspended.useChoiceAttribute,
-        suspended.useBooleanAttribute,
-        suspended.useNumericAttribute,
-        suspended.useComponentAttribute,
+        suspended.choiceAttributeAtomFamily,
+        suspended.booleanAttributeAtomFamily,
+        suspended.numericAttributeAtomFamily,
+        suspended.componentAttributeAtomFamily,
     ];
 
     return atomEffect((get) => {

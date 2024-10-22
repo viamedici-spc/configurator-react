@@ -14,7 +14,7 @@ export type UseExplainResult = {
     applySolution(solution: ExplainSolution): Promise<SetManyResult>,
 };
 
-export function createUseExplainHookAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseExplainResult> {
+export function createExplainAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseExplainResult> {
     return atomWithGuard((_, getGuarded) => {
         const session = getGuarded(configurationSessionAtom);
 

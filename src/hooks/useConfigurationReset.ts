@@ -1,4 +1,4 @@
-import {UseConfigurationResetResult} from "../internal/jotai/domain/useConfigurationReset";
+import {UseConfigurationResetResult} from "../internal/jotai/domain/configurationReset";
 import {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
@@ -13,6 +13,6 @@ const useConfigurationReset: {
      * @param suspend Whether to disable the Suspense api.
      */
     (suspend: false): UseConfigurationResetResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseConfigurationResetResult>(s => s.useConfigurationResetAtom, s => s.useConfigurationResetAtom);
+} = prepareAtomValueUsageWithSuspense<UseConfigurationResetResult>(s => s.configurationResetAtom, s => s.configurationResetAtom);
 
 export default useConfigurationReset;

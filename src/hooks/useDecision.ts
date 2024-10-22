@@ -1,4 +1,4 @@
-import {UseDecisionResult} from "../internal/jotai/domain/useDecision";
+import {UseDecisionResult} from "../internal/jotai/domain/decision";
 import {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
@@ -13,6 +13,6 @@ const useDecision: {
      * @param suspend Whether to disable the Suspense api.
      */
     (suspend: false): UseDecisionResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseDecisionResult>(s => s.useDecisionAtom, s => s.useDecisionAtom);
+} = prepareAtomValueUsageWithSuspense<UseDecisionResult>(s => s.decisionAtom, s => s.decisionAtom);
 
 export default useDecision;

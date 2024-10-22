@@ -6,7 +6,7 @@ export type UseSessionReinitializationResult = {
     reinitializeSession: () => Promise<void>;
 };
 
-export function createUseSessionReinitializationHookAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseSessionReinitializationResult> {
+export function createSessionReinitializationAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseSessionReinitializationResult> {
     return atomWithGuard((_, getGuarded) => {
         const session = getGuarded(configurationSessionAtom);
 

@@ -1,5 +1,5 @@
 import {ConfigurationUninitialized} from "../types";
-import {UseConfigurationStoringResult} from "../internal/jotai/domain/useConfigurationStoring";
+import {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
 const useConfigurationStoring: {
@@ -13,6 +13,6 @@ const useConfigurationStoring: {
      * @param suspend Whether to disable the Suspense api.
      */
     (suspend: false): UseConfigurationStoringResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseConfigurationStoringResult>(s => s.useConfigurationStoringAtom, s => s.useConfigurationStoringAtom);
+} = prepareAtomValueUsageWithSuspense<UseConfigurationStoringResult>(s => s.configurationStoringAtom, s => s.configurationStoringAtom);
 
 export default useConfigurationStoring;

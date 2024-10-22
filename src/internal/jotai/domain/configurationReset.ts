@@ -7,7 +7,7 @@ export type UseConfigurationResetResult = {
     resetConfiguration: () => Promise<void>
 };
 
-export function createUseConfigurationResetHookAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"], canResetAtom: Selectors["guardedCanResetAtom"]): GuardedAtom<UseConfigurationResetResult> {
+export function createConfigurationResetAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"], canResetAtom: Selectors["guardedCanResetAtom"]): GuardedAtom<UseConfigurationResetResult> {
     return atomWithGuard((_, getGuarded) => {
         const session = getGuarded(configurationSessionAtom);
         const canReset = getGuarded(canResetAtom);

@@ -2,14 +2,13 @@ import {Atom, atom} from "jotai";
 import {Attribute, Configuration, GlobalAttributeIdKey, IConfigurationSession} from "@viamedici-spc/configurator-ts";
 import {Primitives} from "./PrimitveAtoms";
 import {ConfigurationInitialization, ConfigurationUninitialized, ConfigurationUpdating, GuardedAtom} from "../../types";
-import {createUseDecisionHookAtom, UseDecisionResult} from "./domain/useDecision";
-import {createUseConfigurationResetHookAtom, UseConfigurationResetResult} from "./domain/useConfigurationReset";
-import {createUseExplainHookAtom, UseExplainResult} from "./domain/useExplain";
+import {createDecisionAtom, UseDecisionResult} from "./domain/decision";
+import {createConfigurationResetAtom, UseConfigurationResetResult} from "./domain/configurationReset";
+import {createExplainAtom, UseExplainResult} from "./domain/explain";
 import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
 import {
-    createUseBooleanAttributeHookAtom,
-    createUseChoiceAttributeHookAtom, createUseComponentAttributeHookAtom,
-    createUseNumericAttributeHookAtom,
+    createBooleanAttributeAtomFamily,
+    createChoiceAttributeAtomFamily, createComponentAttributeAtomFamily, createNumericAttributeAtomFamily,
     UseBooleanAttributeResult,
     UseChoiceAttributeResult,
     UseComponentAttributeResult,
@@ -18,7 +17,7 @@ import {
 import {PrimitiveAtom} from "jotai";
 import {createConfigurationInitializationAtom} from "./domain/configurationInitialization";
 import {createConfigurationUpdatingAtom} from "./domain/configurationUpdating";
-import {createUseConfigurationStoringHookAtom, UseConfigurationStoringResult} from "./domain/useConfigurationStoring";
+import {createConfigurationStoringAtom, UseConfigurationStoringResult} from "./domain/configurationStoring";
 import {createSubscriberAtom, SubscriberAtomType} from "./domain/AtomSubscription";
 import {
     ConfigurationSessionAtomType,
@@ -27,8 +26,8 @@ import {
     SessionInitializationAtomType,
     SessionUpdatingAtomType
 } from "./domain/SessionManagement";
-import {createUseConfigurationSatisfactionAtom, UseConfigurationSatisfactionResult} from "./domain/useConfigurationSatisfaction";
-import {createUseSessionReinitializationHookAtom, UseSessionReinitializationResult} from "./domain/useSessionReinitialization";
+import {createConfigurationSatisfactionAtom, UseConfigurationSatisfactionResult} from "./domain/configurationSatisfaction";
+import {createSessionReinitializationAtom, UseSessionReinitializationResult} from "./domain/sessionReinitialization";
 
 export type Selectors = {
     configurationSessionAtom: ConfigurationSessionAtomType;
@@ -44,16 +43,16 @@ export type Selectors = {
     configurationInitializationAtom: Atom<ConfigurationInitialization>;
     configurationUpdatingAtom: Atom<ConfigurationUpdating>;
 
-    useConfigurationStoringAtom: GuardedAtom<UseConfigurationStoringResult>;
-    useConfigurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
-    useDecisionAtom: GuardedAtom<UseDecisionResult>;
-    useConfigurationResetAtom: GuardedAtom<UseConfigurationResetResult>;
-    useSessionReinitializationAtom: GuardedAtom<UseSessionReinitializationResult>;
-    useExplainAtom: GuardedAtom<UseExplainResult>;
-    useChoiceAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
-    useNumericAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
-    useBooleanAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
-    useComponentAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>>;
+    configurationStoringAtom: GuardedAtom<UseConfigurationStoringResult>;
+    configurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
+    decisionAtom: GuardedAtom<UseDecisionResult>;
+    configurationResetAtom: GuardedAtom<UseConfigurationResetResult>;
+    sessionReinitializationAtom: GuardedAtom<UseSessionReinitializationResult>;
+    explainAtom: GuardedAtom<UseExplainResult>;
+    choiceAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
+    numericAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
+    booleanAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
+    componentAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>>;
 
     subscriberAtom: SubscriberAtomType;
 };
@@ -72,8 +71,8 @@ export function createSelectors(primitives: Primitives): Selectors {
         guardedCanResetAtom: guardAtom(primitives.canResetAtom),
         guardedAttributesAtom: guardAtom(primitives.attributesAtom),
     };
-    const useDecisionHookAtom = createUseDecisionHookAtom(guardedAtoms.guardedConfigurationSessionAtom);
-    const useExplainHookAtom = createUseExplainHookAtom(guardedAtoms.guardedConfigurationSessionAtom);
+    const decisionHookAtom = createDecisionAtom(guardedAtoms.guardedConfigurationSessionAtom);
+    const explainHookAtom = createExplainAtom(guardedAtoms.guardedConfigurationSessionAtom);
 
     return {
         ...guardedAtoms,
@@ -81,19 +80,21 @@ export function createSelectors(primitives: Primitives): Selectors {
 
         sessionInitializationAtom: sessionInitializationAtom,
         sessionUpdatingAtom: sessionUpdatingAtom,
+
         configurationInitializationAtom: createConfigurationInitializationAtom(sessionInitializationAtom, guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedConfigurationAtom, guardedAtoms.guardedCanResetAtom, guardedAtoms.guardedIsSatisfiedAtom, guardedAtoms.guardedAttributesAtom),
         configurationUpdatingAtom: createConfigurationUpdatingAtom(sessionUpdatingAtom),
-        useDecisionAtom: useDecisionHookAtom,
-        useExplainAtom: useExplainHookAtom,
 
-        useConfigurationSatisfactionAtom: createUseConfigurationSatisfactionAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedIsSatisfiedAtom),
-        useConfigurationStoringAtom: createUseConfigurationStoringHookAtom(guardedAtoms.guardedConfigurationSessionAtom),
-        useConfigurationResetAtom: createUseConfigurationResetHookAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedCanResetAtom),
-        useSessionReinitializationAtom: createUseSessionReinitializationHookAtom(guardedAtoms.guardedConfigurationSessionAtom),
-        useChoiceAttribute: createUseChoiceAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),
-        useNumericAttribute: createUseNumericAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),
-        useBooleanAttribute: createUseBooleanAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),
-        useComponentAttribute: createUseComponentAttributeHookAtom(guardedAtoms.guardedAttributesAtom, useDecisionHookAtom, useExplainHookAtom),
+        decisionAtom: decisionHookAtom,
+        explainAtom: explainHookAtom,
+
+        configurationSatisfactionAtom: createConfigurationSatisfactionAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedIsSatisfiedAtom),
+        configurationStoringAtom: createConfigurationStoringAtom(guardedAtoms.guardedConfigurationSessionAtom),
+        configurationResetAtom: createConfigurationResetAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedCanResetAtom),
+        sessionReinitializationAtom: createSessionReinitializationAtom(guardedAtoms.guardedConfigurationSessionAtom),
+        choiceAttributeAtomFamily: createChoiceAttributeAtomFamily(guardedAtoms.guardedAttributesAtom, decisionHookAtom, explainHookAtom),
+        numericAttributeAtomFamily: createNumericAttributeAtomFamily(guardedAtoms.guardedAttributesAtom, decisionHookAtom, explainHookAtom),
+        booleanAttributeAtomFamily: createBooleanAttributeAtomFamily(guardedAtoms.guardedAttributesAtom, decisionHookAtom, explainHookAtom),
+        componentAttributeAtomFamily: createComponentAttributeAtomFamily(guardedAtoms.guardedAttributesAtom, decisionHookAtom, explainHookAtom),
 
         subscriberAtom: createSubscriberAtom(primitives)
     };

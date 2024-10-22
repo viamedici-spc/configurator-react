@@ -13,7 +13,7 @@ export type UseConfigurationSatisfactionResult = {
     }
 }
 
-export function createUseConfigurationSatisfactionAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"], isSatisfiedAtom: Selectors["guardedIsSatisfiedAtom"]): GuardedAtom<UseConfigurationSatisfactionResult> {
+export function createConfigurationSatisfactionAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"], isSatisfiedAtom: Selectors["guardedIsSatisfiedAtom"]): GuardedAtom<UseConfigurationSatisfactionResult> {
     const explainQuestion: WhyIsConfigurationNotSatisfied = {
         question: ExplainQuestionType.whyIsNotSatisfied,
         subject: ExplainQuestionSubject.configuration

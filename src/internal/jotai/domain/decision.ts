@@ -11,7 +11,7 @@ export type UseDecisionResult = {
     getDecisions(): ReadonlyArray<CollectedDecision>;
 };
 
-export function createUseDecisionHookAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseDecisionResult> {
+export function createDecisionAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseDecisionResult> {
     return atomWithGuard((_, getGuarded) => {
         const session = getGuarded(configurationSessionAtom);
 

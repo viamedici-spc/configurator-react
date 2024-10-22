@@ -1,39 +1,31 @@
 import {useAtomsContext} from "../internal/contexts";
 import {createAttributesAtom} from "../internal/jotai/domain/dynamic";
-import {Atoms} from "../internal/jotai/Atoms";
 import {useMemo} from "react";
 import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
 import {Attribute, Configuration, GlobalAttributeId, GlobalAttributeIdKey} from "@viamedici-spc/configurator-ts";
 import {Atom} from "jotai";
 import {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "../internal/jotai/domain/attribute";
-import {UseDecisionResult} from "../internal/jotai/domain/useDecision";
-import {UseConfigurationResetResult} from "../internal/jotai/domain/useConfigurationReset";
-import {UseExplainResult} from "../internal/jotai/domain/useExplain";
+import {UseDecisionResult} from "../internal/jotai/domain/decision";
+import {UseConfigurationResetResult} from "../internal/jotai/domain/configurationReset";
+import {UseExplainResult} from "../internal/jotai/domain/explain";
 import {ConfigurationInitialization, ConfigurationUpdating, GuardedAtom} from "../types";
-import {UseConfigurationStoringResult} from "../internal/jotai/domain/useConfigurationStoring";
-import {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/useConfigurationSatisfaction";
-import {UseSessionReinitializationResult} from "../internal/jotai/domain/useSessionReinitialization";
-
-/**
- * TODO
- * Namensgebung besprechen
- * mit Suffix oder ohne?
- *
- * Wie kommentieren?
- */
+import {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
+import {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/configurationSatisfaction";
+import {UseSessionReinitializationResult} from "../internal/jotai/domain/sessionReinitialization";
 
 export type UseJotaiAtomsResult = {
-    getConfigurationInitializationAtom: Atom<ConfigurationInitialization>;
-    getConfigurationUpdatingAtom: Atom<ConfigurationUpdating>;
     createAttributesAtom: {
         (attributes: "all"): GuardedAtom<ReadonlyArray<Attribute>>
         (attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: true): GuardedAtom<ReadonlyArray<Attribute>>
         (attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: false): GuardedAtom<ReadonlyArray<Attribute | undefined>>
     };
-    getChoiceAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
-    getNumericAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
-    getBooleanAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
-    getComponentAttribute: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>>;
+    getConfigurationInitializationAtom: Atom<ConfigurationInitialization>;
+    getConfigurationUpdatingAtom: Atom<ConfigurationUpdating>;
+    getChoiceAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
+    getNumericAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
+    getBooleanAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
+    getComponentAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>>;
+
     getConfigurationAtom: GuardedAtom<Configuration>;
     getConfigurationStoringAtom: GuardedAtom<UseConfigurationStoringResult>;
     getConfigurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
@@ -50,16 +42,16 @@ export function useJotaiAtoms(): UseJotaiAtomsResult {
         getConfigurationInitializationAtom: selectors.configurationInitializationAtom,
         getConfigurationUpdatingAtom: selectors.configurationUpdatingAtom,
         createAttributesAtom: createAttributesAtom(selectors),
-        getChoiceAttribute: selectors.useChoiceAttribute,
-        getNumericAttribute: selectors.useNumericAttribute,
-        getBooleanAttribute: selectors.useBooleanAttribute,
-        getComponentAttribute: selectors.useComponentAttribute,
+        getChoiceAttributeAtomFamily: selectors.choiceAttributeAtomFamily,
+        getNumericAttributeAtomFamily: selectors.numericAttributeAtomFamily,
+        getBooleanAttributeAtomFamily: selectors.booleanAttributeAtomFamily,
+        getComponentAttributeAtomFamily: selectors.componentAttributeAtomFamily,
         getConfigurationAtom: selectors.guardedConfigurationAtom,
-        getConfigurationSatisfactionAtom: selectors.useConfigurationSatisfactionAtom,
-        getConfigurationStoringAtom: selectors.useConfigurationStoringAtom,
-        getDecisionAtom: selectors.useDecisionAtom,
-        getConfigurationResetAtom: selectors.useConfigurationResetAtom,
-        getSessionReinitializationAtom: selectors.useSessionReinitializationAtom,
-        getExplainAtom: selectors.useExplainAtom,
+        getConfigurationSatisfactionAtom: selectors.configurationSatisfactionAtom,
+        getConfigurationStoringAtom: selectors.configurationStoringAtom,
+        getDecisionAtom: selectors.decisionAtom,
+        getConfigurationResetAtom: selectors.configurationResetAtom,
+        getSessionReinitializationAtom: selectors.sessionReinitializationAtom,
+        getExplainAtom: selectors.explainAtom,
     }), [selectors]);
 }
