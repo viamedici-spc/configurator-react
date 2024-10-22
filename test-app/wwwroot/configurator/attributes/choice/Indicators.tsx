@@ -18,19 +18,19 @@ export function MandatoryIndicator() {
 
 export function SelectionModeIndicator() {
     const activeAttribute = useActiveAttribute();
-    const attribute = useChoiceAttribute(activeAttribute);
+    const {isMultiSelect} = useChoiceAttribute(activeAttribute);
 
     return (
         <span style={{color: "var(--color-selection-mode)"}}>
-            {AttributeInterpreter.isChoiceAttributeMultiSelect(attribute.attribute) ? "multi-select" : "single-select"}
+            {isMultiSelect() ? "multi-select" : "single-select"}
         </span>
     )
 }
 
 export function AvailableValuesIndicator() {
     const activeAttribute = useActiveAttribute();
-    const {attribute} = useChoiceAttribute(activeAttribute);
-    const allowed = AttributeInterpreter.getAllowedChoiceValues(attribute);
+    const {getAllowedChoiceValues} = useChoiceAttribute(activeAttribute);
+    const allowed = getAllowedChoiceValues();
 
     return (
         <span style={{color: "var(--color-allowed-values)"}}>

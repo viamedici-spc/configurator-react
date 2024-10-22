@@ -1,6 +1,6 @@
 import {useActiveAttribute} from "../AttributeItem";
 import {useComponentAttribute} from "@viamedici-spc/configurator-react";
-import {AttributeInterpreter, ComponentDecisionState, DecisionKind, ExplainQuestionType} from "@viamedici-spc/configurator-ts";
+import {ComponentDecisionState, DecisionKind, ExplainQuestionType} from "@viamedici-spc/configurator-ts";
 import {handleDecisionResponse} from "../../../common/PromiseErrorHandling";
 import {attributeIdToString} from "../../../common/Naming";
 import CommonValueSelection, {Value} from "../CommonValueSelection";
