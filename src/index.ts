@@ -22,6 +22,7 @@ import useConfigurationReset from "./hooks/useConfigurationReset";
 import {UseConfigurationResetResult} from "./internal/jotai/domain/configurationReset";
 import {UseSessionReinitializationResult} from "./internal/jotai/domain/sessionReinitialization";
 import useSessionReinitialization from "./hooks/useSessionReinitialization";
+import { useDefaultConfiguratorStore } from "./internal/contexts";
 
 export {
     // attribute
@@ -76,4 +77,6 @@ export {
 
     // useConfiguration
     useConfiguration,
+
+    useDefaultConfiguratorStore,
 };

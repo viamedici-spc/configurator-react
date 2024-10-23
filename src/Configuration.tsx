@@ -4,7 +4,7 @@ import {
 import {
     SessionContext
 } from "@viamedici-spc/configurator-ts";
-import {AtomsContext} from "./internal/contexts";
+import {AtomsContext, useDefaultConfiguratorStore} from "./internal/contexts";
 import EffectLoader from "./internal/EffectLoader";
 import {createAtoms} from "./internal/jotai/Atoms";
 import {getDefaultStore, Provider} from "jotai";
@@ -25,23 +25,15 @@ export type ConfigurationProps = {
 
 export default function Configuration(props: PropsWithChildren<ConfigurationProps>) {
     const atoms = useMemo(() => createAtoms(), []);
-
-    const children = (<>
-        <SessionManagementInitializer sessionContext={props.sessionContext}/>
-        <EffectLoader/>
-        {props.children}
-    </>);
+    const store = props.jotaiStore ?? useDefaultConfiguratorStore();
 
     return <>
         <AtomsContext.Provider value={atoms}>
-            {
-                props.jotaiStore
-                    ? (<Provider store={props.jotaiStore}>
-                        {children}
-                    </Provider>)
-                    : children
-            }
-
+            <Provider store={store}>
+                <SessionManagementInitializer sessionContext={props.sessionContext}/>
+                <EffectLoader/>
+                {props.children}
+            </Provider>
         </AtomsContext.Provider>
     </>
 }
