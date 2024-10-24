@@ -1,5 +1,5 @@
 import {
-    useAtomsContext
+    useAtomsContext, useConfiguratorStore
 
 } from "../internal/contexts";
 import {ConfigurationInitialization, ConfigurationUpdating} from "../types";
@@ -10,7 +10,8 @@ import {useAtomValue} from "jotai";
  */
 export function useConfigurationInitialization(): ConfigurationInitialization {
     const {selectors: {configurationInitializationAtom}} = useAtomsContext();
-    return useAtomValue(configurationInitializationAtom);
+    const store = useConfiguratorStore();
+    return useAtomValue(configurationInitializationAtom, {store});
 }
 
 /**
@@ -18,5 +19,6 @@ export function useConfigurationInitialization(): ConfigurationInitialization {
  */
 export function useConfigurationUpdating(): ConfigurationUpdating {
     const {selectors: {configurationUpdatingAtom}} = useAtomsContext();
-    return useAtomValue(configurationUpdatingAtom);
+    const store = useConfiguratorStore();
+    return useAtomValue(configurationUpdatingAtom, {store});
 }

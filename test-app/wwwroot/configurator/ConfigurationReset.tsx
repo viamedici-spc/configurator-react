@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {useJotaiAtoms} from "../../../src/hooks/useJotaiAtoms";
 import {useAtomValue} from "jotai";
-import {ConfigurationUninitialized} from "../../../src";
+import {ConfigurationUninitialized, useConfiguratorStore} from "../../../src";
 import clsx from "clsx";
 import {handleError} from "../common/PromiseErrorHandling";
 
@@ -26,7 +26,7 @@ const Root = styled.div`
 
 export default function ConfigurationReset() {
     const {getConfigurationResetAtom} = useJotaiAtoms();
-    const result = useAtomValue(getConfigurationResetAtom);
+    const result = useAtomValue(getConfigurationResetAtom, {store: useConfiguratorStore()});
 
     const text = result === ConfigurationUninitialized ? "uninitialized" : (result.canResetConfiguration ? "yes" : "no");
     const execute = () => {

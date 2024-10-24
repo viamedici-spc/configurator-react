@@ -1,22 +1,21 @@
 import {Context, createContext, useContext} from "react";
 import {Atoms} from "./jotai/Atoms";
-import {getDefaultStore} from "jotai";
-import {createStore} from "jotai/vanilla/store";
+import {getDefaultStore, createStore} from "jotai";
 
 type Contexts = {
     AtomsContext: Context<Atoms>;
+    StoreContext: Context<ReturnType<typeof createStore>>;
 }
 
 const contexts: Contexts = (window as any).configuratorReactContexts ?? {
     AtomsContext: createContext(null as any),
+    StoreContext: createContext(getDefaultStore()),
 } satisfies Contexts;
 (window as any).configuratorReactContexts = contexts;
-(window as any).configuratorStore ||= getDefaultStore();
 
 export const AtomsContext = contexts.AtomsContext;
+export const StoreContext = contexts.StoreContext as Context<ReturnType<typeof createStore>>;
 
 export const useAtomsContext = () => useContext(AtomsContext);
 
-export const useDefaultConfiguratorStore = (): ReturnType<typeof createStore> => {
-    return (window as any).configuratorStore;
-};
+export const useConfiguratorStore = (): ReturnType<typeof createStore> => useContext(StoreContext);

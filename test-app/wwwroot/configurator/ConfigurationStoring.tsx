@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {useJotaiAtoms} from "../../../src/hooks/useJotaiAtoms";
 import {useAtomValue} from "jotai";
-import {ConfigurationUninitialized} from "../../../src";
+import {ConfigurationUninitialized, useConfiguratorStore} from "../../../src";
 import {handleError} from "../common/PromiseErrorHandling";
 
 const Root = styled.div`
@@ -15,7 +15,7 @@ const Root = styled.div`
 
 export default function ConfigurationStoring() {
     const {getConfigurationStoringAtom} = useJotaiAtoms();
-    const result = useAtomValue(getConfigurationStoringAtom);
+    const result = useAtomValue(getConfigurationStoringAtom, {store: useConfiguratorStore()});
 
     const store = () => {
         if (result !== ConfigurationUninitialized) {

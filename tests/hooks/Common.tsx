@@ -13,7 +13,7 @@ import {
 } from "@viamedici-spc/configurator-ts";
 import {PropsWithChildren, useMemo} from "react";
 import {Atoms} from "../../src/internal/jotai/Atoms";
-import {AtomsContext} from "../../src/internal/contexts";
+import {AtomsContext, StoreContext} from "../../src/internal/contexts";
 import {atom, createStore, ExtractAtomValue, Provider} from "jotai";
 import {SessionManagementMachineAtomType} from "../../src/internal/jotai/domain/SessionManagement";
 import {createPrimitives, Primitives} from "../../src/internal/jotai/PrimitveAtoms";
@@ -70,11 +70,13 @@ export function WrappingComponent(props: PropsWithChildren<{
 
 
     return (
-        <Provider store={store}>
-            <AtomsContext.Provider value={atoms}>
-                {props.children}
-            </AtomsContext.Provider>
-        </Provider>
+        <StoreContext.Provider value={store}>
+            <Provider store={store}>
+                <AtomsContext.Provider value={atoms}>
+                    {props.children}
+                </AtomsContext.Provider>
+            </Provider>
+        </StoreContext.Provider>
     );
 }
 

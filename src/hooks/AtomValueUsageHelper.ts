@@ -5,7 +5,7 @@ import {SuspendedAtoms} from "../internal/jotai/SuspendedAtoms";
 import {Atom, useAtomValue, useSetAtom} from "jotai";
 import {ConfigurationUninitialized, GuardedAtom} from "../types";
 import {useEffect, useMemo} from "react";
-import {useAtomsContext} from "../internal/contexts";
+import {useAtomsContext, useConfiguratorStore} from "../internal/contexts";
 import {Bool, Eq, EqT, Str} from "@viamedici-spc/fp-ts-extensions";
 import {useStableMemo} from "fp-ts-react-stable-hooks";
 import {PromiseOrValue} from "../internal/Types";
@@ -15,7 +15,8 @@ export function prepareParameterizedAtomValueUsageWithSuspense<Value, T extends 
     const stableMemoEq = Eq.tuple(Eq.eqNullable(Bool.Eq), argsEq);
     return (suspend: boolean | undefined, ...args: T): Value | ConfigurationUninitialized => {
         const atoms = useAtomsContext();
-        const subscribe = useSetAtom(atoms.selectors.subscriberAtom);
+        const store = useConfiguratorStore();
+        const subscribe = useSetAtom(atoms.selectors.subscriberAtom, {store});
 
         const atom = useStableMemo(() => (suspend ?? true) ? suspendedSelector(atoms, ...args) : normalSelector(atoms, ...args), [suspend, args], stableMemoEq);
         const subscription = useMemo(() => subscribe(atom), [subscribe, atom]);
@@ -26,7 +27,7 @@ export function prepareParameterizedAtomValueUsageWithSuspense<Value, T extends 
             };
         }, [subscription]);
 
-        return useAtomValue(atom);
+        return useAtomValue(atom, {store});
     };
 }
 

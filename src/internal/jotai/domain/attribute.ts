@@ -40,7 +40,7 @@ import {getChoiceAttributeResetDecisions} from "../../attributeHelper";
 import {match} from "ts-pattern";
 import {ConfigurationUninitialized, GuardedAtom} from "../../../types";
 import atomWithGuard, {GuardedGetter} from "../helper/atomWithGuard";
-import memoize from "memoizee";
+import memize from "memize";
 
 export type SimplifiedExplainQuestion<T extends ExplainQuestion> = Omit<T, "attributeId" | "subject">;
 
@@ -112,12 +112,12 @@ export function createChoiceAttributeAtomFamily(guardedAttributesAtom: Selectors
                         d => pipe(() => setManyDecision(d, {type: "KeepExistingDecisions"}), T.map(constVoid))
                     ),
                 )(),
-                isMultiSelect: memoize(() => AttributeInterpreter.isChoiceAttributeMultiSelect(attribute)),
-                getAllowedChoiceValues: memoize(() => AttributeInterpreter.getAllowedChoiceValues(attribute)),
-                getIncludedChoiceValues: memoize(() => AttributeInterpreter.getIncludedChoiceValues(attribute)),
-                getBlockedChoiceValues: memoize(() => AttributeInterpreter.getBlockedChoiceValues(attribute)),
-                isChoiceValueAllowed: memoize((v) => ChoiceValueInterpreter.isAllowed(v)),
-                isChoiceValueBlocked: memoize((v) => ChoiceValueInterpreter.isBlocked(v)),
+                isMultiSelect: memize(() => AttributeInterpreter.isChoiceAttributeMultiSelect(attribute)),
+                getAllowedChoiceValues: memize(() => AttributeInterpreter.getAllowedChoiceValues(attribute)),
+                getIncludedChoiceValues: memize(() => AttributeInterpreter.getIncludedChoiceValues(attribute)),
+                getBlockedChoiceValues: memize(() => AttributeInterpreter.getBlockedChoiceValues(attribute)),
+                isChoiceValueAllowed: memize((v) => ChoiceValueInterpreter.isAllowed(v)),
+                isChoiceValueBlocked: memize((v) => ChoiceValueInterpreter.isBlocked(v)),
             };
         }) satisfies AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
 }
@@ -200,7 +200,7 @@ function createAttributeAtomFamily<A extends Attribute, E extends WhyIsStateNotP
 
         return {
             attribute: attribute,
-            isMandatory: memoize(() => AttributeInterpreter.isMandatory(attribute)),
+            isMandatory: memize(() => AttributeInterpreter.isMandatory(attribute)),
             explain: (question: ExplainQuestionParam<E>, answerType: "decisions" | "constraints" | "full"): Promise<any> => {
                 const subject = match(question.question)
                     .with(ExplainQuestionType.whyIsNotSatisfied, () => ExplainQuestionSubject.attribute)
