@@ -7,11 +7,11 @@ type Contexts = {
     StoreContext: Context<ReturnType<typeof createStore>>;
 }
 
-const contexts: Contexts = (window as any).configuratorReactContexts ?? {
+const contexts: Contexts = (globalThis as any).configuratorReactContexts ?? {
     AtomsContext: createContext(null as any),
     StoreContext: createContext(getDefaultStore()),
 } satisfies Contexts;
-(window as any).configuratorReactContexts = contexts;
+(globalThis as any).configuratorReactContexts = contexts;
 
 export const AtomsContext = contexts.AtomsContext;
 export const StoreContext = contexts.StoreContext as Context<ReturnType<typeof createStore>>;
