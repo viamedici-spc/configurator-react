@@ -18,7 +18,12 @@ export default defineConfig(() => ({
         },
     },
     plugins: [
-        externalizeDeps(),
+        externalizeDeps({
+            except: [
+                // Is only compatible with ESM, not with CommonJs. Some bundlers couldn't handle this by themselves.
+                "p-defer"
+            ]
+        }),
         dts({rollupTypes: true})
     ],
     test: {
