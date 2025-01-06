@@ -29,7 +29,7 @@ import useMakeDecision from "./hooks/useMakeDecision";
 import {UseDecisionQueriesResult} from "./internal/jotai/domain/decisionQueries";
 import useDecisionQueries from "./hooks/useDecisionQueries";
 import useDecisions from "./hooks/useDecisions";
-import { useJotaiAtoms } from "./hooks/useJotaiAtoms";
+import {useJotaiAtoms, UseJotaiAtomsResult} from "./hooks/useJotaiAtoms";
 
 export {
     // attribute
@@ -101,5 +101,6 @@ export {
 
     useConfiguratorStore,
 
+    type UseJotaiAtomsResult,
     useJotaiAtoms
 };

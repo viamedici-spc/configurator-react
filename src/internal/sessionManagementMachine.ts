@@ -98,6 +98,11 @@ export const sessionManagementMachine = setup({
                 ]
             },
             Processing: {
+                entry: [
+                    assign({
+                        sessionCreateOrUpdateError: () => null
+                    })
+                ],
                 invoke: {
                     src: "createOrUpdateSession",
                     input: ({context}) => ({

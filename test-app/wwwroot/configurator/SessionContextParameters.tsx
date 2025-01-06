@@ -24,7 +24,6 @@ export default function SessionContextParameters(props: { accessTokenState: Stat
     const onSubmit = (e: FormEvent) => {
         e.preventDefault();
 
-        console.log(deploymentNameState[0],channelState[0]);
         props.accessTokenState[1](accessTokenState[0]);
         props.deploymentNameState[1](deploymentNameState[0]);
         props.channelState[1](channelState[0]);
