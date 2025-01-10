@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {useJotaiAtoms} from "@viamedici-spc/configurator-react";
 import {useAtomValue} from "jotai";
-import {ConfigurationUninitialized, useConfiguratorStore} from "../../../src";
+import {ConfigurationUninitialized, isConfigurationInitialized, UseConfigurationResetResult, useConfiguratorStore} from "../../../src";
 import clsx from "clsx";
 import {handleError} from "../common/PromiseErrorHandling";
 
@@ -30,7 +30,7 @@ export default function ConfigurationReset() {
 
     const text = result === ConfigurationUninitialized ? "uninitialized" : (result.canResetConfiguration ? "yes" : "no");
     const execute = () => {
-        if (result !== ConfigurationUninitialized) {
+        if (isConfigurationInitialized(result)) {
             handleError(() => result.resetConfiguration());
         }
     };

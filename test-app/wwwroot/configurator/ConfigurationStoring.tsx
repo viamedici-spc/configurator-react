@@ -3,6 +3,7 @@ import {useJotaiAtoms} from "@viamedici-spc/configurator-react";
 import {useAtomValue} from "jotai";
 import {ConfigurationUninitialized, useConfiguratorStore} from "@viamedici-spc/configurator-react";
 import {handleError} from "../common/PromiseErrorHandling";
+import {isConfigurationInitialized, UseConfigurationStoringResult} from "../../../src";
 
 const Root = styled.div`
     grid-area: configuration-storing;
@@ -18,7 +19,7 @@ export default function ConfigurationStoring() {
     const result = useAtomValue(getConfigurationStoringAtom, {store: useConfiguratorStore()});
 
     const store = () => {
-        if (result !== ConfigurationUninitialized) {
+        if (isConfigurationInitialized(result)) {
             handleError(async () => {
                 const storedConfiguration = await result.storeConfiguration();
                 await navigator.clipboard.writeText(JSON.stringify(storedConfiguration));
@@ -26,7 +27,7 @@ export default function ConfigurationStoring() {
         }
     };
     const restore = () => {
-        if (result !== ConfigurationUninitialized) {
+        if (isConfigurationInitialized(result)) {
             handleError(async () => {
                 const text = await navigator.clipboard.readText();
                 await result.restoreConfiguration(JSON.parse(text), {type: "DropExistingDecisions", conflictHandling: {type: "Automatic"}});

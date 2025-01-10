@@ -30,6 +30,7 @@ import {UseDecisionQueriesResult} from "./internal/jotai/domain/decisionQueries"
 import useDecisionQueries from "./hooks/useDecisionQueries";
 import useDecisions from "./hooks/useDecisions";
 import {useJotaiAtoms, UseJotaiAtomsResult} from "./hooks/useJotaiAtoms";
+import {isConfigurationInitialized} from "./helper";
 
 export {
     // attribute
@@ -102,5 +103,7 @@ export {
     useConfiguratorStore,
 
     type UseJotaiAtomsResult,
-    useJotaiAtoms
+    useJotaiAtoms,
+
+    isConfigurationInitialized,
 };
