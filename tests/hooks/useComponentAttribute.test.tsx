@@ -94,7 +94,7 @@ describe("useComponentAttribute tests", () => {
             ])
         };
 
-        const {result} = renderHook(() => useComponentAttribute({localId: "A1"}), {
+        const {result} = renderHook(() => useComponentAttribute({localId: "A1"}, false), {
             wrapper: WrappingComponent,
             initialProps: {
                 session: session,

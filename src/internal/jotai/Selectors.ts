@@ -78,7 +78,7 @@ export type Selectors = {
     subscriberAtom: SubscriberAtomType;
 };
 
-function guardAtom<Value>(base: Atom<Value>): GuardedAtom<Value> {
+function guardAtom<Value>(base: Atom<Value>): GuardedAtom<NonNullable<Value>> {
     return atom(get => get(base) ?? ConfigurationUninitialized);
 }
 

@@ -4,7 +4,7 @@ import {Atom} from "jotai";
 /**
  * Represents an Atom which is guarded against access while the Configuration is not fully initialized.
  */
-export type GuardedAtom<Value> = Atom<NonNullable<Value> | ConfigurationUninitialized>;
+export type GuardedAtom<Value> = Atom<Value | ConfigurationUninitialized>;
 
 export type ConfigurationUninitialized = "ConfigurationUninitialized";
 export const ConfigurationUninitialized: ConfigurationUninitialized = "ConfigurationUninitialized";

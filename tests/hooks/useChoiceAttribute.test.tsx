@@ -71,31 +71,6 @@ describe("useChoiceAttribute tests", () => {
             choiceValueId: "V1",
             state: null
         } as ExplicitChoiceDecision);
-
-        // expect(session.explain).toHaveBeenCalledTimes(4);
-        // expect(session.explain).toHaveBeenNthCalledWith(1, {
-        //     type: ExplainType.ChoiceValue,
-        //     attributeId: {localId: "A1"},
-        //     choiceValueId: "V1",
-        //     question: ExplainMode.WhyMustBeIncluded
-        // } as ExplainChoiceValue);
-        // expect(session.explain).toHaveBeenNthCalledWith(2, {
-        //     type: ExplainType.ChoiceValue,
-        //     attributeId: {localId: "A1"},
-        //     choiceValueId: "V1",
-        //     question: ExplainMode.WhyCanNotBeIncluded
-        // } as ExplainChoiceValue);
-        //
-        // expect(session.explain).toHaveBeenNthCalledWith(3, {
-        //     type: ExplainType.Choice,
-        //     attributeId: {localId: "A1"},
-        //     question: ExplainMode.WhyMustBeIncluded
-        // } as ExplainChoice);
-        // expect(session.explain).toHaveBeenNthCalledWith(4, {
-        //     type: ExplainType.Choice,
-        //     attributeId: {localId: "A1"},
-        //     question: ExplainMode.WhyCanNotBeIncluded
-        // } as ExplainChoice);
     });
 
     it("Attribute not found", async () => {
@@ -127,7 +102,7 @@ describe("useChoiceAttribute tests", () => {
             ])
         };
 
-        const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}), {
+        const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}, false), {
             wrapper: WrappingComponent,
             initialProps: {
                 session: session,

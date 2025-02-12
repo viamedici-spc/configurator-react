@@ -98,7 +98,7 @@ describe("useNumericAttribute tests", () => {
             ])
         };
 
-        const {result} = renderHook(() => useNumericAttribute({localId: "A1"}), {
+        const {result} = renderHook(() => useNumericAttribute({localId: "A1"}, false), {
             wrapper: WrappingComponent,
             initialProps: {
                 session: session,

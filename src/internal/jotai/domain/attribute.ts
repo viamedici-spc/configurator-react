@@ -31,7 +31,7 @@ import {
 } from "@viamedici-spc/configurator-ts";
 import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
 import {atomFamily} from "jotai/utils";
-import {getDefaultStore, Getter} from "jotai";
+import {Getter} from "jotai";
 import {Selectors} from "../Selectors";
 import {constVoid, O, pipe, RA, T} from "@viamedici-spc/fp-ts-extensions";
 import {Refinement} from "fp-ts/Refinement";
