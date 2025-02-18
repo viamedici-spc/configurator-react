@@ -54,7 +54,7 @@
     "vitest": "^2.1.1"
   },
   "dependencies": {
-    "@viamedici-spc/configurator-ts": "2.2.0-alpha0003",
+    "@viamedici-spc/configurator-ts": "2.2.0-alpha0004",
     "@viamedici-spc/fp-ts-extensions": "^1.2.0",
     "dyna-guid": "^2.2.1",
     "fp-ts-react-stable-hooks": "^1.5.0",
