@@ -4,8 +4,11 @@ on: [push, workflow_dispatch]
 
 jobs:
   build-publish:
-    uses: viamedici-spc/github-ci/.github/workflows/build-npm.yml@v1
+    permissions:
+      contents: read
+      id-token: write
+    uses: viamedici-spc/github-ci/.github/workflows/build-npm.yml@v3
     with:
-      node-version: '18'
-    secrets:
-      npm_token: ${{ secrets.NPM_TOKEN }}
+      node-version: '24'
+      build-verbs: 'build,test'
+      skip-publish: false

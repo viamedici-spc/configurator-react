@@ -2,6 +2,10 @@
   "name": "@viamedici-spc/configurator-react",
   "version": "0.0.0",
   "description": "React library to build configurator web applications based on the Viamedici Headless Configuration Engine (HCE).",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viamedici-spc/configurator-react.git"
+  },
   "sideEffects": false,
   "files": [
     "dist"
