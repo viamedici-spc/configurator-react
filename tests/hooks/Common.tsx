@@ -96,7 +96,8 @@ export const choiceAttribute = {
             id: "V1",
             decision: null,
             nonOptimisticDecision: null,
-            possibleDecisionStates: []
+            possibleDecisionStates: [],
+            isPossibleDecisionStatesImmutable: true,
         }]
     ])
 } satisfies ChoiceAttribute;
@@ -109,6 +110,7 @@ export const numericAttribute = {
     canContributeToConfigurationSatisfaction: false,
     decision: null,
     nonOptimisticDecision: null,
+    isPossibleDecisionStatesImmutable: false,
     selection: Selection.Mandatory,
     range: {
         min: 1,
@@ -124,6 +126,7 @@ export const booleanAttribute = {
     isSatisfied: false,
     canContributeToConfigurationSatisfaction: false,
     possibleDecisionStates: [true, false],
+    isPossibleDecisionStatesImmutable: false,
     selection: Selection.Mandatory,
     decision: null,
     nonOptimisticDecision: null,
@@ -139,6 +142,7 @@ export const componentAttribute = {
     nonOptimisticDecision: null,
     selection: Selection.Mandatory,
     possibleDecisionStates: [ComponentDecisionState.Included, ComponentDecisionState.Excluded],
+    isPossibleDecisionStatesImmutable: false,
     inclusion: Inclusion.Optional
 } satisfies ComponentAttribute;
 

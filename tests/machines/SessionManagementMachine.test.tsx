@@ -74,14 +74,14 @@ describe("SessionManagementMachine tests", () => {
         const initialSessionContext = createSessionMock.mock.calls[0][0] as SessionContext;
         expect(initialSessionContext.configurationModelSource).toBe(emptyModel);
         expect(initialSessionContext.attributeRelations).toBeUndefined();
-        expect(initialSessionContext.usageRuleParameters).toBeUndefined();
+        expect(initialSessionContext.disableConfigurationModelTrimming).toBeUndefined();
 
         const session = (await createSessionMock.mock.results[0].value) as Mocked<IConfigurationSession>;
         await waitFor(() => expect(session.setSessionContext).toBeCalledTimes(1));
         const updatedSessionContext = session.setSessionContext.mock.calls[0][0] as SessionContext;
         expect(updatedSessionContext.configurationModelSource).toBe(modelWithOneAttribute);
         expect(updatedSessionContext.attributeRelations).toBeUndefined();
-        expect(updatedSessionContext.usageRuleParameters).toBeUndefined();
+        expect(updatedSessionContext.disableConfigurationModelTrimming).toBeUndefined();
 
         expect(session.close).toBeCalledTimes(0);
     });
