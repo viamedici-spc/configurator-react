@@ -25,10 +25,18 @@ type SessionCreateOrUpdateError = {
     sessionContext: SessionContext
 };
 
-const createOrUpdateSession = fromPromise<Either<SessionCreateOrUpdateError, IConfigurationSession>, { sessionContext: SessionContext, session: Option<IConfigurationSession> }>(({input}) => pipe(
+const createOrUpdateSession = fromPromise<Either<SessionCreateOrUpdateError, IConfigurationSession>, { sessionContext: SessionContext, session: Option<IConfigurationSession> }>(({input, signal}) => pipe(
     input.session,
     O.match(
-        () => () => SessionFactory.createSession(input.sessionContext),
+        () => async () => {
+            const session = await SessionFactory.createSession(input.sessionContext);
+            if (signal.aborted) {
+                // Nobody will receive this session (the machine left Processing or was stopped): close it instead of
+                // leaking it.
+                TE.tryCatch(async () => await session.close(), identity)();
+            }
+            return session;
+        },
         s => async () => {
             await s.setSessionContext(input.sessionContext);
             return s;
@@ -144,9 +152,20 @@ export const sessionManagementMachine = setup({
                     ]
                 }]
             },
+            // Not final: React's StrictMode (and a remount) runs the cleanup and then the effect again, which sends a
+            // new session context; the machine starts over instead of staying shut down.
             Shutdown: {
-                type: "final",
                 id: "shutdown",
+                on: {
+                    SessionContextChanged: {
+                        target: "Idle",
+                        actions: [
+                            assign({
+                                desiredSessionContext: ({event}) => event.sessionContext,
+                            }),
+                        ],
+                    },
+                },
                 entry: [
                     enqueueActions(({context, enqueue}) => {
                         if (context.configurationSession) {
