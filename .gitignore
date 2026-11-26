@@ -3,3 +3,4 @@ node_modules
 /**/dist
 /report/
 .DS_Store
+/package-check/consumer/index.ts

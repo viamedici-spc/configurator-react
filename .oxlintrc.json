@@ -17,7 +17,7 @@
     ],
     "vitest/require-mock-type-parameters": "off"
   },
-  "ignorePatterns": ["dist/**", "test-app/dist/**", "test-app/**"],
+  "ignorePatterns": ["dist/**", "package-check/consumer/index.ts", "test-app/dist/**", "test-app/**"],
   "overrides": [
     {
       "files": ["tests/**"],
