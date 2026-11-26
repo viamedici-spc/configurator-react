@@ -1,3 +1,10 @@
+# Improvements
+
+## Task scheduling
+
+- **`scheduleTask` returns its result:** the command of `useTaskScheduling` resolves with a `ScheduleTaskResult`, whose
+  `pendingTasks` counts the tasks still waiting, as configurator-ts's `scheduleTask` does; its type said `void` before.
+
 # Changes
 
 ## React 18.2 or 19, ESM only
@@ -24,15 +31,15 @@
   `UseJotaiAtomsResult` are `readonly`. Code that changed such an object after receiving it has to build a new one
   instead.
 
-# Improvements
-
-- **`scheduleTask` returns its result:** the command of `useTaskScheduling` resolves with a `ScheduleTaskResult`, whose
-  `pendingTasks` counts the tasks still waiting, as configurator-ts's `scheduleTask` does; its type said `void` before.
-
 # Fixes
+
+## Session lifecycle
 
 - **StrictMode:** a configurator no longer loads forever (or leaks a session) under React's StrictMode, and a session
   that finishes creating after the component unmounted is closed.
 - **Hooks mounted later resolve again:** with newer Jotai versions, hooks mounted after the initial load could stay
   suspended forever.
+
+## Installation
+
 - **Installing with npm works again:** the package no longer runs a `postinstall` script that failed for consumers.
