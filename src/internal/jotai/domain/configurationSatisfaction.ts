@@ -1,11 +1,11 @@
-import {ConstraintsExplainAnswer, DecisionsExplainAnswer, ExplainQuestionSubject, ExplainQuestionType, FullExplainAnswer, WhyIsConfigurationNotSatisfied} from "@viamedici-spc/configurator-ts";
+import {Configuration, ConstraintsExplainAnswer, DecisionsExplainAnswer, ExplainQuestionSubject, ExplainQuestionType, FullExplainAnswer, WhyIsConfigurationNotSatisfied} from "@viamedici-spc/configurator-ts";
 import {Selectors} from "../Selectors";
 import {GuardedAtom} from "../../../types";
 import atomWithGuard from "../helper/atomWithGuard";
 import {match} from "ts-pattern";
 
 export type UseConfigurationSatisfactionResult = {
-    isSatisfied: boolean;
+    isSatisfied: Configuration["isSatisfied"];
     explain: {
         (answerType: "decisions"): Promise<DecisionsExplainAnswer>;
         (answerType: "constraints"): Promise<ConstraintsExplainAnswer>;

@@ -111,6 +111,47 @@ function PaintingColorAttribute() {
 }
 ```
 
+## Live Configuration Previews
+
+Use `useLiveAttributes` for product images, diagrams, or other previews that depend on several attributes, including inferred values. Place the preview inside a `Configuration` with `activeAttributesEnabled`.
+
+```tsx
+import {Configuration, useLiveAttributes} from "@viamedici-spc/configurator-react";
+import type {GlobalAttributeId} from "@viamedici-spc/configurator-ts";
+
+const previewIds: readonly GlobalAttributeId[] = [
+    {localId: "Painting Color"},
+    {localId: "Width", componentPath: ["Housing"]},
+];
+
+function ProductPreview({visible}: {visible: boolean}) {
+    const preview = useLiveAttributes(previewIds, visible);
+    switch (preview.status) {
+        case "inactive":
+            return null;
+        case "pending":
+            return <span role="status">Updating preview…</span>;
+        case "missing":
+            return <span>Preview unavailable for this model.</span>;
+        case "error":
+            return preview.retry
+                ? <button onClick={preview.retry}>Retry preview</button>
+                : <span>Could not update the preview.</span>;
+        case "ready":
+            return <ProductVisualization attributes={preview.attributes}/>;
+    }
+}
+
+// Render with the application's existing session context and tab state.
+<Configuration sessionContext={sessionContext} activeAttributesEnabled>
+    <ProductPreview visible={showPreview}/>
+</Configuration>
+```
+
+Include every attribute the preview reads and use complete IDs for component and shared-model attributes. The hook registers the whole list with the same scope as the input controls. It releases the registration on unmount or when `visible` becomes false. `ready` provides the attributes in the requested order, after the engine confirms the scope and any background refresh. `missingIds` identifies missing attributes. If you retain the last confirmed image during an update, mark it as updating and reset it when the model or session changes.
+
+Use `ConfigurationResultsSection` with `useActiveAttributes().isFullyPropagated` for a final summary, export, or other result that needs the entire model. The section requests the full result when it enters the viewport. Pass `when="mounted"` for a result rendered only on its own step. Update any earlier `FullPropagationSection` imports and JSX to `ConfigurationResultsSection`.
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
