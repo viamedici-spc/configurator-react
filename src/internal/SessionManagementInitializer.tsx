@@ -15,13 +15,13 @@ export default function SessionManagementInitializer(props: { sessionContext: Se
         if (!props.sessionContext) {
             console.warn(sessionContextNullishWarningText);
         }
-    }, [props.sessionContext]);
+    }, [send, props.sessionContext]);
 
     useEffect(() => {
         return () => {
             send({type: "Shutdown"});
         };
-    }, []);
+    }, [send]);
 
     return null;
 }

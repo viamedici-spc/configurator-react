@@ -1,5 +1,4 @@
 import type {ConfigurationUninitialized} from "../types";
-import type {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 import type {StoredConfiguration} from "@viamedici-spc/configurator-ts";
 

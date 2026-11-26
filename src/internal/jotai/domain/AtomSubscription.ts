@@ -92,8 +92,11 @@ export function createAtomSubscriptionCleanupEffect(primitives: Primitives) {
             let didChange = false;
             set(primitives.subscriptionsAtom, existingSubscriptions => {
                 const newSubscriptions = new Map(existingSubscriptions);
+                // The keys are copied first because entries are deleted inside the loops.
+                // oxlint-disable-next-line unicorn/no-useless-spread
                 for (const atom of [...newSubscriptions.keys()]) {
                     const atomSubscriptions = new Map(newSubscriptions.get(atom) ?? RM.empty);
+                    // oxlint-disable-next-line unicorn/no-useless-spread
                     for (const subscriptionId of [...atomSubscriptions.keys()]) {
                         const subscription = atomSubscriptions.get(subscriptionId);
                         if (subscription === undefined || subscription.deref() === undefined) {

@@ -47,6 +47,8 @@ function createCleanupAtomFamiliesEffect(primitives: Primitives, selectors: Sele
             Logger.debug("Cleaning up atomFamilies");
 
             // Clear attributes family
+            // The params are copied first because members are removed inside the loops.
+            // oxlint-disable-next-line unicorn/no-useless-spread
             for (const param of [...attributes.getParams()]) {
                 const atom = attributes(param) as Atom<any>;
                 if (get.peek(atom) == null) {
@@ -58,6 +60,7 @@ function createCleanupAtomFamiliesEffect(primitives: Primitives, selectors: Sele
 
             // Remove all family members that point non-existent attributes.
             for (const family of families) {
+                // oxlint-disable-next-line unicorn/no-useless-spread
                 for (const param of [...family.getParams()]) {
                     if (!existingAttributeKeys.includes(param)) {
                         family.remove(param);

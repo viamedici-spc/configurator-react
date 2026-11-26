@@ -1,12 +1,11 @@
 import type {
     Attribute,
     GlobalAttributeId, GlobalAttributeIdKey} from "@viamedici-spc/configurator-ts";
-import { globalAttributeIdEq, GlobalAttributeIdKeyBuilder, globalAttributeIdKeyEq
-} from "@viamedici-spc/configurator-ts";
+import {globalAttributeIdEq, globalAttributeIdKeyEq} from "@viamedici-spc/configurator-ts";
 import type {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "../internal/jotai/domain/attribute";
 import {createAttributesAtom} from "../internal/jotai/domain/dynamic";
 import type { EqT} from "@viamedici-spc/fp-ts-extensions";
-import {Bool, Eq, O, pipe, RA, Str} from "@viamedici-spc/fp-ts-extensions";
+import {Bool, Eq, RA, Str} from "@viamedici-spc/fp-ts-extensions";
 import type {ConfigurationUninitialized} from "../types";
 import {prepareAttributeUsageWithSuspense, prepareParameterizedAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 import atomWithSuspend from "../internal/jotai/helper/atomWithSuspend";
