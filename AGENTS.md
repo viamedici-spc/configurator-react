@@ -11,7 +11,8 @@ session, hooks read it (suspending until it is ready) and send commands. configu
   test app against the sources with its Vite configuration, and the configuration files at the root), oxlint,
   `bun fmt --check`, Vitest, the tsdown build, publint and arethetypeswrong. CI also runs the tests on React 18.
 - Tests on React 18 locally: `bun add --no-save react@18.3.1 react-dom@18.3.1 && bun run test`, then `bun install`.
-- The test app: `bun run build`, then `bun run --filter configurator-react-test-app start`.
+- The test app: `bun run build`, then `bun run --filter configurator-react-test-app start`. It is a development
+  playground that runs the library from the workspace against the public demo deployment; it is not a demo.
 - Dependencies are updated by hand when working on the library: `bun outdated`, then `bun audit`. `bunfig.toml` installs
   only versions that have been public for three days (our own `@viamedici-spc` packages excepted).
 
