@@ -1,6 +1,6 @@
 import {afterEach, describe, expect, it, vi} from "vitest";
 import {act, cleanup, fireEvent, render, type RenderResult, screen} from "@testing-library/react";
-import {type ReactElement, StrictMode, Suspense, useState, version as reactVersion} from "react";
+import {type ReactElement, Suspense, useState, version as reactVersion} from "react";
 import {
     Configuration,
     useChoiceAttribute,
@@ -13,7 +13,7 @@ import {DecisionKind, SessionFactory} from "@viamedici-spc/configurator-ts";
 import {choiceAttribute, emptyModel} from "../hooks/Common";
 
 // The session lifecycle as an application drives it: mount, suspend until the session exists, mount more readers later,
-// unmount — with and without StrictMode, which mounts effects twice.
+// unmount — with and without StrictMode at the root of the render, which mounts effects twice.
 
 vi.mock("@viamedici-spc/configurator-ts", async importOriginal => ({
     ...(await importOriginal<object>()),
@@ -95,9 +95,9 @@ function Initialization() {
     return <div>init:{String(initialization.isInitializing)}</div>;
 }
 
-function App(props: {strict: boolean; initializationOutside?: boolean}) {
+function App(props: {initializationOutside?: boolean}) {
     const [late, setLate] = useState(false);
-    const tree = (
+    return (
         <Configuration sessionContext={sessionContext}>
             {props.initializationOutside && <Initialization />}
             <Suspense fallback={<div>loading</div>}>
@@ -112,14 +112,14 @@ function App(props: {strict: boolean; initializationOutside?: boolean}) {
             <button onClick={() => setLate(true)}>show</button>
         </Configuration>
     );
-    return props.strict ? <StrictMode>{tree}</StrictMode> : tree;
 }
 
-// React 19 resumes a suspended render only within an awaited act scope.
-async function renderAndSettle(element: ReactElement): Promise<RenderResult> {
-    let rendered: RenderResult | undefined;
+// React 19 resumes a suspended render only within an awaited act scope. StrictMode wraps the whole render, as in an
+// application's entry point; nested inside a component, React 19 does not run effects twice.
+async function renderAndSettle(element: ReactElement, strict: boolean): Promise<Pick<RenderResult, "unmount">> {
+    let rendered: Pick<RenderResult, "unmount"> | undefined;
     await act(async () => {
-        rendered = render(element);
+        rendered = render(element, {reactStrictMode: strict});
     });
     return rendered!;
 }
@@ -148,7 +148,7 @@ describe(`Session lifecycle on React ${reactVersion}`, () => {
     for (const strict of [false, true]) {
         it(`${strict ? "StrictMode" : "no StrictMode"}: loads, then a later component with two suspending hooks loads too`, async () => {
             createSessionMock.mockImplementation(c => sleep(30).then(() => fakeSession(c)));
-            const rendered = await renderAndSettle(<App strict={strict} />);
+            const rendered = await renderAndSettle(<App />, strict);
 
             expect(await waitForText("decisions:0")).toBe(true);
             await act(async () => {
@@ -160,13 +160,15 @@ describe(`Session lifecycle on React ${reactVersion}`, () => {
             await act(async () => {
                 await sleep(100);
             });
+            // StrictMode mounts the Configuration twice: its first session is closed and a second one created.
+            expect(sessions.created).toBe(strict ? 2 : 1);
             expect(sessions.closed).toBe(sessions.created);
         });
     }
 
     it("StrictMode with useConfigurationInitialization outside Suspense loads and closes every session", async () => {
         createSessionMock.mockImplementation(c => sleep(30).then(() => fakeSession(c)));
-        const rendered = await renderAndSettle(<App strict={true} initializationOutside={true} />);
+        const rendered = await renderAndSettle(<App initializationOutside={true} />, true);
 
         expect(await waitForText("decisions:0")).toBe(true);
 
@@ -174,12 +176,13 @@ describe(`Session lifecycle on React ${reactVersion}`, () => {
         await act(async () => {
             await sleep(100);
         });
-        expect(sessions.closed).toBe(sessions.created);
+        expect(sessions.created).toBe(2);
+        expect(sessions.closed).toBe(2);
     });
 
     it("unmounting while the session is being created closes it once created", async () => {
         createSessionMock.mockImplementation(c => sleep(50).then(() => fakeSession(c)));
-        const rendered = await renderAndSettle(<App strict={false} />);
+        const rendered = await renderAndSettle(<App />, false);
         await act(async () => {
             await sleep(10);
         });
