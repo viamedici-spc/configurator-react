@@ -27,6 +27,24 @@ yet.
 - **Upstream:** fp-ts 2.x is in maintenance.
 - **Last checked:** fp-ts 2.16.11, 2026-11-26: no `exports` field.
 
+## jotai-xstate
+
+### Keep its declarations out of a consumer's type check without a build step
+
+- **We would rather** publish the declarations as the bundler emits them.
+- **We do instead** drop bare imports such as `import "jotai-xstate";` from `dist/index.d.ts` (`tsdown.config.ts`).
+- **What blocks it:** jotai-xstate 0.6's declarations do not compile against current xstate, and the declaration bundle
+  keeps a bare import of it, so a consumer's full type check fails although no jotai-xstate type is public.
+- **Check** (no errors means jotai-xstate's declarations compile again):
+
+  ```bash
+  bunx tsc --noEmit --skipLibCheck false node_modules/jotai-xstate/dist/index.d.ts
+  ```
+
+- **What it would buy:** the plugin in `tsdown.config.ts` goes away.
+- **Upstream:** not reported.
+- **Last checked:** jotai-xstate 0.6.1 with xstate 5.33, 2026-11-26: errors.
+
 ## Bun
 
 ### Lint with `bun lint`
