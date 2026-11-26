@@ -13,7 +13,9 @@
         "jotai-effect": "^2",
         "jotai-family": "^1.1.0",
         "jotai-xstate": "^0.6",
+        "memize": "^2.1.1",
         "p-defer": "^4.0.1",
+        "ts-pattern": "^5.9.2",
         "xstate": "^5.33.4",
       },
       "devDependencies": {
