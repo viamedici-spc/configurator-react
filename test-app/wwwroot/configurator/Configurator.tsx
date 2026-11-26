@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {Suspense, useMemo, useState} from "react";
 import SessionContextParameters from "./SessionContextParameters";
 import {Configuration} from "@viamedici-spc/configurator-react";

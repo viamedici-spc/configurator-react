@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import AttributeItem from "./AttributeItem";
 
 const Root = styled.div`

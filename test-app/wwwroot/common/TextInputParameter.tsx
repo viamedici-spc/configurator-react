@@ -1,5 +1,5 @@
 import {Dispatch, SetStateAction} from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 const Root = styled.div`
     display: grid;

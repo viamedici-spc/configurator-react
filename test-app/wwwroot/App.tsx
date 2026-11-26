@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import Configurator from "./configurator/Configurator";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {GlobalStyle} from "./GlobalStyle";
 import {Suspense} from "react";
 import {Logger} from "@viamedici-spc/configurator-ts";

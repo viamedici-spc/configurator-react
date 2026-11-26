@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {useState} from "react";
 import {useActiveAttribute} from "../AttributeItem";
 import {useNumericAttribute} from "@viamedici-spc/configurator-react";

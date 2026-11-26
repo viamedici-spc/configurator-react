@@ -1,29 +1,19 @@
-import {defineConfig} from 'vite';
-import react from '@vitejs/plugin-react';
-import {createHtmlPlugin} from 'vite-plugin-html';
-import checker from 'vite-plugin-checker';
-import macros from "vite-plugin-babel-macros";
+import {defineConfig} from "vite";
+import react from "@vitejs/plugin-react";
 
-export default defineConfig(({command, mode}) => ({
+// Cross-origin isolation, as the configurator runs it in production.
+const isolationHeaders = {
+    "Cross-Origin-Embedder-Policy": "require-corp",
+    "Cross-Origin-Opener-Policy": "same-origin",
+};
+
+export default defineConfig({
     root: "wwwroot",
-    server: {
-        port: 3000
-    },
-    build: {
-        outDir: "../dist",
-        emptyOutDir: true,
-        commonjsOptions: {
-            ignoreTryCatch: false
-        },
-        minify: true
-    },
     base: "",
-    plugins: [
-        macros(),
-        checker({typescript: true}),
-        react({
-            fastRefresh: mode === "hot"
-        }),
-        createHtmlPlugin(),
-    ]
-}));
+    server: {port: 3000},
+    preview: {port: 4173, headers: isolationHeaders},
+    build: {outDir: "../dist", emptyOutDir: true},
+    // fp-ts ships ES modules that need Vite's resolution, also when they come from a linked workspace package.
+    optimizeDeps: {include: ["fp-ts"]},
+    plugins: [react()],
+});

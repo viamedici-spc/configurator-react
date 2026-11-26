@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {AvailableValuesIndicator, MandatoryIndicator, SelectionModeIndicator} from "./Indicators";
 import ValueSelection from "./ValueSelection";
 import SatisfactionIndicator from "../SatisfactionIndicator";

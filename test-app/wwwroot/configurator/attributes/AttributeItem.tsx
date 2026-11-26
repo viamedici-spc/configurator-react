@@ -1,5 +1,5 @@
 import {Attribute, AttributeType, GlobalAttributeId} from "@viamedici-spc/configurator-ts";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import NumericAttribute from "./numeric/NumericAttribute";
 import ChoiceAttribute from "./choice/ChoiceAttribute";
 import BooleanAttribute from "./boolean/BooleanAttribute";

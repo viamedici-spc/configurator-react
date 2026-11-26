@@ -1,26 +1,12 @@
 {
   "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "noImplicitAny": false,
-    "noEmitOnError": false,
-    "removeComments": true,
-    "sourceMap": false,
-    "target": "es6",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "pretty": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "esModuleInterop": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "lib": [
-      "ESNext",
-      "dom"
-    ]
+    "noEmit": true,
+    "skipLibCheck": true
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["wwwroot"]
 }

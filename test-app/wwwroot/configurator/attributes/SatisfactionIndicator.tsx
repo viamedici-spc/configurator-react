@@ -1,7 +1,7 @@
 import {useActiveAttribute} from "./AttributeItem";
 import {useAttributes, useExplain} from "@viamedici-spc/configurator-react";
 import {handleExplain} from "../../common/Explain";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 const ExplainButton = styled.button`
     margin-left: 0.4em;

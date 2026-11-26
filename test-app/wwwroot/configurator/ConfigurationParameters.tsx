@@ -1,5 +1,5 @@
 import TextInputParameter from "../common/TextInputParameter";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {Dispatch, FormEvent, SetStateAction, useEffect, useState} from "react";
 
 const Root = styled.div`

@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {useConfigurationInitialization, useConfigurationUpdating} from "@viamedici-spc/configurator-react";
 
 const Root = styled.div`

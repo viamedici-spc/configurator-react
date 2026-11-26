@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import {Suspense, useState} from "react";
 import {useStoredConfiguration} from "@viamedici-spc/configurator-react";
 

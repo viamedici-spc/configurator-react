@@ -11,6 +11,9 @@
   "files": [
     "dist"
   ],
+  "workspaces": [
+    "test-app"
+  ],
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
@@ -67,7 +70,7 @@
     "react": "^18.2 || ^19"
   },
   "inlinedDependencies": {
-    "memize": "2.1.0",
-    "ts-pattern": "5.4.0"
+    "memize": "2.1.1",
+    "ts-pattern": "5.9.2"
   }
 }
