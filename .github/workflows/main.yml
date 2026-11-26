@@ -1,14 +1,20 @@
 name: Build and Publish
 
-on: [push, workflow_dispatch]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
 
 jobs:
   build-publish:
     permissions:
       contents: read
       id-token: write
-    uses: viamedici-spc/github-ci/.github/workflows/build-npm.yml@v3
+    uses: viamedici-spc/github-ci/.github/workflows/build-bun.yml@feature/v4
     with:
-      node-version: "24"
-      build-verbs: "build,test"
-      skip-publish: false
+      # The library supports React 18 and 19; verify runs on 19, this runs the tests on 18 as well.
+      extra-runs: |
+        bun add --no-save react@18.3.1 react-dom@18.3.1
+        bun run test
