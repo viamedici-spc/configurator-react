@@ -15,9 +15,9 @@ drift, and the published package mixed formats.
 ## Decision
 
 - **Bun** is the package manager and script runner (`packageManager` in `package.json`, `bun.lock`), the type checker
-  (`bun check`, which runs the TypeScript 7 checker and emits nothing), the formatter (`bun fmt`, configured in
-  `.oxfmtrc.json`) and the test runner for nothing here: the tests need a DOM and React rendering, so they run on **Vitest** with jsdom and
-  Testing Library.
+  (`bun check`, which runs the TypeScript 7 checker and emits nothing) and the formatter (`bun fmt`, configured in
+  `.oxfmtrc.json`).
+- **Vitest** runs the tests, with jsdom: they need a DOM and React rendering.
 - **oxlint** lints, until Bun ships a linter of its own.
 - **tsdown** builds the package: one ES module bundle with the dependencies external, and its declarations from the
   TypeScript 7 compiler (`typescript` is a dev dependency for that alone), as in configurator-ts. publint and arethetypeswrong check the packed result.
