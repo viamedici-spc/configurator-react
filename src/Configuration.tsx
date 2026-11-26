@@ -1,14 +1,15 @@
-import {
-    PropsWithChildren, useMemo, useRef
+import type {
+    PropsWithChildren} from "react";
+import { useMemo, useRef
 } from "react";
-import {
+import type {
     SessionContext
 } from "@viamedici-spc/configurator-ts";
 import {AtomsContext, StoreContext, useConfiguratorStore} from "./internal/contexts";
 import EffectLoader from "./internal/EffectLoader";
 import {createAtoms} from "./internal/jotai/Atoms";
 import {getDefaultStore, Provider} from "jotai";
-import {createStore} from "jotai";
+import type {createStore} from "jotai";
 import SessionManagementInitializer from "./internal/SessionManagementInitializer";
 
 export type ConfigurationProps = {

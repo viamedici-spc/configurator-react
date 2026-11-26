@@ -1,4 +1,4 @@
-import {ConfiguratorErrorWithRetry} from "../types";
+import type {ConfiguratorErrorWithRetry} from "../types";
 
 export type PromiseOrValue<Value> = Promise<Value> | Value;
 

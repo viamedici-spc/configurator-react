@@ -1,21 +1,15 @@
-import {
+import type {
     Attribute,
-    AttributeInterpreter,
-    AttributeRefinements,
-    AttributeType,
     BooleanAttribute,
     ChoiceAttribute,
     ChoiceValue,
     ChoiceValueDecisionState,
     ChoiceValueId,
-    ChoiceValueInterpreter,
     ComponentAttribute,
     ComponentDecisionState,
     ConstraintsExplainAnswer,
     DecisionsExplainAnswer,
     ExplainQuestion,
-    ExplainQuestionSubject,
-    ExplainQuestionType,
     ExplainSolution, ExplicitBooleanDecision,
     ExplicitChoiceDecision, ExplicitComponentDecision,
     ExplicitNumericDecision,
@@ -29,16 +23,26 @@ import {
     WhyIsNumericStateNotPossible,
     WhyIsStateNotPossible
 } from "@viamedici-spc/configurator-ts";
-import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import {
+    AttributeInterpreter,
+    AttributeRefinements,
+    AttributeType,
+    ChoiceValueInterpreter,
+    ExplainQuestionSubject,
+    ExplainQuestionType
+} from "@viamedici-spc/configurator-ts";
+import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
 import {atomFamily} from "jotai/utils";
-import {Getter} from "jotai";
-import {Selectors} from "../Selectors";
+import type {Getter} from "jotai";
+import type {Selectors} from "../Selectors";
 import {constVoid, O, pipe, RA, T} from "@viamedici-spc/fp-ts-extensions";
-import {Refinement} from "fp-ts/Refinement";
+import type {Refinement} from "fp-ts/Refinement";
 import {getChoiceAttributeResetDecisions} from "../../attributeHelper";
 import {match} from "ts-pattern";
-import {ConfigurationUninitialized, GuardedAtom} from "../../../types";
-import atomWithGuard, {GuardedGetter} from "../helper/atomWithGuard";
+import type { GuardedAtom} from "../../../types";
+import {ConfigurationUninitialized} from "../../../types";
+import type {GuardedGetter} from "../helper/atomWithGuard";
+import atomWithGuard from "../helper/atomWithGuard";
 import memize from "memize";
 
 export type SimplifiedExplainQuestion<T extends ExplainQuestion> = Omit<T, "attributeId" | "subject">;

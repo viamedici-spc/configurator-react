@@ -1,6 +1,7 @@
-import {ConstraintsExplainAnswer, DecisionsExplainAnswer, ExplainQuestionSubject, ExplainQuestionType, FullExplainAnswer, WhyIsConfigurationNotSatisfied} from "@viamedici-spc/configurator-ts";
-import {Selectors} from "../Selectors";
-import {GuardedAtom} from "../../../types";
+import type {ConstraintsExplainAnswer, DecisionsExplainAnswer, FullExplainAnswer, WhyIsConfigurationNotSatisfied} from "@viamedici-spc/configurator-ts";
+import { ExplainQuestionSubject, ExplainQuestionType} from "@viamedici-spc/configurator-ts";
+import type {Selectors} from "../Selectors";
+import type {GuardedAtom} from "../../../types";
 import atomWithGuard from "../helper/atomWithGuard";
 import {match} from "ts-pattern";
 

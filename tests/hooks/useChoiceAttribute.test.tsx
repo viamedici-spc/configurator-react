@@ -1,10 +1,12 @@
 import {act, cleanup, renderHook} from "@testing-library/react-hooks";
 import {useChoiceAttribute} from "../../src";
-import {
-    AttributeType,
-    ChoiceValueDecisionState,
+import type {
     Configuration,
     ExplicitChoiceDecision, IConfigurationSession
+} from "@viamedici-spc/configurator-ts";
+import {
+    AttributeType,
+    ChoiceValueDecisionState
 } from "@viamedici-spc/configurator-ts";
 import {booleanAttribute, choiceAttribute, WrappingComponent} from "./Common";
 import {afterEach, describe, expect, it, vi} from "vitest";

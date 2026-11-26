@@ -1,6 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/configurationSatisfaction";
+import type {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/configurationSatisfaction";
 
 const useConfigurationSatisfaction: {
     /**

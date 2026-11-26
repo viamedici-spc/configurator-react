@@ -1,5 +1,5 @@
-import {Configuration} from "@viamedici-spc/configurator-ts";
-import {ConfigurationUninitialized} from "../types";
+import type {Configuration} from "@viamedici-spc/configurator-ts";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
 const useConfiguration: {

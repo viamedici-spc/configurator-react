@@ -1,6 +1,8 @@
 import {assign, enqueueActions, fromPromise, log, setup} from "xstate";
-import {E, Either, identity, O, Option, pipe, TE} from "@viamedici-spc/fp-ts-extensions";
-import {ConfiguratorError, IConfigurationSession, SessionContext, SessionFactory} from "@viamedici-spc/configurator-ts";
+import type { Either, Option} from "@viamedici-spc/fp-ts-extensions";
+import {E, identity, O, pipe, TE} from "@viamedici-spc/fp-ts-extensions";
+import type {ConfiguratorError, IConfigurationSession, SessionContext} from "@viamedici-spc/configurator-ts";
+import { SessionFactory} from "@viamedici-spc/configurator-ts";
 
 export type SessionContextChangedEvent = {
     type: "SessionContextChanged",

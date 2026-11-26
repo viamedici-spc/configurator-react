@@ -1,6 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {UseDecisionQueriesResult} from "../internal/jotai/domain/decisionQueries";
+import type {UseDecisionQueriesResult} from "../internal/jotai/domain/decisionQueries";
 
 const useDecisionQueries: {
     /**

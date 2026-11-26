@@ -1,6 +1,8 @@
-import {Context, createContext, useContext} from "react";
-import {Atoms} from "./jotai/Atoms";
-import {getDefaultStore, createStore} from "jotai";
+import type {Context} from "react";
+import { createContext, useContext} from "react";
+import type {Atoms} from "./jotai/Atoms";
+import type { createStore} from "jotai";
+import {getDefaultStore} from "jotai";
 
 type Contexts = {
     AtomsContext: Context<Atoms>;

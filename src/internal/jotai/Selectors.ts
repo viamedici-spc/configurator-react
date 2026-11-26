@@ -1,5 +1,6 @@
-import {Atom, atom} from "jotai";
-import {
+import type {Atom} from "jotai";
+import { atom} from "jotai";
+import type {
     Attribute,
     CollectedDecision,
     CollectedExplicitDecision,
@@ -9,40 +10,54 @@ import {
     IConfigurationSession,
     StoredConfiguration
 } from "@viamedici-spc/configurator-ts";
-import {Primitives} from "./PrimitveAtoms";
-import {ConfigurationInitialization, ConfigurationUninitialized, ConfigurationUpdating, GuardedAtom} from "../../types";
-import {createConfigurationResetAtom, UseConfigurationResetResult} from "./domain/configurationReset";
-import {createExplainAtom, UseExplainResult} from "./domain/explain";
-import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
-import {
-    createBooleanAttributeAtomFamily,
-    createChoiceAttributeAtomFamily, createComponentAttributeAtomFamily, createNumericAttributeAtomFamily,
+import type {Primitives} from "./PrimitveAtoms";
+import type {ConfigurationInitialization, ConfigurationUpdating, GuardedAtom} from "../../types";
+import { ConfigurationUninitialized} from "../../types";
+import type { UseConfigurationResetResult} from "./domain/configurationReset";
+import {createConfigurationResetAtom} from "./domain/configurationReset";
+import type { UseExplainResult} from "./domain/explain";
+import {createExplainAtom} from "./domain/explain";
+import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {
     UseBooleanAttributeResult,
     UseChoiceAttributeResult,
     UseComponentAttributeResult,
     UseNumericAttributeResult
 } from "./domain/attribute";
-import {PrimitiveAtom} from "jotai";
+import {
+    createBooleanAttributeAtomFamily,
+    createChoiceAttributeAtomFamily, createComponentAttributeAtomFamily, createNumericAttributeAtomFamily
+} from "./domain/attribute";
+import type {PrimitiveAtom} from "jotai";
 import {createConfigurationInitializationAtom} from "./domain/configurationInitialization";
 import {createConfigurationUpdatingAtom} from "./domain/configurationUpdating";
-import {createConfigurationStoringAtom, UseConfigurationStoringResult} from "./domain/configurationStoring";
-import {createSubscriberAtom, SubscriberAtomType} from "./domain/AtomSubscription";
-import {
+import type { UseConfigurationStoringResult} from "./domain/configurationStoring";
+import {createConfigurationStoringAtom} from "./domain/configurationStoring";
+import type { SubscriberAtomType} from "./domain/AtomSubscription";
+import {createSubscriberAtom} from "./domain/AtomSubscription";
+import type {
     ConfigurationSessionAtomType,
-    createConfigurationSessionAtom,
-    createSessionInitializationAndUpdatingAtom,
     SessionInitializationAtomType,
     SessionUpdatingAtomType
 } from "./domain/SessionManagement";
-import {createConfigurationSatisfactionAtom, UseConfigurationSatisfactionResult} from "./domain/configurationSatisfaction";
-import {createSessionReinitializationAtom, UseSessionReinitializationResult} from "./domain/sessionReinitialization";
+import {
+    createConfigurationSessionAtom,
+    createSessionInitializationAndUpdatingAtom
+} from "./domain/SessionManagement";
+import type { UseConfigurationSatisfactionResult} from "./domain/configurationSatisfaction";
+import {createConfigurationSatisfactionAtom} from "./domain/configurationSatisfaction";
+import type { UseSessionReinitializationResult} from "./domain/sessionReinitialization";
+import {createSessionReinitializationAtom} from "./domain/sessionReinitialization";
 import {
     createDecisionsAtom, createExplicitDecisionsAtom, createImplicitDecisionsAtom,
     createStoredConfigurationAtom
 } from "./domain/SessionSubscription";
-import {createTaskSchedulingAtom, UseTaskSchedulingResult} from "./domain/taskScheduling";
-import {createDecisionQueriesAtom, UseDecisionQueriesResult} from "./domain/decisionQueries";
-import {createMakeDecisionAtom, UseMakeDecisionResult} from "./domain/makeDecision";
+import type { UseTaskSchedulingResult} from "./domain/taskScheduling";
+import {createTaskSchedulingAtom} from "./domain/taskScheduling";
+import type { UseDecisionQueriesResult} from "./domain/decisionQueries";
+import {createDecisionQueriesAtom} from "./domain/decisionQueries";
+import type { UseMakeDecisionResult} from "./domain/makeDecision";
+import {createMakeDecisionAtom} from "./domain/makeDecision";
 
 export type Selectors = {
     configurationSessionAtom: ConfigurationSessionAtomType;

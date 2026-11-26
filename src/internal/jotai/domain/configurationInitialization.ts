@@ -1,6 +1,7 @@
 import {atom} from "jotai";
-import {ConfigurationInitialization, ConfigurationUninitialized, GuardedAtom} from "../../../types";
-import {Selectors} from "../Selectors";
+import type {ConfigurationInitialization, GuardedAtom} from "../../../types";
+import { ConfigurationUninitialized} from "../../../types";
+import type {Selectors} from "../Selectors";
 import {Bool, Eq, pipe, RA} from "@viamedici-spc/fp-ts-extensions";
 import atomWithEq from "../helper/atomWithEq";
 

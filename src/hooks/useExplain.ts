@@ -1,5 +1,5 @@
-import {UseExplainResult} from "../internal/jotai/domain/explain";
-import {ConfigurationUninitialized} from "../types";
+import type {UseExplainResult} from "../internal/jotai/domain/explain";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
 const useExplain: {

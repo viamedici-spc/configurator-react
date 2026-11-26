@@ -1,5 +1,5 @@
-import {UseConfigurationResetResult} from "../internal/jotai/domain/configurationReset";
-import {ConfigurationUninitialized} from "../types";
+import type {UseConfigurationResetResult} from "../internal/jotai/domain/configurationReset";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
 const useConfigurationReset: {

@@ -1,5 +1,7 @@
-import {atom, Getter} from "jotai";
-import {ConfigurationUninitialized, GuardedAtom} from "../../../types";
+import type { Getter} from "jotai";
+import {atom} from "jotai";
+import type { GuardedAtom} from "../../../types";
+import {ConfigurationUninitialized} from "../../../types";
 
 export type GuardedGetter = <Value>(atom: GuardedAtom<Value>) => Value;
 export default function atomWithGuard<Value>(read: (get: Getter, getGuarded: GuardedGetter) => Value | ConfigurationUninitialized): GuardedAtom<Value> {

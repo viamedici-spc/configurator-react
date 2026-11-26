@@ -1,11 +1,13 @@
+import type {
+    ChoiceAttribute, ChoiceValue,
+    ExplicitChoiceDecision,
+    ExplicitDecision} from "@viamedici-spc/configurator-ts";
 import {
     AttributeType,
-    ChoiceAttribute, ChoiceValue,
-    DecisionKind,
-    ExplicitChoiceDecision,
-    ExplicitDecision,
+    DecisionKind
 } from "@viamedici-spc/configurator-ts";
-import {Ord, OrdT, pipe, RA, RM} from "@viamedici-spc/fp-ts-extensions";
+import type { OrdT} from "@viamedici-spc/fp-ts-extensions";
+import {Ord, pipe, RA, RM} from "@viamedici-spc/fp-ts-extensions";
 
 export function getChoiceAttributeResetDecisions(attribute: ChoiceAttribute): ReadonlyArray<ExplicitDecision> {
     return pipe(

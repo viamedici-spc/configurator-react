@@ -4,7 +4,7 @@ import {render, waitFor} from "@testing-library/react";
 import {AtomsContext} from "../../src/internal/contexts";
 import {createAtoms} from "../../src/internal/jotai/Atoms";
 import SessionManagementInitializer, {sessionContextNullishWarningText} from "../../src/internal/SessionManagementInitializer";
-import {SessionContext} from "@viamedici-spc/configurator-ts";
+import type {SessionContext} from "@viamedici-spc/configurator-ts";
 
 afterEach(async () => {
     vi.clearAllMocks();

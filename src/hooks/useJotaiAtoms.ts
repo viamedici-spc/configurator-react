@@ -1,8 +1,8 @@
 import {useAtomsContext} from "../internal/contexts";
 import {createAttributesAtom} from "../internal/jotai/domain/dynamic";
 import {useMemo} from "react";
-import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
-import {
+import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {
     Attribute,
     CollectedDecision,
     CollectedExplicitDecision,
@@ -12,17 +12,17 @@ import {
     GlobalAttributeIdKey,
     StoredConfiguration
 } from "@viamedici-spc/configurator-ts";
-import {Atom} from "jotai";
-import {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "../internal/jotai/domain/attribute";
-import {UseConfigurationResetResult} from "../internal/jotai/domain/configurationReset";
-import {UseExplainResult} from "../internal/jotai/domain/explain";
-import {ConfigurationInitialization, ConfigurationUpdating, GuardedAtom} from "../types";
-import {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
-import {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/configurationSatisfaction";
-import {UseSessionReinitializationResult} from "../internal/jotai/domain/sessionReinitialization";
-import {UseTaskSchedulingResult} from "../internal/jotai/domain/taskScheduling";
-import {UseMakeDecisionResult} from "../internal/jotai/domain/makeDecision";
-import {UseDecisionQueriesResult} from "../internal/jotai/domain/decisionQueries";
+import type {Atom} from "jotai";
+import type {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "../internal/jotai/domain/attribute";
+import type {UseConfigurationResetResult} from "../internal/jotai/domain/configurationReset";
+import type {UseExplainResult} from "../internal/jotai/domain/explain";
+import type {ConfigurationInitialization, ConfigurationUpdating, GuardedAtom} from "../types";
+import type {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
+import type {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/configurationSatisfaction";
+import type {UseSessionReinitializationResult} from "../internal/jotai/domain/sessionReinitialization";
+import type {UseTaskSchedulingResult} from "../internal/jotai/domain/taskScheduling";
+import type {UseMakeDecisionResult} from "../internal/jotai/domain/makeDecision";
+import type {UseDecisionQueriesResult} from "../internal/jotai/domain/decisionQueries";
 
 export type UseJotaiAtomsResult = {
     createAttributesAtom: {

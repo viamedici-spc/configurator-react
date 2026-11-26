@@ -1,10 +1,10 @@
 import {atomEffect} from "jotai-effect";
 import {Logger} from "@viamedici-spc/configurator-ts";
-import {Primitives} from "./PrimitveAtoms";
-import {Selectors} from "./Selectors";
-import {Atom} from "jotai";
+import type {Primitives} from "./PrimitveAtoms";
+import type {Selectors} from "./Selectors";
+import type {Atom} from "jotai";
 import {createAtomSubscriptionCleanupEffect, createAtomSubscriberEffect} from "./domain/AtomSubscription";
-import {SuspendedAtoms} from "./SuspendedAtoms";
+import type {SuspendedAtoms} from "./SuspendedAtoms";
 import {createAddSessionListenersEffect} from "./domain/SessionSubscription";
 
 const atomFamilyCleanupTimeout = 30 * 1000;

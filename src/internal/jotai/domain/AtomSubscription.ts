@@ -1,9 +1,9 @@
-import {Atom, PrimitiveAtom} from "jotai";
-import {Subscription} from "../../Types";
+import type {Atom, PrimitiveAtom} from "jotai";
+import type {Subscription} from "../../Types";
 import {atom} from "jotai";
 import {RA, RM} from "@viamedici-spc/fp-ts-extensions";
-import {WritableAtom} from "jotai/vanilla/atom";
-import {Primitives} from "../PrimitveAtoms";
+import type {WritableAtom} from "jotai/vanilla/atom";
+import type {Primitives} from "../PrimitveAtoms";
 import {guid} from "dyna-guid";
 import {atomEffect} from "jotai-effect";
 import {Logger} from "@viamedici-spc/configurator-ts";
@@ -24,7 +24,7 @@ export type AtomSubscriptionsAtomType = PrimitiveAtom<ReadonlyMap<Atom<any>, Rea
 export type SubscriberAtomType = WritableAtom<unknown, [atomToSubscribeTo: Atom<any>], Subscription>;
 
 export function createAtomSubscriptionAtom(): AtomSubscriptionsAtomType {
-    return atom(RM.empty);
+    return atom<ReadonlyMap<Atom<any>, ReadonlyMap<string, WeakSubscription>>>(RM.empty);
 }
 
 export function createSubscriberAtom(primitives: Primitives): SubscriberAtomType {

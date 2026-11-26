@@ -1,15 +1,18 @@
-import {Selectors} from "../internal/jotai/Selectors";
-import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
-import {GlobalAttributeId, GlobalAttributeIdKey, GlobalAttributeIdKeyBuilder} from "@viamedici-spc/configurator-ts";
-import {SuspendedAtoms} from "../internal/jotai/SuspendedAtoms";
-import {Atom, useAtomValue, useSetAtom} from "jotai";
-import {ConfigurationUninitialized, GuardedAtom} from "../types";
+import type {Selectors} from "../internal/jotai/Selectors";
+import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {GlobalAttributeId, GlobalAttributeIdKey} from "@viamedici-spc/configurator-ts";
+import { GlobalAttributeIdKeyBuilder} from "@viamedici-spc/configurator-ts";
+import type {SuspendedAtoms} from "../internal/jotai/SuspendedAtoms";
+import type {Atom} from "jotai";
+import { useAtomValue, useSetAtom} from "jotai";
+import type {ConfigurationUninitialized, GuardedAtom} from "../types";
 import {useEffect, useMemo} from "react";
 import {useAtomsContext, useConfiguratorStore} from "../internal/contexts";
-import {Bool, Eq, EqT, Str} from "@viamedici-spc/fp-ts-extensions";
+import type { EqT} from "@viamedici-spc/fp-ts-extensions";
+import {Bool, Eq, Str} from "@viamedici-spc/fp-ts-extensions";
 import {useStableMemo} from "fp-ts-react-stable-hooks";
-import {PromiseOrValue} from "../internal/Types";
-import {Atoms} from "../internal/jotai/Atoms";
+import type {PromiseOrValue} from "../internal/Types";
+import type {Atoms} from "../internal/jotai/Atoms";
 
 export function prepareParameterizedAtomValueUsageWithSuspense<Value, T extends ReadonlyArray<unknown>>(normalSelector: (atoms: Atoms, ...args: T) => GuardedAtom<Value>, suspendedSelector: (atoms: Atoms, ...args: T) => Atom<PromiseOrValue<Value>>, argsEq: EqT<T>) {
     const stableMemoEq = Eq.tuple(Eq.eqNullable(Bool.Eq), argsEq);

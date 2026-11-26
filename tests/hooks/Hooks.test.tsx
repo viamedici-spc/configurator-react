@@ -3,7 +3,7 @@ import {useConfiguration, useConfigurationInitialization} from "../../src";
 import {describe, it, expect, afterEach, vi} from "vitest";
 import {createAtoms} from "../../src/internal/jotai/Atoms";
 import {AtomsContext} from "../../src/internal/contexts";
-import {PropsWithChildren} from "react";
+import type {PropsWithChildren} from "react";
 
 afterEach(async () => {
     vi.clearAllMocks();
@@ -19,7 +19,7 @@ function useConfigurationWrapper(): "CaughtPromise" | "CaughtError" | "ResolvedS
     try {
         useConfiguration();
     } catch (e) {
-        if ('then' in e) {
+        if (typeof e === "object" && e !== null && "then" in e) {
             return "CaughtPromise";
         }
         return "CaughtError";

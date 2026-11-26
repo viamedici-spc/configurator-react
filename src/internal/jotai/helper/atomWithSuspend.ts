@@ -1,8 +1,11 @@
-import {Atom, atom} from "jotai";
+import type {Atom} from "jotai";
+import { atom} from "jotai";
 import {selectAtom} from "jotai/utils";
-import pDefer, {DeferredPromise} from "p-defer";
-import {ConfigurationUninitialized, GuardedAtom} from "../../../types";
-import {PromiseOrValue} from "../../Types";
+import type {DeferredPromise} from "p-defer";
+import pDefer from "p-defer";
+import type { GuardedAtom} from "../../../types";
+import {ConfigurationUninitialized} from "../../../types";
+import type {PromiseOrValue} from "../../Types";
 
 export default function atomWithSuspend<Value>(guardedAtom: GuardedAtom<Value>): Atom<PromiseOrValue<Value>> {
     const base = selectAtom<Value | ConfigurationUninitialized, {

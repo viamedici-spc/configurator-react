@@ -1,19 +1,19 @@
-import {Selectors} from "./Selectors";
-import {UseConfigurationStoringResult} from "./domain/configurationStoring";
-import {UseConfigurationResetResult} from "./domain/configurationReset";
-import {UseExplainResult} from "./domain/explain";
-import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
-import {CollectedDecision, CollectedExplicitDecision, CollectedImplicitDecision, Configuration, GlobalAttributeIdKey, StoredConfiguration} from "@viamedici-spc/configurator-ts";
-import {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "./domain/attribute";
-import {Atom} from "jotai";
+import type {Selectors} from "./Selectors";
+import type {UseConfigurationStoringResult} from "./domain/configurationStoring";
+import type {UseConfigurationResetResult} from "./domain/configurationReset";
+import type {UseExplainResult} from "./domain/explain";
+import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {CollectedDecision, CollectedExplicitDecision, CollectedImplicitDecision, Configuration, GlobalAttributeIdKey, StoredConfiguration} from "@viamedici-spc/configurator-ts";
+import type {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "./domain/attribute";
+import type {Atom} from "jotai";
 import {atomFamily} from "jotai/utils";
-import {PromiseOrValue} from "../Types";
+import type {PromiseOrValue} from "../Types";
 import atomWithSuspend from "./helper/atomWithSuspend";
-import {UseConfigurationSatisfactionResult} from "./domain/configurationSatisfaction";
-import {UseSessionReinitializationResult} from "./domain/sessionReinitialization";
-import {UseTaskSchedulingResult} from "./domain/taskScheduling";
-import {UseMakeDecisionResult} from "./domain/makeDecision";
-import {UseDecisionQueriesResult} from "./domain/decisionQueries";
+import type {UseConfigurationSatisfactionResult} from "./domain/configurationSatisfaction";
+import type {UseSessionReinitializationResult} from "./domain/sessionReinitialization";
+import type {UseTaskSchedulingResult} from "./domain/taskScheduling";
+import type {UseMakeDecisionResult} from "./domain/makeDecision";
+import type {UseDecisionQueriesResult} from "./domain/decisionQueries";
 
 export type SuspendedAtoms = {
     configurationAtom: Atom<PromiseOrValue<Configuration>>;

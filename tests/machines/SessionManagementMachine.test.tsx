@@ -1,9 +1,12 @@
 import {cleanup} from "@testing-library/react-hooks";
-import {ConfigurationModelNotFound, ConfiguratorError, ConfiguratorErrorType, IConfigurationSession, ISessionFactory, SessionContext, SessionFactory} from "@viamedici-spc/configurator-ts";
+import type {ConfigurationModelNotFound, ConfiguratorError, IConfigurationSession, ISessionFactory, SessionContext} from "@viamedici-spc/configurator-ts";
+import { ConfiguratorErrorType, SessionFactory} from "@viamedici-spc/configurator-ts";
 import {emptyModel, modelWithOneAttribute} from "../hooks/Common";
-import {Actor, createActor} from "xstate";
+import type {Actor} from "xstate";
+import { createActor} from "xstate";
 import {waitFor} from "@testing-library/react";
-import {afterEach, beforeEach, describe, expect, it, Mocked, vi} from "vitest";
+import type { Mocked} from "vitest";
+import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {sessionManagementMachine} from "../../src/internal/sessionManagementMachine";
 
 vi.mock("@viamedici-spc/configurator-ts", async (importOriginal) => {
@@ -92,7 +95,7 @@ describe("SessionManagementMachine tests", () => {
 
             return {
                 getSessionContext: () => currentContext,
-                setSessionContext: (c) => {
+                setSessionContext: (c: SessionContext) => {
                     currentContext = c;
                 },
                 close: () => Promise.resolve(null)

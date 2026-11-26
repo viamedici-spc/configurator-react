@@ -1,6 +1,7 @@
-import {ConfigurationUninitialized} from "../types";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {CollectedDecision, CollectedExplicitDecision, CollectedImplicitDecision, DecisionKind} from "@viamedici-spc/configurator-ts";
+import type {CollectedDecision, CollectedExplicitDecision, CollectedImplicitDecision} from "@viamedici-spc/configurator-ts";
+import { DecisionKind} from "@viamedici-spc/configurator-ts";
 import {match, P} from "ts-pattern";
 import {useMemo} from "react";
 

@@ -1,25 +1,28 @@
 import {atomFamily} from "jotai/utils";
-import {
+import type {
     Attribute,
     CollectedDecision,
     CollectedExplicitDecision,
     CollectedImplicitDecision,
     Configuration,
-    DecisionKind,
     GlobalAttributeIdKey,
-    GlobalAttributeIdKeyBuilder,
     IConfigurationSession,
-    Logger,
     OnDecisionsChangedHandler,
     OnStoredConfigurationChangedHandler,
     StoredConfiguration,
     Subscription
 } from "@viamedici-spc/configurator-ts";
-import {Atom, atom, PrimitiveAtom} from "jotai";
-import {Primitives} from "../PrimitveAtoms";
-import {Selectors} from "../Selectors";
+import {
+    DecisionKind,
+    GlobalAttributeIdKeyBuilder,
+    Logger
+} from "@viamedici-spc/configurator-ts";
+import type {Atom, PrimitiveAtom} from "jotai";
+import { atom} from "jotai";
+import type {Primitives} from "../PrimitveAtoms";
+import type {Selectors} from "../Selectors";
 import {atomEffect} from "jotai-effect";
-import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
 
 const createAttributesAtomValue = () => atomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>>(() => atom());
 

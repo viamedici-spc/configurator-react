@@ -22,9 +22,9 @@
   },
   "scripts": {
     "build": "vite build",
-    "test": "tsc -p ./tsconfig.test.json --noEmit && vitest --run",
+    "test": "vitest run",
     "test:watch": "vitest watch --reporter default",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "bun check && bun check -p tests"
   },
   "keywords": [
     "viamedici",

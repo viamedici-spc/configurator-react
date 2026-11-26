@@ -1,9 +1,11 @@
 import {act, cleanup, renderHook} from "@testing-library/react-hooks";
 import {useBooleanAttribute} from "../../src";
 import {describe, it, expect, afterEach, vi} from "vitest";
-import {
-    AttributeType,
+import type {
     Configuration, ExplicitBooleanDecision, IConfigurationSession
+} from "@viamedici-spc/configurator-ts";
+import {
+    AttributeType
 } from "@viamedici-spc/configurator-ts";
 import {booleanAttribute, numericAttribute, WrappingComponent} from "./Common";
 

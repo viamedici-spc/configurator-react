@@ -1,5 +1,5 @@
-import {ConfiguratorError} from "@viamedici-spc/configurator-ts";
-import {Atom} from "jotai";
+import type {ConfiguratorError} from "@viamedici-spc/configurator-ts";
+import type {Atom} from "jotai";
 
 /**
  * Represents an Atom which is guarded against access while the Configuration is not fully initialized.

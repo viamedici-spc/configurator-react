@@ -1,6 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {UseSessionReinitializationResult} from "../internal/jotai/domain/sessionReinitialization";
+import type {UseSessionReinitializationResult} from "../internal/jotai/domain/sessionReinitialization";
 
 const useSessionReinitialization: {
     /**

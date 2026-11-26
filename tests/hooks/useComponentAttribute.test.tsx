@@ -1,11 +1,13 @@
 import {act, cleanup, renderHook} from "@testing-library/react-hooks";
 import {afterEach, describe, expect, it, vi} from "vitest";
-import {
-    AttributeType,
-    ComponentDecisionState,
+import type {
     Configuration,
     ExplicitComponentDecision,
     IConfigurationSession
+} from "@viamedici-spc/configurator-ts";
+import {
+    AttributeType,
+    ComponentDecisionState
 } from "@viamedici-spc/configurator-ts";
 import {componentAttribute, numericAttribute, WrappingComponent} from "./Common";
 import {useComponentAttribute} from "../../src";

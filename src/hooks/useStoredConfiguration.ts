@@ -1,7 +1,7 @@
-import {ConfigurationUninitialized} from "../types";
-import {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
+import type {ConfigurationUninitialized} from "../types";
+import type {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {StoredConfiguration} from "@viamedici-spc/configurator-ts";
+import type {StoredConfiguration} from "@viamedici-spc/configurator-ts";
 
 const useStoredConfiguration: {
     /**

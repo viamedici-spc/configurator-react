@@ -1,4 +1,4 @@
-import {SessionContext} from "@viamedici-spc/configurator-ts";
+import type {SessionContext} from "@viamedici-spc/configurator-ts";
 import {useEffect} from "react";
 import {useSetAtom} from "jotai";
 import {useAtomsContext} from "./contexts";

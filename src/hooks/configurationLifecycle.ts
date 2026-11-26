@@ -1,7 +1,7 @@
 import {
     useAtomsContext, useConfiguratorStore
 } from "../internal/contexts";
-import {ConfigurationInitialization, ConfigurationUpdating} from "../types";
+import type {ConfigurationInitialization, ConfigurationUpdating} from "../types";
 import {useAtomValue} from "jotai";
 
 /**

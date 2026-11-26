@@ -1,9 +1,10 @@
-import {atom, Atom} from "jotai";
+import type { Atom} from "jotai";
+import {atom} from "jotai";
 import {atomWithMachine} from "jotai-xstate";
 import {sessionManagementMachine} from "../../sessionManagementMachine";
-import {IConfigurationSession} from "@viamedici-spc/configurator-ts";
-import {Primitives} from "../PrimitveAtoms";
-import {SessionInitialization, SessionUpdating} from "../../Types";
+import type {IConfigurationSession} from "@viamedici-spc/configurator-ts";
+import type {Primitives} from "../PrimitveAtoms";
+import type {SessionInitialization, SessionUpdating} from "../../Types";
 
 export type SessionManagementMachineAtomType = ReturnType<typeof atomWithMachine<typeof sessionManagementMachine>>;
 export type ConfigurationSessionAtomType = Atom<IConfigurationSession | null>;

@@ -1,29 +1,33 @@
-import {
-    AttributeType,
+import type {
     BooleanAttribute,
     ChoiceAttribute,
-    ComponentAttribute,
-    ComponentDecisionState, Configuration,
-    ConfigurationModelFromPackage,
+    ComponentAttribute, Configuration,
+    ConfigurationModelFromPackage, IConfigurationSession,
+    NumericAttribute} from "@viamedici-spc/configurator-ts";
+import {
+    AttributeType,
+    ComponentDecisionState,
     ConfigurationModelSourceType,
-    GlobalAttributeIdKeyBuilder, IConfigurationSession,
+    GlobalAttributeIdKeyBuilder,
     Inclusion,
-    NumericAttribute,
     Selection
 } from "@viamedici-spc/configurator-ts";
-import {PropsWithChildren, useMemo} from "react";
-import {Atoms} from "../../src/internal/jotai/Atoms";
+import type {PropsWithChildren} from "react";
+import { useMemo} from "react";
+import type {Atoms} from "../../src/internal/jotai/Atoms";
 import {AtomsContext, StoreContext} from "../../src/internal/contexts";
-import {atom, createStore, ExtractAtomValue, Provider} from "jotai";
-import {SessionManagementMachineAtomType} from "../../src/internal/jotai/domain/SessionManagement";
-import {createPrimitives, Primitives} from "../../src/internal/jotai/PrimitveAtoms";
+import type { ExtractAtomValue} from "jotai";
+import {atom, createStore, Provider} from "jotai";
+import type {SessionManagementMachineAtomType} from "../../src/internal/jotai/domain/SessionManagement";
+import type { Primitives} from "../../src/internal/jotai/PrimitveAtoms";
+import {createPrimitives} from "../../src/internal/jotai/PrimitveAtoms";
 import {createSelectors} from "../../src/internal/jotai/Selectors";
 import {createSuspendedAtoms} from "../../src/internal/jotai/SuspendedAtoms";
 import {createEffects} from "../../src/internal/jotai/Effects";
 import type {StateFrom, ContextFrom} from "xstate";
-import {sessionManagementMachine} from "../../src/internal/sessionManagementMachine";
+import type {sessionManagementMachine} from "../../src/internal/sessionManagementMachine";
 import {atomFamily} from "jotai/utils";
-import {AttributesAtomType} from "../../src/internal/jotai/domain/SessionSubscription";
+import type {AttributesAtomType} from "../../src/internal/jotai/domain/SessionSubscription";
 
 export function WrappingComponent(props: PropsWithChildren<{
     session: IConfigurationSession,

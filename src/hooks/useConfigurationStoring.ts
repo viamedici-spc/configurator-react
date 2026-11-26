@@ -1,5 +1,5 @@
-import {ConfigurationUninitialized} from "../types";
-import {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
+import type {ConfigurationUninitialized} from "../types";
+import type {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
 const useConfigurationStoring: {
