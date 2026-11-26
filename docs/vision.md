@@ -16,3 +16,9 @@ status: accepted
 ## Audiences
 
 Developers of configurator applications in React, and the coding agents that help them.
+
+## Place among the SPC libraries
+
+The library builds on configurator-ts, and configurator-framer builds on it. It adds the React bindings that
+configurator-ts does not have: the `Configuration` component, which owns a session for its subtree, and the hooks that
+read the configuration and send commands.
