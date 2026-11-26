@@ -30,8 +30,13 @@ session, hooks read it (suspending until it is ready) and send commands. configu
 - Short, sentence-case messages in the past tense; one concern per commit; issue references as `Fixes #<n>`. Ask
   before committing.
 - CI (`.github/workflows/main.yml`) runs the shared workflow `viamedici-spc/github-ci` (`build-bun.yml`): it verifies
-  every push and publishes with npm trusted publishing — `main` as release candidates, `feature/*` branches as
-  prereleases under a dist-tag named after the branch, version tags as releases.
+  every push and pull request (a branch with an open pull request runs twice) and publishes, on a push or a manual run
+  only, with npm trusted publishing — `main` as release candidates, `feature/*` branches as prereleases under a
+  dist-tag named after the branch, version tags as releases. Its React 18 run installs React 18 outside the lockfile,
+  in the read-only verify job and under the release-age guard of `bunfig.toml`.
+- Publishing runs in the GitHub environment `npm`, whose rules admit `main`, `feature/*`, `release/*`, `hotfix/*`,
+  `support/*` and version tags; npm accepts a publish of this package only from that environment.
+- Only repository admins create, move or delete version tags; a tag ruleset enforces it.
 - A change that needs a new configurator-ts pins its exact published (pre)release first, then releases this package.
 
 ## This repository is public
