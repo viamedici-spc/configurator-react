@@ -14,11 +14,11 @@ export type ConfigurationProps = {
      * session, which migrates its decisions (`IConfigurationSession.setSessionContext` of configurator-ts).
      * @remarks A change to the SessionContext is detected using referentially equality. Consider using {@link useMemo} or {@link useRef} to keep the SessionContext unchanged during rendering.
      */
-    sessionContext: SessionContext;
+    readonly sessionContext: SessionContext;
     /**
      * An optional Jotai store where all Atoms will be stored in. Defaults to the result of {@link getDefaultStore()}.
      */
-    jotaiStore?: ReturnType<typeof createStore>;
+    readonly jotaiStore?: ReturnType<typeof createStore>;
 };
 
 export default function Configuration(props: PropsWithChildren<ConfigurationProps>) {

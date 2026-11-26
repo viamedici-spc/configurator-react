@@ -11,8 +11,8 @@ import atomWithGuard from "../helper/atomWithGuard";
 import {match} from "ts-pattern";
 
 export type UseConfigurationSatisfactionResult = {
-    isSatisfied: boolean;
-    explain: {
+    readonly isSatisfied: boolean;
+    readonly explain: {
         (answerType: "decisions"): Promise<DecisionsExplainAnswer>;
         (answerType: "constraints"): Promise<ConstraintsExplainAnswer>;
         (answerType: "full"): Promise<FullExplainAnswer>;

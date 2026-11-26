@@ -4,8 +4,8 @@ import type {GuardedAtom} from "../../../types";
 import atomWithGuard from "../helper/atomWithGuard";
 
 export type UseMakeDecisionResult = {
-    makeDecision: (decision: ExplicitDecision) => Promise<void>;
-    makeManyDecisions: (
+    readonly makeDecision: (decision: ExplicitDecision) => Promise<void>;
+    readonly makeManyDecisions: (
         decisions: ReadonlyArray<ExplicitDecision>,
         mode: MakeManyDecisionsMode,
     ) => Promise<MakeManyDecisionsResult>;

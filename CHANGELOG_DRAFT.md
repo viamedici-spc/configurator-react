@@ -16,6 +16,12 @@
 - **Jotai 3:** an application that passes its own store (`jotaiStore`), or uses `useConfiguratorStore` or
   `useJotaiAtoms`, works with Jotai 3, and the atom families of `useJotaiAtoms` come from `jotai-family`.
 
+## Readonly types
+
+- **Every public type is readonly:** the properties of the hooks' result types, `ConfigurationProps` and
+  `UseJotaiAtomsResult` are `readonly`. Code that changed such an object after receiving it has to build a new one
+  instead.
+
 # Improvements
 
 - **`scheduleTask` returns its result:** the command of `useTaskScheduling` resolves with a `ScheduleTaskResult` (the

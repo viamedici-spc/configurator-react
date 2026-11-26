@@ -13,7 +13,7 @@ export type UseTaskSchedulingResult = {
      * @returns The number of tasks still waiting for execution.
      * @throws `TaskCancelled` if the session is closed while the task waits.
      */
-    scheduleTask: (signal?: AbortSignal | null) => Promise<ScheduleTaskResult>;
+    readonly scheduleTask: (signal?: AbortSignal | null) => Promise<ScheduleTaskResult>;
 };
 
 export function createTaskSchedulingAtom(

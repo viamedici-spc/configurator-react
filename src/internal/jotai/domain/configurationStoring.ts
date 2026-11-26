@@ -4,8 +4,8 @@ import type {GuardedAtom} from "../../../types";
 import atomWithGuard from "../helper/atomWithGuard";
 
 export type UseConfigurationStoringResult = {
-    storeConfiguration: () => Promise<StoredConfiguration>;
-    restoreConfiguration: (
+    readonly storeConfiguration: () => Promise<StoredConfiguration>;
+    readonly restoreConfiguration: (
         storedConfiguration: StoredConfiguration,
         mode: MakeManyDecisionsMode,
     ) => Promise<MakeManyDecisionsResult>;

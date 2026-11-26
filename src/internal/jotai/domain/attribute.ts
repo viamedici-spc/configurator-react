@@ -55,7 +55,7 @@ export type ExplainQuestionParam<T extends WhyIsStateNotPossible> =
     | SimplifiedExplainQuestion<T>;
 
 export type UseAttributeExplainResult<T extends WhyIsStateNotPossible> = {
-    explain: {
+    readonly explain: {
         (question: ExplainQuestionParam<T>, answerType: "decisions"): Promise<DecisionsExplainAnswer>;
         (question: ExplainQuestionParam<T>, answerType: "constraints"): Promise<ConstraintsExplainAnswer>;
         (question: ExplainQuestionParam<T>, answerType: "full"): Promise<FullExplainAnswer>;
@@ -64,34 +64,37 @@ export type UseAttributeExplainResult<T extends WhyIsStateNotPossible> = {
 };
 
 export type UseChoiceAttributeResult = UseAttributeExplainResult<WhyIsChoiceValueStateNotPossible> & {
-    attribute: ChoiceAttribute;
-    makeDecision: (choiceValueId: ChoiceValueId, state: ChoiceValueDecisionState | null | undefined) => Promise<void>;
-    clearDecisions: () => Promise<void>;
-    isMultiSelect: () => boolean;
-    isMandatory: () => boolean;
-    getAllowedChoiceValues: () => ReadonlyArray<ChoiceValue>;
-    getBlockedChoiceValues: () => ReadonlyArray<ChoiceValue>;
-    getIncludedChoiceValues: () => ReadonlyArray<ChoiceValue>;
-    isChoiceValueAllowed: (choiceValue: ChoiceValue) => boolean;
-    isChoiceValueBlocked: (choiceValue: ChoiceValue) => boolean;
+    readonly attribute: ChoiceAttribute;
+    readonly makeDecision: (
+        choiceValueId: ChoiceValueId,
+        state: ChoiceValueDecisionState | null | undefined,
+    ) => Promise<void>;
+    readonly clearDecisions: () => Promise<void>;
+    readonly isMultiSelect: () => boolean;
+    readonly isMandatory: () => boolean;
+    readonly getAllowedChoiceValues: () => ReadonlyArray<ChoiceValue>;
+    readonly getBlockedChoiceValues: () => ReadonlyArray<ChoiceValue>;
+    readonly getIncludedChoiceValues: () => ReadonlyArray<ChoiceValue>;
+    readonly isChoiceValueAllowed: (choiceValue: ChoiceValue) => boolean;
+    readonly isChoiceValueBlocked: (choiceValue: ChoiceValue) => boolean;
 };
 
 export type UseNumericAttributeResult = UseAttributeExplainResult<WhyIsNumericStateNotPossible> & {
-    attribute: NumericAttribute;
-    makeDecision: (state: number | null | undefined) => Promise<void>;
-    isMandatory: () => boolean;
+    readonly attribute: NumericAttribute;
+    readonly makeDecision: (state: number | null | undefined) => Promise<void>;
+    readonly isMandatory: () => boolean;
 };
 
 export type UseBooleanAttributeResult = UseAttributeExplainResult<WhyIsBooleanStateNotPossible> & {
-    attribute: BooleanAttribute;
-    makeDecision: (state: boolean | null | undefined) => Promise<void>;
-    isMandatory: () => boolean;
+    readonly attribute: BooleanAttribute;
+    readonly makeDecision: (state: boolean | null | undefined) => Promise<void>;
+    readonly isMandatory: () => boolean;
 };
 
 export type UseComponentAttributeResult = UseAttributeExplainResult<WhyIsComponentStateNotPossible> & {
-    attribute: ComponentAttribute;
-    makeDecision: (state: ComponentDecisionState | null | undefined) => Promise<void>;
-    isMandatory: () => boolean;
+    readonly attribute: ComponentAttribute;
+    readonly makeDecision: (state: ComponentDecisionState | null | undefined) => Promise<void>;
+    readonly isMandatory: () => boolean;
 };
 
 export function createChoiceAttributeAtomFamily(

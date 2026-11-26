@@ -30,7 +30,7 @@ import type {UseMakeDecisionResult} from "../internal/jotai/domain/makeDecision"
 import type {UseDecisionQueriesResult} from "../internal/jotai/domain/decisionQueries";
 
 export type UseJotaiAtomsResult = {
-    createAttributesAtom: {
+    readonly createAttributesAtom: {
         (attributes: "all"): GuardedAtom<ReadonlyArray<Attribute>>;
         (
             attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>,
@@ -41,29 +41,38 @@ export type UseJotaiAtomsResult = {
             filterMissingAttributes: false,
         ): GuardedAtom<ReadonlyArray<Attribute | undefined>>;
     };
-    getConfigurationInitializationAtom: Atom<ConfigurationInitialization>;
-    getConfigurationUpdatingAtom: Atom<ConfigurationUpdating>;
-    getChoiceAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
-    getNumericAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
-    getBooleanAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
-    getComponentAttributeAtomFamily: AtomFamily<
+    readonly getConfigurationInitializationAtom: Atom<ConfigurationInitialization>;
+    readonly getConfigurationUpdatingAtom: Atom<ConfigurationUpdating>;
+    readonly getChoiceAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        GuardedAtom<UseChoiceAttributeResult | undefined>
+    >;
+    readonly getNumericAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        GuardedAtom<UseNumericAttributeResult | undefined>
+    >;
+    readonly getBooleanAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        GuardedAtom<UseBooleanAttributeResult | undefined>
+    >;
+    readonly getComponentAttributeAtomFamily: AtomFamily<
         GlobalAttributeIdKey,
         GuardedAtom<UseComponentAttributeResult | undefined>
     >;
 
-    getConfigurationAtom: GuardedAtom<Configuration>;
-    getConfigurationStoringAtom: GuardedAtom<UseConfigurationStoringResult>;
-    getConfigurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
-    getMakeDecisionAtom: GuardedAtom<UseMakeDecisionResult>;
-    getDecisionQueriesAtom: GuardedAtom<UseDecisionQueriesResult>;
-    getConfigurationResetAtom: GuardedAtom<UseConfigurationResetResult>;
-    getSessionReinitializationAtom: GuardedAtom<UseSessionReinitializationResult>;
-    getExplainAtom: GuardedAtom<UseExplainResult>;
-    getTaskSchedulingAtom: GuardedAtom<UseTaskSchedulingResult>;
-    getStoredConfigurationAtom: GuardedAtom<StoredConfiguration>;
-    getDecisionsAtom: GuardedAtom<ReadonlyArray<CollectedDecision>>;
-    getExplicitDecisionsAtom: GuardedAtom<ReadonlyArray<CollectedExplicitDecision>>;
-    getImplicitDecisionsAtom: GuardedAtom<NonNullable<ReadonlyArray<CollectedImplicitDecision>>>;
+    readonly getConfigurationAtom: GuardedAtom<Configuration>;
+    readonly getConfigurationStoringAtom: GuardedAtom<UseConfigurationStoringResult>;
+    readonly getConfigurationSatisfactionAtom: GuardedAtom<UseConfigurationSatisfactionResult>;
+    readonly getMakeDecisionAtom: GuardedAtom<UseMakeDecisionResult>;
+    readonly getDecisionQueriesAtom: GuardedAtom<UseDecisionQueriesResult>;
+    readonly getConfigurationResetAtom: GuardedAtom<UseConfigurationResetResult>;
+    readonly getSessionReinitializationAtom: GuardedAtom<UseSessionReinitializationResult>;
+    readonly getExplainAtom: GuardedAtom<UseExplainResult>;
+    readonly getTaskSchedulingAtom: GuardedAtom<UseTaskSchedulingResult>;
+    readonly getStoredConfigurationAtom: GuardedAtom<StoredConfiguration>;
+    readonly getDecisionsAtom: GuardedAtom<ReadonlyArray<CollectedDecision>>;
+    readonly getExplicitDecisionsAtom: GuardedAtom<ReadonlyArray<CollectedExplicitDecision>>;
+    readonly getImplicitDecisionsAtom: GuardedAtom<NonNullable<ReadonlyArray<CollectedImplicitDecision>>>;
 };
 
 /**

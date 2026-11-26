@@ -3,7 +3,7 @@ import type {GuardedAtom} from "../../../types";
 import atomWithGuard from "../helper/atomWithGuard";
 
 export type UseSessionReinitializationResult = {
-    reinitializeSession: () => Promise<void>;
+    readonly reinitializeSession: () => Promise<void>;
 };
 
 export function createSessionReinitializationAtom(

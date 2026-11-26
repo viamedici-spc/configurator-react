@@ -3,8 +3,8 @@ import type {GuardedAtom} from "../../../types";
 import atomWithGuard from "../helper/atomWithGuard";
 
 export type UseConfigurationResetResult = {
-    canResetConfiguration: boolean;
-    resetConfiguration: () => Promise<void>;
+    readonly canResetConfiguration: boolean;
+    readonly resetConfiguration: () => Promise<void>;
 };
 
 export function createConfigurationResetAtom(
