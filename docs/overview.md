@@ -16,7 +16,12 @@ React layer.
 
 ## Public contract
 
-- The entry point `src/index.ts` exports `Configuration`, the hooks in `src/hooks/` and their result types.
+- The entry point `src/index.ts` exports:
+  - `Configuration` and `ConfigurationProps`;
+  - the hooks in `src/hooks/` with their result types;
+  - `useConfiguratorStore` and `useJotaiAtoms`, with `UseJotaiAtomsResult` and `GuardedAtom`;
+  - the lifecycle types `ConfigurationInitialization`, `ConfigurationUpdating` and `ConfiguratorErrorWithRetry`;
+  - `ConfigurationUninitialized` and `isConfigurationInitialized`.
 - Reading hooks come in a suspending form and a form that returns `ConfigurationUninitialized` instead
   (`useX(…, false)`).
 
