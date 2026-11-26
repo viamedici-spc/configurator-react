@@ -32,12 +32,13 @@ export function WrappingComponent(props: PropsWithChildren<{
     const configurationSessionAtom = useMemo(() => atom<IConfigurationSession>(), []);
     const sessionManagementMachineAtom: SessionManagementMachineAtomType = useMemo(() =>
         atom<StateFrom<typeof sessionManagementMachine>, [any], void>(get => ({
+            matches: () => false,
             context: {
                 sessionCreateOrUpdateError: null,
                 desiredSessionContext: null,
                 configurationSession: get(configurationSessionAtom)
             } as ContextFrom<typeof sessionManagementMachine>
-        } as StateFrom<typeof sessionManagementMachine>), () => {
+        } as unknown as StateFrom<typeof sessionManagementMachine>), () => {
         }), []);
     const primitives: Primitives = useMemo(() => ({
         ...createPrimitives(),

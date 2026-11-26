@@ -24,7 +24,7 @@ import {AtomFamily} from "jotai/vanilla/utils/atomFamily";
 const createAttributesAtomValue = () => atomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>>(() => atom());
 
 export type ConfigurationAtomType = PrimitiveAtom<Configuration | undefined>;
-export type IsSatisfiedAtomType = PrimitiveAtom<boolean | undefined>;
+export type IsSatisfiedAtomType = PrimitiveAtom<Configuration["isSatisfied"] | undefined>;
 export type CanResetAtomType = PrimitiveAtom<boolean | undefined>;
 export type AttributesAtomType = PrimitiveAtom<AtomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>> | undefined>;
 
@@ -50,9 +50,7 @@ export function createAddSessionListenersEffect(primitives: Primitives, selector
         const configurationChangedSubscription = session.addConfigurationChangedListener((configuration, configurationChanges) => {
             Logger.debug("SessionSubscription:", "Received ConfigurationChanged");
             set(configurationAtom, configuration);
-            if (configurationChanges.isSatisfied != null) {
-                set(isSatisfiedAtom, configurationChanges.isSatisfied);
-            }
+            set(isSatisfiedAtom, configuration.isSatisfied);
             const currentAttributesValue = get.peek(attributesAtom);
             const attributes = currentAttributesValue ?? createAttributesAtomValue();
 

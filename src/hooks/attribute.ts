@@ -1,10 +1,12 @@
+import * as Bool from "fp-ts/boolean";
+import * as Str from "fp-ts/string";
 import {
     Attribute,
     GlobalAttributeId, globalAttributeIdEq, GlobalAttributeIdKey, GlobalAttributeIdKeyBuilder, globalAttributeIdKeyEq
 } from "@viamedici-spc/configurator-ts";
 import {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "../internal/jotai/domain/attribute";
 import {createAttributesAtom} from "../internal/jotai/domain/dynamic";
-import {Bool, Eq, EqT, O, pipe, RA, Str} from "@viamedici-spc/fp-ts-extensions";
+import {Eq, EqT, O, pipe, RA} from "@viamedici-spc/fp-ts-extensions";
 import {ConfigurationUninitialized} from "../types";
 import {prepareAttributeUsageWithSuspense, prepareParameterizedAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 import atomWithSuspend from "../internal/jotai/helper/atomWithSuspend";
@@ -65,7 +67,7 @@ export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | Glob
  * @returns The requested attributes in the order of the {@link attributes} parameter.
  * @param suspend Whether to disable the Suspense API.
  */
-export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: false, suspend: false): ReadonlyArray<Attribute> | ConfigurationUninitialized
+export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: false, suspend: false): ReadonlyArray<Attribute | undefined> | ConfigurationUninitialized
 export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> | "all", suspendOrFilterMissingAttributesOrUndefined?: boolean, suspendOrUndefined?: boolean): ReadonlyArray<Attribute | undefined> | ConfigurationUninitialized {
     const suspend = attributes == "all" ? suspendOrFilterMissingAttributesOrUndefined : suspendOrUndefined;
     const filterMissingAttributes = attributes == "all" ? undefined : suspendOrFilterMissingAttributesOrUndefined;

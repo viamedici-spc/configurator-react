@@ -107,3 +107,8 @@ export {
 
     isConfigurationInitialized,
 };
+
+export {ConfigurationResultsSection, useActiveAttribute, useActiveAttributes, useFullPropagation, type ConfigurationResultsSectionProps} from "./hooks/useActiveAttributes";
+export {useLiveAttributes, type LiveAttributesResult} from "./hooks/useLiveAttributes";
+export {isImmutablyExcluded} from "./internal/ActiveAttributesController";
+export type {ActiveAttributesState} from "./internal/ActiveAttributesController";

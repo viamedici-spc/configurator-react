@@ -1,3 +1,4 @@
+import {ActiveAttributesProvider} from "./hooks/useActiveAttributes";
 import {
     PropsWithChildren, useMemo, useRef
 } from "react";
@@ -12,6 +13,8 @@ import {createStore} from "jotai";
 import SessionManagementInitializer from "./internal/SessionManagementInitializer";
 
 export type ConfigurationProps = {
+    /** Opt in to propagation limited to registered attributes. Defaults to false. */
+    activeAttributesEnabled?: boolean;
     /**
      * The SessionContext that should be used to create the session. Every time the SessionContext change, a new Session is created and all decisions are tried to restore.
      * @remarks A change to the SessionContext is detected using referentially equality. Consider using {@link useMemo} or {@link useRef} to keep the SessionContext unchanged during rendering.
@@ -32,7 +35,9 @@ export default function Configuration(props: PropsWithChildren<ConfigurationProp
                 <JotaiStoreProvider>
                     <SessionManagementInitializer sessionContext={props.sessionContext}/>
                     <EffectLoader/>
-                    {props.children}
+                    <ActiveAttributesProvider enabled={props.activeAttributesEnabled ?? false}>
+                        {props.children}
+                    </ActiveAttributesProvider>
                 </JotaiStoreProvider>
             </ConfiguratorStoreProvider>
         </AtomsContext.Provider>

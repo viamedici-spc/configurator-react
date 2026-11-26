@@ -51,7 +51,7 @@ export type Selectors = {
 
     guardedConfigurationSessionAtom: GuardedAtom<IConfigurationSession>;
     guardedConfigurationAtom: GuardedAtom<Configuration>;
-    guardedIsSatisfiedAtom: GuardedAtom<boolean>;
+    guardedIsSatisfiedAtom: GuardedAtom<Configuration["isSatisfied"]>;
     guardedCanResetAtom: GuardedAtom<boolean>;
     guardedAttributesAtom: GuardedAtom<AtomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>>>;
     guardedStoredConfigurationAtom: GuardedAtom<StoredConfiguration>;
@@ -88,7 +88,10 @@ export function createSelectors(primitives: Primitives): Selectors {
     const guardedAtoms = {
         guardedConfigurationSessionAtom: guardAtom(configurationSessionAtom),
         guardedConfigurationAtom: guardAtom(primitives.configurationAtom),
-        guardedIsSatisfiedAtom: guardAtom(primitives.isSatisfiedAtom),
+        guardedIsSatisfiedAtom: atom(get => {
+            const satisfaction = get(primitives.isSatisfiedAtom);
+            return satisfaction === undefined ? ConfigurationUninitialized : satisfaction;
+        }),
         guardedCanResetAtom: guardAtom(primitives.canResetAtom),
         guardedAttributesAtom: guardAtom(primitives.attributesAtom),
         guardedStoredConfigurationAtom: guardAtom(createStoredConfigurationAtom(configurationSessionAtom)),
