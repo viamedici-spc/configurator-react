@@ -22,9 +22,9 @@ React layer.
 
 ## Invariants
 
-- **One session per `Configuration`.** It is created when the component mounts, updated when its `sessionContext`
-  changes and closed when it unmounts — also under StrictMode, which mounts effects twice, and when it unmounts while
-  the session is still being created.
+- **At most one session stays open per `Configuration`.** It is created when the component mounts, updated when its
+  `sessionContext` changes and closed when it unmounts, also when it unmounts while the session is still being created.
+  Under StrictMode, which mounts effects twice, a second session is created and the first one is closed.
 - **State is reached through hooks only**, never through a context or an atom directly.
 - **React is a peer dependency** (`^18.2 || ^19`).
 

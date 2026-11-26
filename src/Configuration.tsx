@@ -10,7 +10,8 @@ import SessionManagementInitializer from "./internal/SessionManagementInitialize
 
 export type ConfigurationProps = {
     /**
-     * The SessionContext that should be used to create the session. Every time the SessionContext change, a new Session is created and all decisions are tried to restore.
+     * The SessionContext that should be used to create the session. A changed SessionContext is applied to the existing
+     * session, which migrates its decisions (`IConfigurationSession.setSessionContext` of configurator-ts).
      * @remarks A change to the SessionContext is detected using referentially equality. Consider using {@link useMemo} or {@link useRef} to keep the SessionContext unchanged during rendering.
      */
     sessionContext: SessionContext;
