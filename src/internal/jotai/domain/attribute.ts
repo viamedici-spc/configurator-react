@@ -31,8 +31,8 @@ import {
     ExplainQuestionSubject,
     ExplainQuestionType
 } from "@viamedici-spc/configurator-ts";
-import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
-import {atomFamily} from "jotai/utils";
+import type {AtomFamily} from "jotai-family";
+import {atomFamily} from "jotai-family";
 import type {Getter} from "jotai";
 import type {Selectors} from "../Selectors";
 import {constVoid, O, pipe, RA, T} from "@viamedici-spc/fp-ts-extensions";

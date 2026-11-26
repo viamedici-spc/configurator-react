@@ -2,7 +2,7 @@ import type {Atom, PrimitiveAtom} from "jotai";
 import type {Subscription} from "../../Types";
 import {atom} from "jotai";
 import {RA, RM} from "@viamedici-spc/fp-ts-extensions";
-import type {WritableAtom} from "jotai/vanilla/atom";
+import type {WritableAtom} from "jotai";
 import type {Primitives} from "../PrimitveAtoms";
 import {guid} from "dyna-guid";
 import {atomEffect} from "jotai-effect";
@@ -67,13 +67,20 @@ export function createSubscriberAtom(primitives: Primitives): SubscriberAtomType
     });
 }
 
-export function createAtomSubscriberEffect(primitives: Primitives) {
-    return atomEffect((get) => {
+// A derived atom, not an effect: mounting it keeps every subscribed atom mounted, and its dependencies stay registered
+// even while one of them suspends or throws. (Effects lost their dependencies in that case with newer Jotai versions,
+// so hooks mounted later never resolved.)
+export function createAtomSubscriberEffect(primitives: Primitives): Atom<void> {
+    return atom(get => {
         const subscriptions = get(primitives.subscriptionsAtom);
         const atoms = [...subscriptions.keys()];
         Logger.debug("AtomSubscriber:", "There are", atoms.length, "Atoms to subscribe to.");
-        for (const atom of atoms) {
-            get(atom);
+        for (const subscribedAtom of atoms) {
+            try {
+                get(subscribedAtom);
+            } catch {
+                // The dependency is registered even when the atom throws; the reading component gets the error.
+            }
         }
     });
 }

@@ -9,9 +9,10 @@
         "@viamedici-spc/fp-ts-extensions": "^1.2.0",
         "dyna-guid": "^2.2.1",
         "fp-ts-react-stable-hooks": "^1.5.0",
-        "jotai": "^2.10.0",
-        "jotai-effect": "^1.0.3",
-        "jotai-xstate": "^0.5.0",
+        "jotai": "^3",
+        "jotai-effect": "^2",
+        "jotai-family": "^1.1.0",
+        "jotai-xstate": "^0.6",
         "p-defer": "^4.0.1",
         "xstate": "^5.18.2",
       },
@@ -335,11 +336,13 @@
 
     "is-potential-custom-element-name": ["is-potential-custom-element-name@1.0.1", "", {}, "sha512-bCYeRA2rVibKZd+s2625gGnGF/t7DSqDs4dP7CrLA1m7jKWz6pps0LpYLJN8Q64HtmPKJ1hrN3nzPNKFEKOUiQ=="],
 
-    "jotai": ["jotai@2.10.0", "", { "peerDependencies": { "@types/react": ">=17.0.0", "react": ">=17.0.0" }, "optionalPeers": ["@types/react", "react"] }, "sha512-8W4u0aRlOIwGlLQ0sqfl/c6+eExl5D8lZgAUolirZLktyaj4WnxO/8a0HEPmtriQAB6X5LMhXzZVmw02X0P0qQ=="],
+    "jotai": ["jotai@3.0.2", "", { "peerDependencies": { "@types/react": ">=18.0.0", "react": ">=18.0.0" }, "optionalPeers": ["@types/react", "react"] }, "sha512-1h+H6BQN+D048zv8hRGVeNxghxRLFZCB+l2WhFe7RhRiF0JlC8516G2BtRUXhPvMQTGB9OHst2N/BW9aNpp5aA=="],
 
-    "jotai-effect": ["jotai-effect@1.0.3", "", { "peerDependencies": { "jotai": ">=2.5.0" } }, "sha512-Xye6oVMQkhOmkF9G5gdtwlqG2w9GuMcfYdRS0aV/HeoYCj1LfLJ4O8jQRVT/Zb5hPGOLGNll/x6k5wxifn1jYg=="],
+    "jotai-effect": ["jotai-effect@2.4.2", "", { "peerDependencies": { "jotai": ">=2.20.0 || >=3.0.0-alpha.0" } }, "sha512-YACEgYedHkSH0p3QkcBN3p41Ebhw8EOs+4hmyeApZ7eUINrQjs9ZITSap30WtC7kU4Jbz9RIpQ3v58qLv9/WGA=="],
 
-    "jotai-xstate": ["jotai-xstate@0.5.0", "", { "peerDependencies": { "jotai": ">=2.0.0", "xstate": ">=5.0.0" } }, "sha512-okvJOaMaAGIp/haoK1NmcgeHCSBJj1MndkBMLy7ngqm5LyBG9uXE6pE+KhR4CarZy2l+5DuJXNucxdWWJ3ZhoA=="],
+    "jotai-family": ["jotai-family@1.1.0", "", { "peerDependencies": { "jotai": ">=2.9.0" } }, "sha512-T1ACRsLnN5Mu0B8/DIWUW1hW7x1RmpBprm/+CWmUTf4ZZUmIFEQpBJ9PNQtXPjdUD2uu8RvwBxr7nJPdCw5BXg=="],
+
+    "jotai-xstate": ["jotai-xstate@0.6.1", "", { "peerDependencies": { "jotai": ">=2.0.0", "xstate": ">=5.0.0" } }, "sha512-graSDsorui1a4Zt4jCJ40GuOzOkfOY317XcazYnNx0EHS+D/rOr4aLzZRy0NLaPQZsypfcGSMbNCwksfhwkixA=="],
 
     "js-tokens": ["js-tokens@4.0.0", "", {}, "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="],
 

@@ -1,7 +1,7 @@
 import {useAtomsContext} from "../internal/contexts";
 import {createAttributesAtom} from "../internal/jotai/domain/dynamic";
 import {useMemo} from "react";
-import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {AtomFamily} from "jotai-family";
 import type {
     Attribute,
     CollectedDecision,

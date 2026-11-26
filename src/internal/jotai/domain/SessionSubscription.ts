@@ -1,4 +1,4 @@
-import {atomFamily} from "jotai/utils";
+import {atomFamily} from "jotai-family";
 import type {
     Attribute,
     CollectedDecision,
@@ -22,7 +22,7 @@ import { atom} from "jotai";
 import type {Primitives} from "../PrimitveAtoms";
 import type {Selectors} from "../Selectors";
 import {atomEffect} from "jotai-effect";
-import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {AtomFamily} from "jotai-family";
 
 const createAttributesAtomValue = () => atomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>>(() => atom());
 

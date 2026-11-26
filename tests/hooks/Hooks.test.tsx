@@ -39,6 +39,6 @@ describe("Hook tests", () => {
     it("Safe hook don't throw", () => {
         const {result} = renderHook(useConfigurationInitialization, {wrapper: ContextWrapper});
 
-        expect(result.error).toBeFalsy();
+        expect(result.current).toBeDefined();
     });
 });

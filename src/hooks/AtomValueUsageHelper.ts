@@ -1,5 +1,5 @@
 import type {Selectors} from "../internal/jotai/Selectors";
-import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {AtomFamily} from "jotai-family";
 import type {GlobalAttributeId, GlobalAttributeIdKey} from "@viamedici-spc/configurator-ts";
 import { GlobalAttributeIdKeyBuilder} from "@viamedici-spc/configurator-ts";
 import type {SuspendedAtoms} from "../internal/jotai/SuspendedAtoms";

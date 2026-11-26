@@ -26,7 +26,7 @@ import {createSuspendedAtoms} from "../../src/internal/jotai/SuspendedAtoms";
 import {createEffects} from "../../src/internal/jotai/Effects";
 import type {StateFrom, ContextFrom} from "xstate";
 import type {sessionManagementMachine} from "../../src/internal/sessionManagementMachine";
-import {atomFamily} from "jotai/utils";
+import {atomFamily} from "jotai-family";
 import type {AttributesAtomType} from "../../src/internal/jotai/domain/SessionSubscription";
 
 export function WrappingComponent(props: PropsWithChildren<{

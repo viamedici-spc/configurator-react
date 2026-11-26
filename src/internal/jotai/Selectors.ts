@@ -17,7 +17,7 @@ import type { UseConfigurationResetResult} from "./domain/configurationReset";
 import {createConfigurationResetAtom} from "./domain/configurationReset";
 import type { UseExplainResult} from "./domain/explain";
 import {createExplainAtom} from "./domain/explain";
-import type {AtomFamily} from "jotai/vanilla/utils/atomFamily";
+import type {AtomFamily} from "jotai-family";
 import type {
     UseBooleanAttributeResult,
     UseChoiceAttributeResult,
