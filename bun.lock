@@ -5,7 +5,7 @@
     "": {
       "name": "@viamedici-spc/configurator-react",
       "dependencies": {
-        "@viamedici-spc/fp-ts-extensions": "2.0.0-modern-toolchain-20261126094931",
+        "@viamedici-spc/fp-ts-extensions": "2.0.0",
         "dyna-guid": "^2.3.3",
         "fp-ts-react-stable-hooks": "^2.0.0",
         "jotai-effect": "^2",
@@ -23,7 +23,7 @@
         "@types/bun": "^1.4.5",
         "@types/react": "^19",
         "@types/react-dom": "^19.3.0",
-        "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126175746",
+        "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126215538",
         "jotai": "^3.0.2",
         "jsdom": "^31.0.1",
         "oxlint": "^1.94.0",
@@ -44,7 +44,7 @@
       "name": "configurator-react-test-app",
       "dependencies": {
         "@viamedici-spc/configurator-react": "workspace:*",
-        "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126175746",
+        "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126215538",
         "clsx": "^2.1.1",
         "jotai": "^3.0.2",
         "react": "^19.3.1",
@@ -270,9 +270,9 @@
 
     "@viamedici-spc/configurator-react": ["@viamedici-spc/configurator-react@root:", {}],
 
-    "@viamedici-spc/configurator-ts": ["@viamedici-spc/configurator-ts@5.0.0-modern-toolchain-20261126175746", "", { "dependencies": { "@morphic-ts/batteries": "^3.0.0", "@morphic-ts/model-algebras": "^3.0.0", "@viamedici-spc/fp-ts-extensions": "2.0.0-modern-toolchain-20261126094931", "dyna-guid": "^2.3.3", "fast-equals": "^6.4.1", "fp-ts": "^2.16.11", "memize": "^2.1.1", "monocle-ts": "^2.3.13", "openapi-fetch": "^0.17.0", "p-defer": "^4.0.1", "spark-md5": "^3.0.2", "ts-pattern": "^5.9.2", "tslib": "^2.7.0", "xstate": "^5.33.4" } }, "sha512-I3rtDtz5u1md50ZWBWv06wo3+h6S1A4aedzdxBow5u9q2DKfub/6MzKcNB48snnyb9NefftE8pVnkfGl6Bsurw=="],
+    "@viamedici-spc/configurator-ts": ["@viamedici-spc/configurator-ts@5.0.0-modern-toolchain-20261126215538", "", { "dependencies": { "@morphic-ts/batteries": "^3.0.0", "@morphic-ts/model-algebras": "^3.0.0", "@viamedici-spc/fp-ts-extensions": "2.0.0", "dyna-guid": "^2.3.3", "fast-equals": "^6.4.1", "fp-ts": "^2.16.11", "memize": "^2.1.1", "monocle-ts": "^2.3.13", "openapi-fetch": "^0.17.0", "p-defer": "^4.0.1", "spark-md5": "^3.0.2", "ts-pattern": "^5.9.2", "tslib": "^2.7.0", "xstate": "^5.33.4" } }, "sha512-qh+dSuhazcsr0TI0KB1PiDHYZlFuTsFwGxt3Hvc++3ak4BWiCkQ4PsyZ5VbAumNbawMvkTarZ/aQ4T4H/ULeaA=="],
 
-    "@viamedici-spc/fp-ts-extensions": ["@viamedici-spc/fp-ts-extensions@2.0.0-modern-toolchain-20261126094931", "", { "peerDependencies": { "fp-ts": "2.*" } }, "sha512-ywpE+ue+AHBscDs6IHjiTd0m4uVFvtP4suatHbRRYGf3poYiZZOmSMaul/owVe7PrPpxXrwZHaW0/LK83KoN2g=="],
+    "@viamedici-spc/fp-ts-extensions": ["@viamedici-spc/fp-ts-extensions@2.0.0", "", { "peerDependencies": { "fp-ts": "2.*" } }, "sha512-r+M0EWcMvv0eTUGFiTgdnHHTNS/60skV4jDDVv5B+wC6qCLFP7t51XQsXD3QVa6HmAWQEmOvdNihG9xk4/RTyA=="],
 
     "@vitejs/plugin-react": ["@vitejs/plugin-react@6.3.0", "", { "dependencies": { "@rolldown/pluginutils": "^1.0.1" }, "peerDependencies": { "@rolldown/plugin-babel": "^0.1.7 || ^0.2.0 || ^0.3.0", "babel-plugin-react-compiler": "^1.0.0", "oxc-transform-react": ">=0.152.0 <0.157.0", "vite": "^8.0.0" }, "optionalPeers": ["@rolldown/plugin-babel", "babel-plugin-react-compiler", "oxc-transform-react"] }, "sha512-H9E955aVvD2F4zNHCw4eIZbIfF6xKldlh7MNu+hSU7xwQzh65lI/N+CJWqmfhi0PEjDXIt/H7T7J/4wU63KJiw=="],
 

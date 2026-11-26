@@ -43,7 +43,7 @@
     "verify:package": "bun package-check/build.ts && bun package-check/consumer.ts && publint --strict && attw --pack . --profile esm-only --format table-flipped"
   },
   "dependencies": {
-    "@viamedici-spc/fp-ts-extensions": "2.0.0-modern-toolchain-20261126094931",
+    "@viamedici-spc/fp-ts-extensions": "2.0.0",
     "dyna-guid": "^2.3.3",
     "fp-ts-react-stable-hooks": "^2.0.0",
     "jotai-effect": "^2",
@@ -61,7 +61,7 @@
     "@types/bun": "^1.4.5",
     "@types/react": "^19",
     "@types/react-dom": "^19.3.0",
-    "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126175746",
+    "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126215538",
     "jotai": "^3.0.2",
     "jsdom": "^31.0.1",
     "oxlint": "^1.94.0",
