@@ -10,26 +10,25 @@ import type {
     OnDecisionsChangedHandler,
     OnStoredConfigurationChangedHandler,
     StoredConfiguration,
-    Subscription
+    Subscription,
 } from "@viamedici-spc/configurator-ts";
-import {
-    DecisionKind,
-    GlobalAttributeIdKeyBuilder,
-    Logger
-} from "@viamedici-spc/configurator-ts";
+import {DecisionKind, GlobalAttributeIdKeyBuilder, Logger} from "@viamedici-spc/configurator-ts";
 import type {Atom, PrimitiveAtom} from "jotai";
-import { atom} from "jotai";
+import {atom} from "jotai";
 import type {Primitives} from "../PrimitveAtoms";
 import type {Selectors} from "../Selectors";
 import {atomEffect} from "jotai-effect";
 import type {AtomFamily} from "jotai-family";
 
-const createAttributesAtomValue = () => atomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>>(() => atom());
+const createAttributesAtomValue = () =>
+    atomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>>(() => atom());
 
 export type ConfigurationAtomType = PrimitiveAtom<Configuration | undefined>;
 export type IsSatisfiedAtomType = PrimitiveAtom<boolean | undefined>;
 export type CanResetAtomType = PrimitiveAtom<boolean | undefined>;
-export type AttributesAtomType = PrimitiveAtom<AtomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>> | undefined>;
+export type AttributesAtomType = PrimitiveAtom<
+    AtomFamily<GlobalAttributeIdKey, PrimitiveAtom<Attribute | undefined>> | undefined
+>;
 
 export const createConfigurationAtom = (): ConfigurationAtomType => atom();
 export const createIsSatisfiedAtom = (): IsSatisfiedAtomType => atom();
@@ -50,31 +49,33 @@ export function createAddSessionListenersEffect(primitives: Primitives, selector
             return;
         }
 
-        const configurationChangedSubscription = session.addConfigurationChangedListener((configuration, configurationChanges) => {
-            Logger.debug("SessionSubscription:", "Received ConfigurationChanged");
-            set(configurationAtom, configuration);
-            if (configurationChanges.isSatisfied != null) {
-                set(isSatisfiedAtom, configurationChanges.isSatisfied);
-            }
-            const currentAttributesValue = get.peek(attributesAtom);
-            const attributes = currentAttributesValue ?? createAttributesAtomValue();
+        const configurationChangedSubscription = session.addConfigurationChangedListener(
+            (configuration, configurationChanges) => {
+                Logger.debug("SessionSubscription:", "Received ConfigurationChanged");
+                set(configurationAtom, configuration);
+                if (configurationChanges.isSatisfied != null) {
+                    set(isSatisfiedAtom, configurationChanges.isSatisfied);
+                }
+                const currentAttributesValue = get.peek(attributesAtom);
+                const attributes = currentAttributesValue ?? createAttributesAtomValue();
 
-            configurationChanges.attributes.added.forEach(attribute => {
-                set(attributes(attribute.key), attribute);
-            });
-            configurationChanges.attributes.changed.forEach(attribute => {
-                set(attributes(attribute.key), attribute);
-            });
-            configurationChanges.attributes.removed.forEach(attributeId => {
-                set(attributes(GlobalAttributeIdKeyBuilder(attributeId)), undefined);
-            });
+                configurationChanges.attributes.added.forEach(attribute => {
+                    set(attributes(attribute.key), attribute);
+                });
+                configurationChanges.attributes.changed.forEach(attribute => {
+                    set(attributes(attribute.key), attribute);
+                });
+                configurationChanges.attributes.removed.forEach(attributeId => {
+                    set(attributes(GlobalAttributeIdKeyBuilder(attributeId)), undefined);
+                });
 
-            if (currentAttributesValue == null) {
-                set(attributesAtom, () => attributes);
-            }
-        });
+                if (currentAttributesValue == null) {
+                    set(attributesAtom, () => attributes);
+                }
+            },
+        );
 
-        const canResetSubscription = session.addCanResetConfigurationChangedListener((canResetConfiguration) => {
+        const canResetSubscription = session.addCanResetConfigurationChangedListener(canResetConfiguration => {
             Logger.debug("SessionSubscription:", "Received CanResetConfigurationChanged");
             set(canResetAtom, canResetConfiguration);
         });
@@ -86,15 +87,19 @@ export function createAddSessionListenersEffect(primitives: Primitives, selector
     });
 }
 
-function subscribeToSession<H extends (...args: any) => void, R>(configurationSessionAtom: Selectors["configurationSessionAtom"], subscribe: (session: IConfigurationSession, handler: (...args: Parameters<H>) => void) => Subscription, resultMapper: (...args: Parameters<H>) => R) {
-    const subscribingAtom = atom<Atom<Parameters<H> | undefined> | undefined>((get) => {
+function subscribeToSession<H extends (...args: any) => void, R>(
+    configurationSessionAtom: Selectors["configurationSessionAtom"],
+    subscribe: (session: IConfigurationSession, handler: (...args: Parameters<H>) => void) => Subscription,
+    resultMapper: (...args: Parameters<H>) => R,
+) {
+    const subscribingAtom = atom<Atom<Parameters<H> | undefined> | undefined>(get => {
         const session = get(configurationSessionAtom);
         if (!session) {
             return undefined;
         }
 
         const resultAtom = atom<Parameters<H>>();
-        resultAtom.onMount = (setAtom) => {
+        resultAtom.onMount = setAtom => {
             const subscription = subscribe(session, (...args) => {
                 setAtom(args);
             });
@@ -122,17 +127,39 @@ function subscribeToSession<H extends (...args: any) => void, R>(configurationSe
 }
 
 export function createStoredConfigurationAtom(configurationSessionAtom: Selectors["configurationSessionAtom"]) {
-    return subscribeToSession<OnStoredConfigurationChangedHandler, StoredConfiguration>(configurationSessionAtom, (s, h) => s.addStoredConfigurationChangedListener(h), (s) => s);
+    return subscribeToSession<OnStoredConfigurationChangedHandler, StoredConfiguration>(
+        configurationSessionAtom,
+        (s, h) => s.addStoredConfigurationChangedListener(h),
+        s => s,
+    );
 }
 
 export function createDecisionsAtom(configurationSessionAtom: Selectors["configurationSessionAtom"]) {
-    return subscribeToSession<OnDecisionsChangedHandler<CollectedDecision>, ReadonlyArray<CollectedDecision>>(configurationSessionAtom, (s, h) => s.addDecisionsChangedListener(h), s => s);
+    return subscribeToSession<OnDecisionsChangedHandler<CollectedDecision>, ReadonlyArray<CollectedDecision>>(
+        configurationSessionAtom,
+        (s, h) => s.addDecisionsChangedListener(h),
+        s => s,
+    );
 }
 
 export function createExplicitDecisionsAtom(configurationSessionAtom: Selectors["configurationSessionAtom"]) {
-    return subscribeToSession<OnDecisionsChangedHandler<CollectedExplicitDecision>, ReadonlyArray<CollectedExplicitDecision>>(configurationSessionAtom, (s, h) => s.addDecisionsChangedListener(DecisionKind.Explicit, h), s => s);
+    return subscribeToSession<
+        OnDecisionsChangedHandler<CollectedExplicitDecision>,
+        ReadonlyArray<CollectedExplicitDecision>
+    >(
+        configurationSessionAtom,
+        (s, h) => s.addDecisionsChangedListener(DecisionKind.Explicit, h),
+        s => s,
+    );
 }
 
 export function createImplicitDecisionsAtom(configurationSessionAtom: Selectors["configurationSessionAtom"]) {
-    return subscribeToSession<OnDecisionsChangedHandler<CollectedImplicitDecision>, ReadonlyArray<CollectedImplicitDecision>>(configurationSessionAtom, (s, h) => s.addDecisionsChangedListener(DecisionKind.Implicit, h), s => s);
+    return subscribeToSession<
+        OnDecisionsChangedHandler<CollectedImplicitDecision>,
+        ReadonlyArray<CollectedImplicitDecision>
+    >(
+        configurationSessionAtom,
+        (s, h) => s.addDecisionsChangedListener(DecisionKind.Implicit, h),
+        s => s,
+    );
 }

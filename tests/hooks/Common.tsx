@@ -1,25 +1,28 @@
 import type {
     BooleanAttribute,
     ChoiceAttribute,
-    ComponentAttribute, Configuration,
-    ConfigurationModelFromPackage, IConfigurationSession,
-    NumericAttribute} from "@viamedici-spc/configurator-ts";
+    ComponentAttribute,
+    Configuration,
+    ConfigurationModelFromPackage,
+    IConfigurationSession,
+    NumericAttribute,
+} from "@viamedici-spc/configurator-ts";
 import {
     AttributeType,
     ComponentDecisionState,
     ConfigurationModelSourceType,
     GlobalAttributeIdKeyBuilder,
     Inclusion,
-    Selection
+    Selection,
 } from "@viamedici-spc/configurator-ts";
 import type {ComponentProps, PropsWithChildren, ReactElement} from "react";
-import { useMemo} from "react";
+import {useMemo} from "react";
 import type {Atoms} from "../../src/internal/jotai/Atoms";
 import {AtomsContext, StoreContext} from "../../src/internal/contexts";
-import type { ExtractAtomValue} from "jotai";
+import type {ExtractAtomValue} from "jotai";
 import {atom, createStore, Provider} from "jotai";
 import type {SessionManagementMachineAtomType} from "../../src/internal/jotai/domain/SessionManagement";
-import type { Primitives} from "../../src/internal/jotai/PrimitveAtoms";
+import type {Primitives} from "../../src/internal/jotai/PrimitveAtoms";
 import {createPrimitives} from "../../src/internal/jotai/PrimitveAtoms";
 import {createSelectors} from "../../src/internal/jotai/Selectors";
 import {createSuspendedAtoms} from "../../src/internal/jotai/SuspendedAtoms";
@@ -29,24 +32,35 @@ import type {sessionManagementMachine} from "../../src/internal/sessionManagemen
 import {atomFamily} from "jotai-family";
 import type {AttributesAtomType} from "../../src/internal/jotai/domain/SessionSubscription";
 
-export function WrappingComponent(props: PropsWithChildren<{
-    session: IConfigurationSession,
-    configuration: Configuration
-}>) {
+export function WrappingComponent(
+    props: PropsWithChildren<{
+        session: IConfigurationSession;
+        configuration: Configuration;
+    }>,
+) {
     const configurationSessionAtom = useMemo(() => atom<IConfigurationSession>(), []);
-    const sessionManagementMachineAtom: SessionManagementMachineAtomType = useMemo(() =>
-        atom<StateFrom<typeof sessionManagementMachine>, [any], void>(get => ({
-            context: {
-                sessionCreateOrUpdateError: null,
-                desiredSessionContext: null,
-                configurationSession: get(configurationSessionAtom)
-            } as ContextFrom<typeof sessionManagementMachine>
-        } as StateFrom<typeof sessionManagementMachine>), () => {
-        }), []);
-    const primitives: Primitives = useMemo(() => ({
-        ...createPrimitives(),
-        sessionManagementMachineAtom: sessionManagementMachineAtom
-    }), []);
+    const sessionManagementMachineAtom: SessionManagementMachineAtomType = useMemo(
+        () =>
+            atom<StateFrom<typeof sessionManagementMachine>, [any], void>(
+                get =>
+                    ({
+                        context: {
+                            sessionCreateOrUpdateError: null,
+                            desiredSessionContext: null,
+                            configurationSession: get(configurationSessionAtom),
+                        } as ContextFrom<typeof sessionManagementMachine>,
+                    }) as StateFrom<typeof sessionManagementMachine>,
+                () => {},
+            ),
+        [],
+    );
+    const primitives: Primitives = useMemo(
+        () => ({
+            ...createPrimitives(),
+            sessionManagementMachineAtom: sessionManagementMachineAtom,
+        }),
+        [],
+    );
     const atoms: Atoms = useMemo(() => {
         const selectors = createSelectors(primitives);
         const suspendedAtoms = createSuspendedAtoms(selectors);
@@ -54,7 +68,7 @@ export function WrappingComponent(props: PropsWithChildren<{
             primitives: primitives,
             selectors: selectors,
             suspended: suspendedAtoms,
-            effects: createEffects(primitives, selectors, suspendedAtoms)
+            effects: createEffects(primitives, selectors, suspendedAtoms),
         };
     }, []);
     const store = useMemo(() => {
@@ -72,13 +86,10 @@ export function WrappingComponent(props: PropsWithChildren<{
         return store;
     }, []);
 
-
     return (
         <StoreContext.Provider value={store}>
             <Provider store={store}>
-                <AtomsContext.Provider value={atoms}>
-                    {props.children}
-                </AtomsContext.Provider>
+                <AtomsContext.Provider value={atoms}>{props.children}</AtomsContext.Provider>
             </Provider>
         </StoreContext.Provider>
     );
@@ -92,18 +103,20 @@ export const choiceAttribute = {
     canContributeToConfigurationSatisfaction: false,
     cardinality: {
         lowerBound: 0,
-        upperBound: 1
+        upperBound: 1,
     },
     values: new Map([
         [
-            "V1", {
-            id: "V1",
-            decision: null,
-            nonOptimisticDecision: null,
-            possibleDecisionStates: [],
-            isPossibleDecisionStatesImmutable: true,
-        }]
-    ])
+            "V1",
+            {
+                id: "V1",
+                decision: null,
+                nonOptimisticDecision: null,
+                possibleDecisionStates: [],
+                isPossibleDecisionStatesImmutable: true,
+            },
+        ],
+    ]),
 } satisfies ChoiceAttribute;
 
 export const numericAttribute = {
@@ -118,9 +131,9 @@ export const numericAttribute = {
     selection: Selection.Mandatory,
     range: {
         min: 1,
-        max: 2
+        max: 2,
     },
-    decimalPlaces: 0
+    decimalPlaces: 0,
 } satisfies NumericAttribute;
 
 export const booleanAttribute = {
@@ -147,15 +160,15 @@ export const componentAttribute = {
     selection: Selection.Mandatory,
     possibleDecisionStates: [ComponentDecisionState.Included, ComponentDecisionState.Excluded],
     isPossibleDecisionStatesImmutable: false,
-    inclusion: Inclusion.Optional
+    inclusion: Inclusion.Optional,
 } satisfies ComponentAttribute;
 
 export const emptyModel: ConfigurationModelFromPackage = {
     type: ConfigurationModelSourceType.Package,
     configurationModelPackage: {
         root: "null",
-        configurationModels: []
-    }
+        configurationModels: [],
+    },
 };
 
 export const modelWithOneAttribute: ConfigurationModelFromPackage = {
@@ -173,18 +186,20 @@ export const modelWithOneAttribute: ConfigurationModelFromPackage = {
                             upperBound: 1,
                             choiceValues: [
                                 {
-                                    choiceValueId: "A1_C1"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        ]
-    }
+                                    choiceValueId: "A1_C1",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ],
+    },
 };
 
 /** A renderHook wrapper with the given props: renderHook passes only the children to its wrapper. */
-export function wrapperWith(props: ComponentProps<typeof WrappingComponent>): (wrapperProps: PropsWithChildren) => ReactElement {
+export function wrapperWith(
+    props: ComponentProps<typeof WrappingComponent>,
+): (wrapperProps: PropsWithChildren) => ReactElement {
     return ({children}) => <WrappingComponent {...props}>{children}</WrappingComponent>;
 }

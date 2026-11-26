@@ -13,6 +13,9 @@ const useExplain: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseExplainResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseExplainResult>(s => s.explainAtom, s => s.explainAtom);
+} = prepareAtomValueUsageWithSuspense<UseExplainResult>(
+    s => s.explainAtom,
+    s => s.explainAtom,
+);
 
 export default useExplain;

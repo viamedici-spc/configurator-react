@@ -33,7 +33,7 @@ function createCleanupAtomFamiliesEffect(primitives: Primitives, selectors: Sele
         suspended.componentAttributeAtomFamily,
     ];
 
-    return atomEffect((get) => {
+    return atomEffect(get => {
         // Subscribe to configuration so that every change to the configuration reschedules the timeout.
         get(primitives.configurationAtom);
 

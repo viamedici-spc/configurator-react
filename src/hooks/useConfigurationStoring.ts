@@ -13,6 +13,9 @@ const useConfigurationStoring: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseConfigurationStoringResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseConfigurationStoringResult>(s => s.configurationStoringAtom, s => s.configurationStoringAtom);
+} = prepareAtomValueUsageWithSuspense<UseConfigurationStoringResult>(
+    s => s.configurationStoringAtom,
+    s => s.configurationStoringAtom,
+);
 
 export default useConfigurationStoring;

@@ -19,15 +19,15 @@ export default function ChoiceAttribute() {
     return (
         <>
             <Root>
-                <ValueSelection/>
+                <ValueSelection />
                 <Indicators>
-                    <SatisfactionIndicator/>
+                    <SatisfactionIndicator />
                     <span> · </span>
-                    <AvailableValuesIndicator/>
+                    <AvailableValuesIndicator />
                     <span> · </span>
-                    <MandatoryIndicator/>
+                    <MandatoryIndicator />
                     <span> · </span>
-                    <SelectionModeIndicator/>
+                    <SelectionModeIndicator />
                 </Indicators>
             </Root>
         </>

@@ -13,6 +13,9 @@ const useDecisionQueries: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseDecisionQueriesResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseDecisionQueriesResult>(s => s.decisionQueriesAtom, s => s.decisionQueriesAtom);
+} = prepareAtomValueUsageWithSuspense<UseDecisionQueriesResult>(
+    s => s.decisionQueriesAtom,
+    s => s.decisionQueriesAtom,
+);
 
 export default useDecisionQueries;

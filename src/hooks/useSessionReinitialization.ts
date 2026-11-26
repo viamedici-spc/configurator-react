@@ -13,6 +13,9 @@ const useSessionReinitialization: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseSessionReinitializationResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseSessionReinitializationResult>(s => s.sessionReinitializationAtom, s => s.sessionReinitializationAtom);
+} = prepareAtomValueUsageWithSuspense<UseSessionReinitializationResult>(
+    s => s.sessionReinitializationAtom,
+    s => s.sessionReinitializationAtom,
+);
 
 export default useSessionReinitialization;

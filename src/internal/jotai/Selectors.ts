@@ -1,5 +1,5 @@
 import type {Atom} from "jotai";
-import { atom} from "jotai";
+import {atom} from "jotai";
 import type {
     Attribute,
     CollectedDecision,
@@ -8,55 +8,56 @@ import type {
     Configuration,
     GlobalAttributeIdKey,
     IConfigurationSession,
-    StoredConfiguration
+    StoredConfiguration,
 } from "@viamedici-spc/configurator-ts";
 import type {Primitives} from "./PrimitveAtoms";
 import type {ConfigurationInitialization, ConfigurationUpdating, GuardedAtom} from "../../types";
-import { ConfigurationUninitialized} from "../../types";
-import type { UseConfigurationResetResult} from "./domain/configurationReset";
+import {ConfigurationUninitialized} from "../../types";
+import type {UseConfigurationResetResult} from "./domain/configurationReset";
 import {createConfigurationResetAtom} from "./domain/configurationReset";
-import type { UseExplainResult} from "./domain/explain";
+import type {UseExplainResult} from "./domain/explain";
 import {createExplainAtom} from "./domain/explain";
 import type {AtomFamily} from "jotai-family";
 import type {
     UseBooleanAttributeResult,
     UseChoiceAttributeResult,
     UseComponentAttributeResult,
-    UseNumericAttributeResult
+    UseNumericAttributeResult,
 } from "./domain/attribute";
 import {
     createBooleanAttributeAtomFamily,
-    createChoiceAttributeAtomFamily, createComponentAttributeAtomFamily, createNumericAttributeAtomFamily
+    createChoiceAttributeAtomFamily,
+    createComponentAttributeAtomFamily,
+    createNumericAttributeAtomFamily,
 } from "./domain/attribute";
 import type {PrimitiveAtom} from "jotai";
 import {createConfigurationInitializationAtom} from "./domain/configurationInitialization";
 import {createConfigurationUpdatingAtom} from "./domain/configurationUpdating";
-import type { UseConfigurationStoringResult} from "./domain/configurationStoring";
+import type {UseConfigurationStoringResult} from "./domain/configurationStoring";
 import {createConfigurationStoringAtom} from "./domain/configurationStoring";
-import type { SubscriberAtomType} from "./domain/AtomSubscription";
+import type {SubscriberAtomType} from "./domain/AtomSubscription";
 import {createSubscriberAtom} from "./domain/AtomSubscription";
 import type {
     ConfigurationSessionAtomType,
     SessionInitializationAtomType,
-    SessionUpdatingAtomType
+    SessionUpdatingAtomType,
 } from "./domain/SessionManagement";
-import {
-    createConfigurationSessionAtom,
-    createSessionInitializationAndUpdatingAtom
-} from "./domain/SessionManagement";
-import type { UseConfigurationSatisfactionResult} from "./domain/configurationSatisfaction";
+import {createConfigurationSessionAtom, createSessionInitializationAndUpdatingAtom} from "./domain/SessionManagement";
+import type {UseConfigurationSatisfactionResult} from "./domain/configurationSatisfaction";
 import {createConfigurationSatisfactionAtom} from "./domain/configurationSatisfaction";
-import type { UseSessionReinitializationResult} from "./domain/sessionReinitialization";
+import type {UseSessionReinitializationResult} from "./domain/sessionReinitialization";
 import {createSessionReinitializationAtom} from "./domain/sessionReinitialization";
 import {
-    createDecisionsAtom, createExplicitDecisionsAtom, createImplicitDecisionsAtom,
-    createStoredConfigurationAtom
+    createDecisionsAtom,
+    createExplicitDecisionsAtom,
+    createImplicitDecisionsAtom,
+    createStoredConfigurationAtom,
 } from "./domain/SessionSubscription";
-import type { UseTaskSchedulingResult} from "./domain/taskScheduling";
+import type {UseTaskSchedulingResult} from "./domain/taskScheduling";
 import {createTaskSchedulingAtom} from "./domain/taskScheduling";
-import type { UseDecisionQueriesResult} from "./domain/decisionQueries";
+import type {UseDecisionQueriesResult} from "./domain/decisionQueries";
 import {createDecisionQueriesAtom} from "./domain/decisionQueries";
-import type { UseMakeDecisionResult} from "./domain/makeDecision";
+import type {UseMakeDecisionResult} from "./domain/makeDecision";
 import {createMakeDecisionAtom} from "./domain/makeDecision";
 
 export type Selectors = {
@@ -88,7 +89,10 @@ export type Selectors = {
     choiceAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
     numericAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
     booleanAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
-    componentAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>>;
+    componentAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        GuardedAtom<UseComponentAttributeResult | undefined>
+    >;
 
     subscriberAtom: SubscriberAtomType;
 };
@@ -121,7 +125,14 @@ export function createSelectors(primitives: Primitives): Selectors {
         sessionInitializationAtom: sessionInitializationAtom,
         sessionUpdatingAtom: sessionUpdatingAtom,
 
-        configurationInitializationAtom: createConfigurationInitializationAtom(sessionInitializationAtom, guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedConfigurationAtom, guardedAtoms.guardedCanResetAtom, guardedAtoms.guardedIsSatisfiedAtom, guardedAtoms.guardedAttributesAtom),
+        configurationInitializationAtom: createConfigurationInitializationAtom(
+            sessionInitializationAtom,
+            guardedAtoms.guardedConfigurationSessionAtom,
+            guardedAtoms.guardedConfigurationAtom,
+            guardedAtoms.guardedCanResetAtom,
+            guardedAtoms.guardedIsSatisfiedAtom,
+            guardedAtoms.guardedAttributesAtom,
+        ),
         configurationUpdatingAtom: createConfigurationUpdatingAtom(sessionUpdatingAtom),
 
         makeDecisionAtom: makeDecisionAtom,
@@ -129,15 +140,37 @@ export function createSelectors(primitives: Primitives): Selectors {
         decisionQueriesAtom: createDecisionQueriesAtom(guardedAtoms.guardedConfigurationSessionAtom),
 
         taskSchedulingAtom: createTaskSchedulingAtom(guardedAtoms.guardedConfigurationSessionAtom),
-        configurationSatisfactionAtom: createConfigurationSatisfactionAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedIsSatisfiedAtom),
+        configurationSatisfactionAtom: createConfigurationSatisfactionAtom(
+            guardedAtoms.guardedConfigurationSessionAtom,
+            guardedAtoms.guardedIsSatisfiedAtom,
+        ),
         configurationStoringAtom: createConfigurationStoringAtom(guardedAtoms.guardedConfigurationSessionAtom),
-        configurationResetAtom: createConfigurationResetAtom(guardedAtoms.guardedConfigurationSessionAtom, guardedAtoms.guardedCanResetAtom),
+        configurationResetAtom: createConfigurationResetAtom(
+            guardedAtoms.guardedConfigurationSessionAtom,
+            guardedAtoms.guardedCanResetAtom,
+        ),
         sessionReinitializationAtom: createSessionReinitializationAtom(guardedAtoms.guardedConfigurationSessionAtom),
-        choiceAttributeAtomFamily: createChoiceAttributeAtomFamily(guardedAtoms.guardedAttributesAtom, makeDecisionAtom, explainHookAtom),
-        numericAttributeAtomFamily: createNumericAttributeAtomFamily(guardedAtoms.guardedAttributesAtom, makeDecisionAtom, explainHookAtom),
-        booleanAttributeAtomFamily: createBooleanAttributeAtomFamily(guardedAtoms.guardedAttributesAtom, makeDecisionAtom, explainHookAtom),
-        componentAttributeAtomFamily: createComponentAttributeAtomFamily(guardedAtoms.guardedAttributesAtom, makeDecisionAtom, explainHookAtom),
+        choiceAttributeAtomFamily: createChoiceAttributeAtomFamily(
+            guardedAtoms.guardedAttributesAtom,
+            makeDecisionAtom,
+            explainHookAtom,
+        ),
+        numericAttributeAtomFamily: createNumericAttributeAtomFamily(
+            guardedAtoms.guardedAttributesAtom,
+            makeDecisionAtom,
+            explainHookAtom,
+        ),
+        booleanAttributeAtomFamily: createBooleanAttributeAtomFamily(
+            guardedAtoms.guardedAttributesAtom,
+            makeDecisionAtom,
+            explainHookAtom,
+        ),
+        componentAttributeAtomFamily: createComponentAttributeAtomFamily(
+            guardedAtoms.guardedAttributesAtom,
+            makeDecisionAtom,
+            explainHookAtom,
+        ),
 
-        subscriberAtom: createSubscriberAtom(primitives)
+        subscriberAtom: createSubscriberAtom(primitives),
     };
 }

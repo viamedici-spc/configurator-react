@@ -11,14 +11,15 @@ import {Logger} from "@viamedici-spc/configurator-ts";
 const atomSubscriptionCleanupInterval = 30 * 1000;
 
 export type WeakSubscription = {
-    deref: () => Subscription | undefined
+    deref: () => Subscription | undefined;
 };
 
-const createWeakRef: (subscription: Subscription) => WeakSubscription = WeakRef != null
-    ? ((subscription) => new WeakRef(subscription))
-    : ((subscription) => ({
-        deref: () => subscription,
-    }));
+const createWeakRef: (subscription: Subscription) => WeakSubscription =
+    WeakRef != null
+        ? subscription => new WeakRef(subscription)
+        : subscription => ({
+              deref: () => subscription,
+          });
 
 export type AtomSubscriptionsAtomType = PrimitiveAtom<ReadonlyMap<Atom<any>, ReadonlyMap<string, WeakSubscription>>>;
 export type SubscriberAtomType = WritableAtom<unknown, [atomToSubscribeTo: Atom<any>], Subscription>;
@@ -51,7 +52,7 @@ export function createSubscriberAtom(primitives: Primitives): SubscriberAtomType
         };
 
         const subscription = {
-            unsubscribe: unsubscribe
+            unsubscribe: unsubscribe,
         } satisfies Subscription;
 
         set(primitives.subscriptionsAtom, m => {
@@ -100,7 +101,12 @@ export function createAtomSubscriptionCleanupEffect(primitives: Primitives) {
                     for (const subscriptionId of [...atomSubscriptions.keys()]) {
                         const subscription = atomSubscriptions.get(subscriptionId);
                         if (subscription === undefined || subscription.deref() === undefined) {
-                            Logger.debug("AtomSubscriptionCleanup:", "Deleting subscription", subscriptionId, "because it got garbage collected.");
+                            Logger.debug(
+                                "AtomSubscriptionCleanup:",
+                                "Deleting subscription",
+                                subscriptionId,
+                                "because it got garbage collected.",
+                            );
                             atomSubscriptions.delete(subscriptionId);
                             didChange = true;
                         }
@@ -114,7 +120,14 @@ export function createAtomSubscriptionCleanupEffect(primitives: Primitives) {
                     }
                 }
 
-                Logger.debug("AtomSubscriptionCleanup:", "There are", newSubscriptions.size, "Atoms with", [...newSubscriptions.values(), RA.flatten].length, "subscriptions left.");
+                Logger.debug(
+                    "AtomSubscriptionCleanup:",
+                    "There are",
+                    newSubscriptions.size,
+                    "Atoms with",
+                    [...newSubscriptions.values(), RA.flatten].length,
+                    "subscriptions left.",
+                );
 
                 return didChange ? newSubscriptions : existingSubscriptions;
             });

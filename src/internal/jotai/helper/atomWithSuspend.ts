@@ -1,17 +1,20 @@
 import type {Atom} from "jotai";
-import { atom} from "jotai";
+import {atom} from "jotai";
 import {selectAtom} from "jotai/utils";
 import type {DeferredPromise} from "p-defer";
 import pDefer from "p-defer";
-import type { GuardedAtom} from "../../../types";
+import type {GuardedAtom} from "../../../types";
 import {ConfigurationUninitialized} from "../../../types";
 import type {PromiseOrValue} from "../../Types";
 
 export default function atomWithSuspend<Value>(guardedAtom: GuardedAtom<Value>): Atom<PromiseOrValue<Value>> {
-    const base = selectAtom<Value | ConfigurationUninitialized, {
-        deferredPromise: DeferredPromise<Value> | null,
-        result: Promise<Value> | Value
-    }>(guardedAtom, (value, previous) => {
+    const base = selectAtom<
+        Value | ConfigurationUninitialized,
+        {
+            deferredPromise: DeferredPromise<Value> | null;
+            result: Promise<Value> | Value;
+        }
+    >(guardedAtom, (value, previous) => {
         if (value !== ConfigurationUninitialized) {
             if (previous?.deferredPromise != null) {
                 previous.deferredPromise.resolve(value);
@@ -20,13 +23,13 @@ export default function atomWithSuspend<Value>(guardedAtom: GuardedAtom<Value>):
                 // Otherwise, unwrapping the value would result in an additional update.
                 return {
                     deferredPromise: null,
-                    result: previous.deferredPromise.promise
+                    result: previous.deferredPromise.promise,
                 };
             }
 
             return {
                 deferredPromise: null,
-                result: value
+                result: value,
             };
         }
 
@@ -34,7 +37,7 @@ export default function atomWithSuspend<Value>(guardedAtom: GuardedAtom<Value>):
 
         return {
             deferredPromise: deferredPromise,
-            result: deferredPromise.promise
+            result: deferredPromise.promise,
         };
     });
 

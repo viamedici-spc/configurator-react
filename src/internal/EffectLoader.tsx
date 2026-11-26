@@ -3,7 +3,8 @@ import {useAtom} from "jotai";
 
 export default function EffectLoader() {
     const {effects} = useAtomsContext();
-    const {addSessionListenersEffect, cleanupAtomFamiliesEffect, atomSubscriberEffect, atomSubscriptionCleanupEffect} = effects;
+    const {addSessionListenersEffect, cleanupAtomFamiliesEffect, atomSubscriberEffect, atomSubscriptionCleanupEffect} =
+        effects;
     useAtom(addSessionListenersEffect);
     useAtom(cleanupAtomFamiliesEffect);
     useAtom(atomSubscriberEffect);

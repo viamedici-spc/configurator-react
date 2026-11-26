@@ -33,37 +33,35 @@ export default function ValueSelection() {
             } else {
                 console.info("Explain blocked value for %s: %s", attributeIdToString(attribute.id), value.toString());
 
-                handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"), applySolution);
+                handleExplain(
+                    () => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: value}, "full"),
+                    applySolution,
+                );
             }
         }
     };
 
-    const selectedValue = attribute.decision?.state === true
-        ? trueValueId
-        : attribute.decision?.state === false
-            ? falseValueId
-            : nothingValueId;
+    const selectedValue =
+        attribute.decision?.state === true
+            ? trueValueId
+            : attribute.decision?.state === false
+              ? falseValueId
+              : nothingValueId;
 
     const isTrueValuePossible = attribute.possibleDecisionStates.includes(true);
     const isFalseValuePossible = attribute.possibleDecisionStates.includes(false);
     const falseValue: Value<string> = {
         id: falseValueId,
         name: "no",
-        isImplicit: attribute.decision?.state === false && attribute.decision?.kind === DecisionKind.Implicit
+        isImplicit: attribute.decision?.state === false && attribute.decision?.kind === DecisionKind.Implicit,
     };
     const trueValue: Value<string> = {
         id: trueValueId,
         name: "yes",
-        isImplicit: attribute.decision?.state === true && attribute.decision?.kind === DecisionKind.Implicit
+        isImplicit: attribute.decision?.state === true && attribute.decision?.kind === DecisionKind.Implicit,
     };
-    const allowedValues = [
-        isFalseValuePossible && falseValue,
-        isTrueValuePossible && trueValue
-    ];
-    const blockedValues = [
-        (!isFalseValuePossible) && falseValue,
-        (!isTrueValuePossible) && trueValue
-    ];
+    const allowedValues = [isFalseValuePossible && falseValue, isTrueValuePossible && trueValue];
+    const blockedValues = [!isFalseValuePossible && falseValue, !isTrueValuePossible && trueValue];
 
     return (
         <CommonValueSelection

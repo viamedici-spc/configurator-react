@@ -2,18 +2,33 @@
   "name": "@viamedici-spc/configurator-react",
   "version": "0.0.0",
   "description": "React library to build configurator web applications based on the Viamedici Headless Configuration Engine (HCE).",
+  "keywords": [
+    "configuration",
+    "constraint",
+    "csp",
+    "hce",
+    "problem",
+    "product",
+    "react",
+    "satisfaction",
+    "solver",
+    "spc",
+    "viamedici"
+  ],
+  "license": "MIT",
+  "author": "Viamedici Software GmbH",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/viamedici-spc/configurator-react.git"
   },
-  "type": "module",
-  "sideEffects": false,
-  "files": [
-    "dist"
-  ],
   "workspaces": [
     "test-app"
   ],
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
@@ -27,22 +42,18 @@
     "verify": "bun run --parallel typecheck lint format:check test verify:package",
     "verify:package": "bun run build && publint --strict && attw --pack . --profile esm-only --format table-flipped"
   },
-  "keywords": [
-    "viamedici",
-    "product",
-    "configuration",
-    "spc",
-    "hce",
-    "csp",
-    "constraint",
-    "satisfaction",
-    "problem",
-    "solver",
-    "react"
-  ],
-  "author": "Viamedici Software GmbH",
-  "license": "MIT",
-  "packageManager": "bun@1.4.5",
+  "dependencies": {
+    "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126112243",
+    "@viamedici-spc/fp-ts-extensions": "2.0.0-modern-toolchain-20261126094931",
+    "dyna-guid": "^2.3.3",
+    "fp-ts-react-stable-hooks": "^2.0.0",
+    "jotai": "^3",
+    "jotai-effect": "^2",
+    "jotai-family": "^1.1.0",
+    "jotai-xstate": "^0.6",
+    "p-defer": "^4.0.1",
+    "xstate": "^5.33.4"
+  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
     "@testing-library/dom": "^10.4.2",
@@ -58,21 +69,10 @@
     "typescript": "7.0.2",
     "vitest": "^5.1.1"
   },
-  "dependencies": {
-    "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126112243",
-    "@viamedici-spc/fp-ts-extensions": "2.0.0-modern-toolchain-20261126094931",
-    "dyna-guid": "^2.3.3",
-    "fp-ts-react-stable-hooks": "^2.0.0",
-    "jotai": "^3",
-    "jotai-effect": "^2",
-    "jotai-family": "^1.1.0",
-    "jotai-xstate": "^0.6",
-    "p-defer": "^4.0.1",
-    "xstate": "^5.33.4"
-  },
   "peerDependencies": {
     "react": "^18.2 || ^19"
   },
+  "packageManager": "bun@1.4.5",
   "inlinedDependencies": {
     "memize": "2.1.1",
     "ts-pattern": "5.9.2"

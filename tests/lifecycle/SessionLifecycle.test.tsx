@@ -1,7 +1,13 @@
 import {afterEach, describe, expect, it, vi} from "vitest";
 import {act, cleanup, fireEvent, render, type RenderResult, screen} from "@testing-library/react";
 import {type ReactElement, StrictMode, Suspense, useState, version as reactVersion} from "react";
-import {Configuration, useChoiceAttribute, useConfigurationInitialization, useDecisions, useStoredConfiguration} from "../../src";
+import {
+    Configuration,
+    useChoiceAttribute,
+    useConfigurationInitialization,
+    useDecisions,
+    useStoredConfiguration,
+} from "../../src";
 import type {IConfigurationSession, ISessionFactory, SessionContext} from "@viamedici-spc/configurator-ts";
 import {DecisionKind, SessionFactory} from "@viamedici-spc/configurator-ts";
 import {choiceAttribute, emptyModel} from "../hooks/Common";
@@ -42,7 +48,10 @@ function fakeSession(context: SessionContext): IConfigurationSession {
         resetConfiguration: async () => {},
         scheduleTask: async () => {},
         addConfigurationChangedListener: (handler: (...args: unknown[]) => void) => {
-            handler(configuration, {isSatisfied: false, attributes: {added: [choiceAttribute], changed: [], removed: []}});
+            handler(configuration, {
+                isSatisfied: false,
+                attributes: {added: [choiceAttribute], changed: [], removed: []},
+            });
             return subscription;
         },
         addCanResetConfigurationChangedListener: (handler: (canReset: boolean) => void) => {

@@ -1,4 +1,4 @@
-import type { Atom} from "jotai";
+import type {Atom} from "jotai";
 import {atom} from "jotai";
 import {atomWithMachine} from "jotai-xstate";
 import {sessionManagementMachine} from "../../sessionManagementMachine";
@@ -46,11 +46,12 @@ export function createSessionInitializationAndUpdatingAtom(primitives: Primitive
         const {retry} = get(retryAtom);
         const error = sessionManagementMachine.context.sessionCreateOrUpdateError?.configurationError
             ? {
-                ...sessionManagementMachine.context.sessionCreateOrUpdateError.configurationError,
-                retry: () => {
-                    retry();
-                }
-            } : null;
+                  ...sessionManagementMachine.context.sessionCreateOrUpdateError.configurationError,
+                  retry: () => {
+                      retry();
+                  },
+              }
+            : null;
 
         return {
             isProcessing,
@@ -59,7 +60,7 @@ export function createSessionInitializationAndUpdatingAtom(primitives: Primitive
         };
     });
 
-    const sessionInitializationAtom: SessionInitializationAtomType = atom<SessionInitialization>((get) => {
+    const sessionInitializationAtom: SessionInitializationAtomType = atom<SessionInitialization>(get => {
         const {hasSession, error, isProcessing} = get(baseAtom);
 
         return {
@@ -68,7 +69,7 @@ export function createSessionInitializationAndUpdatingAtom(primitives: Primitive
         } satisfies SessionInitialization;
     });
 
-    const sessionUpdatingAtom: SessionUpdatingAtomType = atom<SessionUpdating>((get) => {
+    const sessionUpdatingAtom: SessionUpdatingAtomType = atom<SessionUpdating>(get => {
         const {hasSession, error, isProcessing} = get(baseAtom);
 
         return {

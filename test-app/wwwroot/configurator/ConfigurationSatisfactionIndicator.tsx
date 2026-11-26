@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import {useConfigurationInitialization, useConfigurationSatisfaction, useExplain} from "@viamedici-spc/configurator-react";
+import {
+    useConfigurationInitialization,
+    useConfigurationSatisfaction,
+    useExplain,
+} from "@viamedici-spc/configurator-react";
 import {handleExplain} from "../common/Explain";
 
 const Root = styled.div`
@@ -15,7 +19,7 @@ const Root = styled.div`
         background-color: var(--color-satisfied-bg);
         color: var(--color-satisfied);
     }
-`
+`;
 
 export default function ConfigurationSatisfactionIndicator() {
     const {isInitializing} = useConfigurationInitialization();
@@ -24,7 +28,7 @@ export default function ConfigurationSatisfactionIndicator() {
         return null;
     }
 
-    return <Indicator/>
+    return <Indicator />;
 }
 
 function Indicator() {
@@ -40,5 +44,5 @@ function Indicator() {
             <span>{isSatisfied ? "Configuration satisfied" : "Configuration unsatisfied"} </span>
             {!isSatisfied && <button onClick={onExplain}>Explain</button>}
         </Root>
-    )
+    );
 }

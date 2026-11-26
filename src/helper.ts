@@ -8,4 +8,5 @@ import {ConfigurationUninitialized} from "./types";
  *
  * @returns `true` if the value is of type `T`.
  */
-export const isConfigurationInitialized = <T>(v: T | ConfigurationUninitialized): v is T => v !== ConfigurationUninitialized;
+export const isConfigurationInitialized = <T>(v: T | ConfigurationUninitialized): v is T =>
+    v !== ConfigurationUninitialized;

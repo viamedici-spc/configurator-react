@@ -16,21 +16,21 @@ export type ConfiguratorErrorWithRetry = ConfiguratorError & {
     /**
      * Retry the failed operation.
      */
-    readonly retry?: () => void
+    readonly retry?: () => void;
 };
 
 export type ConfigurationInitialization = {
     /**
      * Gets whether the Configuration is currently initializing.
      */
-    readonly isInitializing: boolean,
-    readonly error?: ConfiguratorErrorWithRetry
+    readonly isInitializing: boolean;
+    readonly error?: ConfiguratorErrorWithRetry;
 };
 
 export type ConfigurationUpdating = {
     /**
      * Gets whether the Configuration is currently updating.
      */
-    readonly isUpdating: boolean,
-    readonly error?: ConfiguratorErrorWithRetry
+    readonly isUpdating: boolean;
+    readonly error?: ConfiguratorErrorWithRetry;
 };

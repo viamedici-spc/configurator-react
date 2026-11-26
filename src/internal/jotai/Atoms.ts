@@ -1,10 +1,10 @@
-import type { Primitives} from "./PrimitveAtoms";
+import type {Primitives} from "./PrimitveAtoms";
 import {createPrimitives} from "./PrimitveAtoms";
-import type { Selectors} from "./Selectors";
+import type {Selectors} from "./Selectors";
 import {createSelectors} from "./Selectors";
-import type { Effects} from "./Effects";
+import type {Effects} from "./Effects";
 import {createEffects} from "./Effects";
-import type { SuspendedAtoms} from "./SuspendedAtoms";
+import type {SuspendedAtoms} from "./SuspendedAtoms";
 import {createSuspendedAtoms} from "./SuspendedAtoms";
 
 export type Atoms = {

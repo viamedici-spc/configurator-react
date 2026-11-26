@@ -7,7 +7,9 @@ export type UseTaskSchedulingResult = {
     scheduleTask: (signal?: AbortSignal | null) => Promise<ScheduleTaskResult>;
 };
 
-export function createTaskSchedulingAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseTaskSchedulingResult> {
+export function createTaskSchedulingAtom(
+    configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"],
+): GuardedAtom<UseTaskSchedulingResult> {
     return atomWithGuard((_, getGuarded) => {
         const session = getGuarded(configurationSessionAtom);
 

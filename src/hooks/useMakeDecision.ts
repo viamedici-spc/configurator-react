@@ -13,6 +13,9 @@ const useMakeDecision: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseMakeDecisionResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseMakeDecisionResult>(s => s.makeDecisionAtom, s => s.makeDecisionAtom);
+} = prepareAtomValueUsageWithSuspense<UseMakeDecisionResult>(
+    s => s.makeDecisionAtom,
+    s => s.makeDecisionAtom,
+);
 
 export default useMakeDecision;

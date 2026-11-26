@@ -1,13 +1,13 @@
 import {atom} from "jotai";
 import type {ConfigurationInitialization, GuardedAtom} from "../../../types";
-import { ConfigurationUninitialized} from "../../../types";
+import {ConfigurationUninitialized} from "../../../types";
 import type {Selectors} from "../Selectors";
 import {Bool, Eq, pipe, RA} from "@viamedici-spc/fp-ts-extensions";
 import atomWithEq from "../helper/atomWithEq";
 
 const eq = Eq.struct<ConfigurationInitialization>({
     isInitializing: Bool.Eq,
-    error: Eq.eqNullable(Eq.eqStrict)
+    error: Eq.eqNullable(Eq.eqStrict),
 });
 
 export function createConfigurationInitializationAtom(
@@ -29,7 +29,7 @@ export function createConfigurationInitializationAtom(
     const baseAtom = atom<ConfigurationInitialization>(get => {
         const everyGuardedAtomIsInitialized = pipe(
             guardedAtoms,
-            RA.every(loadable => get(loadable) !== ConfigurationUninitialized)
+            RA.every(loadable => get(loadable) !== ConfigurationUninitialized),
         );
 
         const sessionInitialization = get(sessionInitializationAtom);
@@ -37,7 +37,7 @@ export function createConfigurationInitializationAtom(
 
         return {
             isInitializing: !isReady,
-            error: sessionInitialization.error
+            error: sessionInitialization.error,
         };
     });
 

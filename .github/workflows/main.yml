@@ -9,6 +9,6 @@ jobs:
       id-token: write
     uses: viamedici-spc/github-ci/.github/workflows/build-npm.yml@v3
     with:
-      node-version: '24'
-      build-verbs: 'build,test'
+      node-version: "24"
+      build-verbs: "build,test"
       skip-publish: false

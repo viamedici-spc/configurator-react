@@ -14,14 +14,13 @@ const Indicators = styled.div`
     font-size: 0.8em;
 `;
 
-
 export default function ComponentAttribute() {
     return (
         <>
             <Root>
-                <ValueSelection/>
+                <ValueSelection />
                 <Indicators>
-                    <SatisfactionIndicator/>
+                    <SatisfactionIndicator />
                 </Indicators>
             </Root>
         </>

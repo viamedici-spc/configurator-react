@@ -1,9 +1,6 @@
-import type {
-    PropsWithChildren} from "react";
+import type {PropsWithChildren} from "react";
 import {useMemo} from "react";
-import type {
-    SessionContext
-} from "@viamedici-spc/configurator-ts";
+import type {SessionContext} from "@viamedici-spc/configurator-ts";
 import {AtomsContext, StoreContext, useConfiguratorStore} from "./internal/contexts";
 import EffectLoader from "./internal/EffectLoader";
 import {createAtoms} from "./internal/jotai/Atoms";
@@ -26,35 +23,31 @@ export type ConfigurationProps = {
 export default function Configuration(props: PropsWithChildren<ConfigurationProps>) {
     const atoms = useMemo(() => createAtoms(), []);
 
-    return <>
-        <AtomsContext.Provider value={atoms}>
-            <ConfiguratorStoreProvider jotaiStore={props.jotaiStore}>
-                <JotaiStoreProvider>
-                    <SessionManagementInitializer sessionContext={props.sessionContext}/>
-                    <EffectLoader/>
-                    {props.children}
-                </JotaiStoreProvider>
-            </ConfiguratorStoreProvider>
-        </AtomsContext.Provider>
-    </>
+    return (
+        <>
+            <AtomsContext.Provider value={atoms}>
+                <ConfiguratorStoreProvider jotaiStore={props.jotaiStore}>
+                    <JotaiStoreProvider>
+                        <SessionManagementInitializer sessionContext={props.sessionContext} />
+                        <EffectLoader />
+                        {props.children}
+                    </JotaiStoreProvider>
+                </ConfiguratorStoreProvider>
+            </AtomsContext.Provider>
+        </>
+    );
 }
 
-function ConfiguratorStoreProvider(props: PropsWithChildren<{ jotaiStore: ReturnType<typeof createStore> | undefined }>) {
-    return props.jotaiStore
-        ? <StoreContext.Provider value={props.jotaiStore}>
-            {props.children}
-        </StoreContext.Provider>
-        : (<>
-            {props.children}
-        </>);
+function ConfiguratorStoreProvider(props: PropsWithChildren<{jotaiStore: ReturnType<typeof createStore> | undefined}>) {
+    return props.jotaiStore ? (
+        <StoreContext.Provider value={props.jotaiStore}>{props.children}</StoreContext.Provider>
+    ) : (
+        <>{props.children}</>
+    );
 }
 
 function JotaiStoreProvider(props: PropsWithChildren<{}>) {
     const store = useConfiguratorStore();
 
-    return (
-        <Provider store={store}>
-            {props.children}
-        </Provider>
-    );
+    return <Provider store={store}>{props.children}</Provider>;
 }

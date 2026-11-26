@@ -13,6 +13,9 @@ const useTaskScheduling: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseTaskSchedulingResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseTaskSchedulingResult>(s => s.taskSchedulingAtom, s => s.taskSchedulingAtom);
+} = prepareAtomValueUsageWithSuspense<UseTaskSchedulingResult>(
+    s => s.taskSchedulingAtom,
+    s => s.taskSchedulingAtom,
+);
 
 export default useTaskScheduling;

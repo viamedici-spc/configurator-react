@@ -13,7 +13,7 @@ afterEach(async () => {
 const atoms = createAtoms();
 
 function ContextWrapper(props: PropsWithChildren<any>) {
-    return (<AtomsContext.Provider value={atoms}>{props.children}</AtomsContext.Provider>);
+    return <AtomsContext.Provider value={atoms}>{props.children}</AtomsContext.Provider>;
 }
 
 function ConfigurationReader() {

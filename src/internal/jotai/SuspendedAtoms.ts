@@ -3,8 +3,20 @@ import type {UseConfigurationStoringResult} from "./domain/configurationStoring"
 import type {UseConfigurationResetResult} from "./domain/configurationReset";
 import type {UseExplainResult} from "./domain/explain";
 import type {AtomFamily} from "jotai-family";
-import type {CollectedDecision, CollectedExplicitDecision, CollectedImplicitDecision, Configuration, GlobalAttributeIdKey, StoredConfiguration} from "@viamedici-spc/configurator-ts";
-import type {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "./domain/attribute";
+import type {
+    CollectedDecision,
+    CollectedExplicitDecision,
+    CollectedImplicitDecision,
+    Configuration,
+    GlobalAttributeIdKey,
+    StoredConfiguration,
+} from "@viamedici-spc/configurator-ts";
+import type {
+    UseBooleanAttributeResult,
+    UseChoiceAttributeResult,
+    UseComponentAttributeResult,
+    UseNumericAttributeResult,
+} from "./domain/attribute";
 import type {Atom} from "jotai";
 import {atomFamily} from "jotai-family";
 import type {PromiseOrValue} from "../Types";
@@ -30,10 +42,22 @@ export type SuspendedAtoms = {
     sessionReinitializationAtom: Atom<PromiseOrValue<UseSessionReinitializationResult>>;
     explainAtom: Atom<PromiseOrValue<UseExplainResult>>;
     taskSchedulingAtom: Atom<PromiseOrValue<UseTaskSchedulingResult>>;
-    choiceAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, Atom<PromiseOrValue<UseChoiceAttributeResult | undefined>>>;
-    numericAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, Atom<PromiseOrValue<UseNumericAttributeResult | undefined>>>;
-    booleanAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, Atom<PromiseOrValue<UseBooleanAttributeResult | undefined>>>;
-    componentAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, Atom<PromiseOrValue<UseComponentAttributeResult | undefined>>>;
+    choiceAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        Atom<PromiseOrValue<UseChoiceAttributeResult | undefined>>
+    >;
+    numericAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        Atom<PromiseOrValue<UseNumericAttributeResult | undefined>>
+    >;
+    booleanAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        Atom<PromiseOrValue<UseBooleanAttributeResult | undefined>>
+    >;
+    componentAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        Atom<PromiseOrValue<UseComponentAttributeResult | undefined>>
+    >;
 };
 
 export function createSuspendedAtoms(selectors: Selectors): SuspendedAtoms {

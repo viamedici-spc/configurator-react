@@ -2,7 +2,11 @@ import styled from "styled-components";
 import {Suspense, useMemo, useState} from "react";
 import SessionContextParameters from "./SessionContextParameters";
 import {Configuration} from "@viamedici-spc/configurator-react";
-import {ConfigurationModelSourceType, ConfigurationModelFromChannel, SessionContext} from "@viamedici-spc/configurator-ts";
+import {
+    ConfigurationModelSourceType,
+    ConfigurationModelFromChannel,
+    SessionContext,
+} from "@viamedici-spc/configurator-ts";
 import * as config from "../config";
 import ConfigurationParameters from "./ConfigurationParameters";
 import ConfigurationReset from "./ConfigurationReset";
@@ -32,9 +36,9 @@ const Header = styled.div`
 const Main = styled.div`
     grid-area: main;
     display: grid;
-    grid-template-rows:[error-indicator] auto [attributes] 1fr [gap] 1.5em [state-viewer] auto;
+    grid-template-rows: [error-indicator] auto [attributes] 1fr [gap] 1.5em [state-viewer] auto;
     grid-template-columns: [error-indicator attributes state-viewer] 1fr;
-`
+`;
 const SubGrid = styled.div`
     grid-area: decisions;
     display: grid;
@@ -43,7 +47,7 @@ const SubGrid = styled.div`
     gap: 1.5em;
     grid-template-rows: [decisions] auto [stored-configuration] auto;
     grid-template-columns: [decisions stored-configuration] 1fr;
-`
+`;
 
 export default function Configurator() {
     const loadConfigurationState = useState(true);
@@ -56,17 +60,21 @@ export default function Configurator() {
     const [accessToken] = accessTokenState;
     const [deploymentName] = deploymentNameState;
     const [channel] = channelState;
-    const sessionContext = useMemo(() => ({
-        apiBaseUrl: config.hcaEngineEndpoint,
-        sessionInitialisationOptions: {
-            accessToken: accessToken,
-        },
-        configurationModelSource: {
-            type: ConfigurationModelSourceType.Channel,
-            deploymentName: deploymentName,
-            channel: channel
-        } as ConfigurationModelFromChannel,
-    } satisfies SessionContext), [channel, deploymentName, accessToken]);
+    const sessionContext = useMemo(
+        () =>
+            ({
+                apiBaseUrl: config.hcaEngineEndpoint,
+                sessionInitialisationOptions: {
+                    accessToken: accessToken,
+                },
+                configurationModelSource: {
+                    type: ConfigurationModelSourceType.Channel,
+                    deploymentName: deploymentName,
+                    channel: channel,
+                } as ConfigurationModelFromChannel,
+            }) satisfies SessionContext,
+        [channel, deploymentName, accessToken],
+    );
 
     return (
         <Root>
@@ -74,30 +82,36 @@ export default function Configurator() {
                 <h1>Test Configurator</h1>
             </Header>
 
-            <SessionContextParameters accessTokenState={accessTokenState} deploymentNameState={deploymentNameState} channelState={channelState}/>
-            <ConfigurationParameters loadConfigurationState={loadConfigurationState} passNullAsSessionContextState={passNullAsSessionContextState}/>
+            <SessionContextParameters
+                accessTokenState={accessTokenState}
+                deploymentNameState={deploymentNameState}
+                channelState={channelState}
+            />
+            <ConfigurationParameters
+                loadConfigurationState={loadConfigurationState}
+                passNullAsSessionContextState={passNullAsSessionContextState}
+            />
 
-            {
-                loadConfiguration
-                && <Configuration sessionContext={passNullAsSessionContext ? null : sessionContext}>
-                    <ConfigurationSatisfactionIndicator/>
-                    <ConfigurationReset/>
-                    <ConfigurationStoring/>
+            {loadConfiguration && (
+                <Configuration sessionContext={passNullAsSessionContext ? null : sessionContext}>
+                    <ConfigurationSatisfactionIndicator />
+                    <ConfigurationReset />
+                    <ConfigurationStoring />
 
                     <Main>
-                        <InitializationError/>
+                        <InitializationError />
 
                         <Suspense fallback={<span>Configuration loading …</span>}>
-                            <UpdateError/>
-                            <Attributes/>
+                            <UpdateError />
+                            <Attributes />
                         </Suspense>
                     </Main>
                     <SubGrid>
-                        <Decisions/>
-                        <StoredConfiguration/>
+                        <Decisions />
+                        <StoredConfiguration />
                     </SubGrid>
                 </Configuration>
-            }
+            )}
         </Root>
-    )
+    );
 }

@@ -12,7 +12,7 @@ const Root = styled.div`
     border-radius: var(--shape-card-border-radius);
     font-weight: bolder;
     box-shadow: var(--shadow-card);
-`
+`;
 
 export default function ConfigurationStoring() {
     const {getConfigurationStoringAtom} = useJotaiAtoms();
@@ -30,15 +30,24 @@ export default function ConfigurationStoring() {
         if (isConfigurationInitialized(result)) {
             handleError(async () => {
                 const text = await navigator.clipboard.readText();
-                await result.restoreConfiguration(JSON.parse(text), {type: "DropExistingDecisions", conflictHandling: {type: "Automatic"}});
-            })
+                await result.restoreConfiguration(JSON.parse(text), {
+                    type: "DropExistingDecisions",
+                    conflictHandling: {type: "Automatic"},
+                });
+            });
         }
     };
 
     return (
         <Root>
-            <div>Store configuration: {result === ConfigurationUninitialized ? "uninitialized" : <button onClick={store}>Store</button>}</div>
-            <div>Restore configuration: {result === ConfigurationUninitialized ? "uninitialized" : <button onClick={restore}>Restore</button>}</div>
+            <div>
+                Store configuration:{" "}
+                {result === ConfigurationUninitialized ? "uninitialized" : <button onClick={store}>Store</button>}
+            </div>
+            <div>
+                Restore configuration:{" "}
+                {result === ConfigurationUninitialized ? "uninitialized" : <button onClick={restore}>Restore</button>}
+            </div>
         </Root>
     );
 }

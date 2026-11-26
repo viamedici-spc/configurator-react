@@ -13,6 +13,9 @@ const useConfigurationSatisfaction: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseConfigurationSatisfactionResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseConfigurationSatisfactionResult>(s => s.configurationSatisfactionAtom, s => s.configurationSatisfactionAtom);
+} = prepareAtomValueUsageWithSuspense<UseConfigurationSatisfactionResult>(
+    s => s.configurationSatisfactionAtom,
+    s => s.configurationSatisfactionAtom,
+);
 
 export default useConfigurationSatisfaction;

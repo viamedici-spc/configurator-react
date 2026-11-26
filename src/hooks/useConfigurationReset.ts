@@ -13,6 +13,9 @@ const useConfigurationReset: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseConfigurationResetResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseConfigurationResetResult>(s => s.configurationResetAtom, s => s.configurationResetAtom);
+} = prepareAtomValueUsageWithSuspense<UseConfigurationResetResult>(
+    s => s.configurationResetAtom,
+    s => s.configurationResetAtom,
+);
 
 export default useConfigurationReset;

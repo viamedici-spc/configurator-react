@@ -10,10 +10,15 @@ import type {
     Configuration,
     GlobalAttributeId,
     GlobalAttributeIdKey,
-    StoredConfiguration
+    StoredConfiguration,
 } from "@viamedici-spc/configurator-ts";
 import type {Atom} from "jotai";
-import type {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "../internal/jotai/domain/attribute";
+import type {
+    UseBooleanAttributeResult,
+    UseChoiceAttributeResult,
+    UseComponentAttributeResult,
+    UseNumericAttributeResult,
+} from "../internal/jotai/domain/attribute";
 import type {UseConfigurationResetResult} from "../internal/jotai/domain/configurationReset";
 import type {UseExplainResult} from "../internal/jotai/domain/explain";
 import type {ConfigurationInitialization, ConfigurationUpdating, GuardedAtom} from "../types";
@@ -26,16 +31,25 @@ import type {UseDecisionQueriesResult} from "../internal/jotai/domain/decisionQu
 
 export type UseJotaiAtomsResult = {
     createAttributesAtom: {
-        (attributes: "all"): GuardedAtom<ReadonlyArray<Attribute>>
-        (attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: true): GuardedAtom<ReadonlyArray<Attribute>>
-        (attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: false): GuardedAtom<ReadonlyArray<Attribute | undefined>>
+        (attributes: "all"): GuardedAtom<ReadonlyArray<Attribute>>;
+        (
+            attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>,
+            filterMissingAttributes: true,
+        ): GuardedAtom<ReadonlyArray<Attribute>>;
+        (
+            attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>,
+            filterMissingAttributes: false,
+        ): GuardedAtom<ReadonlyArray<Attribute | undefined>>;
     };
     getConfigurationInitializationAtom: Atom<ConfigurationInitialization>;
     getConfigurationUpdatingAtom: Atom<ConfigurationUpdating>;
     getChoiceAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseChoiceAttributeResult | undefined>>;
     getNumericAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseNumericAttributeResult | undefined>>;
     getBooleanAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseBooleanAttributeResult | undefined>>;
-    getComponentAttributeAtomFamily: AtomFamily<GlobalAttributeIdKey, GuardedAtom<UseComponentAttributeResult | undefined>>;
+    getComponentAttributeAtomFamily: AtomFamily<
+        GlobalAttributeIdKey,
+        GuardedAtom<UseComponentAttributeResult | undefined>
+    >;
 
     getConfigurationAtom: GuardedAtom<Configuration>;
     getConfigurationStoringAtom: GuardedAtom<UseConfigurationStoringResult>;
@@ -59,26 +73,29 @@ export type UseJotaiAtomsResult = {
 export function useJotaiAtoms(): UseJotaiAtomsResult {
     const {selectors} = useAtomsContext();
 
-    return useMemo(() => ({
-        getConfigurationInitializationAtom: selectors.configurationInitializationAtom,
-        getConfigurationUpdatingAtom: selectors.configurationUpdatingAtom,
-        createAttributesAtom: createAttributesAtom(selectors),
-        getChoiceAttributeAtomFamily: selectors.choiceAttributeAtomFamily,
-        getNumericAttributeAtomFamily: selectors.numericAttributeAtomFamily,
-        getBooleanAttributeAtomFamily: selectors.booleanAttributeAtomFamily,
-        getComponentAttributeAtomFamily: selectors.componentAttributeAtomFamily,
-        getConfigurationAtom: selectors.guardedConfigurationAtom,
-        getConfigurationSatisfactionAtom: selectors.configurationSatisfactionAtom,
-        getConfigurationStoringAtom: selectors.configurationStoringAtom,
-        getMakeDecisionAtom: selectors.makeDecisionAtom,
-        getDecisionQueriesAtom: selectors.decisionQueriesAtom,
-        getConfigurationResetAtom: selectors.configurationResetAtom,
-        getSessionReinitializationAtom: selectors.sessionReinitializationAtom,
-        getExplainAtom: selectors.explainAtom,
-        getTaskSchedulingAtom: selectors.taskSchedulingAtom,
-        getStoredConfigurationAtom: selectors.guardedStoredConfigurationAtom,
-        getDecisionsAtom: selectors.guardedDecisionsAtom,
-        getExplicitDecisionsAtom: selectors.guardedExplicitDecisionsAtom,
-        getImplicitDecisionsAtom: selectors.guardedImplicitDecisionsAtom,
-    }), [selectors]);
+    return useMemo(
+        () => ({
+            getConfigurationInitializationAtom: selectors.configurationInitializationAtom,
+            getConfigurationUpdatingAtom: selectors.configurationUpdatingAtom,
+            createAttributesAtom: createAttributesAtom(selectors),
+            getChoiceAttributeAtomFamily: selectors.choiceAttributeAtomFamily,
+            getNumericAttributeAtomFamily: selectors.numericAttributeAtomFamily,
+            getBooleanAttributeAtomFamily: selectors.booleanAttributeAtomFamily,
+            getComponentAttributeAtomFamily: selectors.componentAttributeAtomFamily,
+            getConfigurationAtom: selectors.guardedConfigurationAtom,
+            getConfigurationSatisfactionAtom: selectors.configurationSatisfactionAtom,
+            getConfigurationStoringAtom: selectors.configurationStoringAtom,
+            getMakeDecisionAtom: selectors.makeDecisionAtom,
+            getDecisionQueriesAtom: selectors.decisionQueriesAtom,
+            getConfigurationResetAtom: selectors.configurationResetAtom,
+            getSessionReinitializationAtom: selectors.sessionReinitializationAtom,
+            getExplainAtom: selectors.explainAtom,
+            getTaskSchedulingAtom: selectors.taskSchedulingAtom,
+            getStoredConfigurationAtom: selectors.guardedStoredConfigurationAtom,
+            getDecisionsAtom: selectors.guardedDecisionsAtom,
+            getExplicitDecisionsAtom: selectors.guardedExplicitDecisionsAtom,
+            getImplicitDecisionsAtom: selectors.guardedImplicitDecisionsAtom,
+        }),
+        [selectors],
+    );
 }

@@ -13,6 +13,9 @@ const useStoredConfiguration: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): StoredConfiguration | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<StoredConfiguration>(s => s.guardedStoredConfigurationAtom, s => s.storedConfigurationAtom);
+} = prepareAtomValueUsageWithSuspense<StoredConfiguration>(
+    s => s.guardedStoredConfigurationAtom,
+    s => s.storedConfigurationAtom,
+);
 
 export default useStoredConfiguration;

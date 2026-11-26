@@ -5,7 +5,7 @@ import atomWithEq from "../helper/atomWithEq";
 
 const eq = Eq.struct<ConfigurationUpdating>({
     isUpdating: Bool.Eq,
-    error: Eq.eqNullable(Eq.eqStrict)
+    error: Eq.eqNullable(Eq.eqStrict),
 });
 
 export function createConfigurationUpdatingAtom(sessionUpdatingAtom: Selectors["sessionUpdatingAtom"]) {

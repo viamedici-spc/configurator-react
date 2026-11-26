@@ -1,18 +1,18 @@
 import type {AtomSubscriptionsAtomType} from "./domain/AtomSubscription";
-import { createAtomSubscriptionAtom} from "./domain/AtomSubscription";
-import type { SessionManagementMachineAtomType} from "./domain/SessionManagement";
+import {createAtomSubscriptionAtom} from "./domain/AtomSubscription";
+import type {SessionManagementMachineAtomType} from "./domain/SessionManagement";
 import {createSessionManagementMachineAtom} from "./domain/SessionManagement";
 import type {
     AttributesAtomType,
     CanResetAtomType,
     ConfigurationAtomType,
-    IsSatisfiedAtomType
+    IsSatisfiedAtomType,
 } from "./domain/SessionSubscription";
 import {
     createAttributesAtom,
     createCanResetAtom,
     createConfigurationAtom,
-    createIsSatisfiedAtom
+    createIsSatisfiedAtom,
 } from "./domain/SessionSubscription";
 
 export type Primitives = {
@@ -30,5 +30,5 @@ export const createPrimitives = (): Primitives => ({
     isSatisfiedAtom: createIsSatisfiedAtom(),
     canResetAtom: createCanResetAtom(),
     attributesAtom: createAttributesAtom(),
-    subscriptionsAtom: createAtomSubscriptionAtom()
+    subscriptionsAtom: createAtomSubscriptionAtom(),
 });
