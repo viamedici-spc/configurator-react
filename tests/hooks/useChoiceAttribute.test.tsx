@@ -1,4 +1,4 @@
-import {act, cleanup, renderHook} from "@testing-library/react-hooks";
+import {act, cleanup, renderHook} from "@testing-library/react";
 import {useChoiceAttribute} from "../../src";
 import type {
     Configuration,
@@ -8,7 +8,7 @@ import {
     AttributeType,
     ChoiceValueDecisionState
 } from "@viamedici-spc/configurator-ts";
-import {booleanAttribute, choiceAttribute, WrappingComponent} from "./Common";
+import {booleanAttribute, choiceAttribute, wrapperWith} from "./Common";
 import {afterEach, describe, expect, it, vi} from "vitest";
 
 afterEach(async () => {
@@ -34,11 +34,10 @@ describe("useChoiceAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         await act(async () => {
@@ -84,11 +83,10 @@ describe("useChoiceAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         expect(result.current).toBeUndefined();
@@ -105,11 +103,10 @@ describe("useChoiceAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}, false), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         expect(result.current).toBeUndefined();

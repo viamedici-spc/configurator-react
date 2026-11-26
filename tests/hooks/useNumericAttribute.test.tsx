@@ -1,4 +1,4 @@
-import {act, cleanup, renderHook} from "@testing-library/react-hooks";
+import {act, cleanup, renderHook} from "@testing-library/react";
 import {useNumericAttribute} from "../../src";
 import type {
     Configuration,
@@ -7,7 +7,7 @@ import type {
 import {
     AttributeType
 } from "@viamedici-spc/configurator-ts";
-import {booleanAttribute, numericAttribute, WrappingComponent} from "./Common";
+import {booleanAttribute, numericAttribute, wrapperWith} from "./Common";
 import {describe, it, expect, afterEach, vi} from "vitest";
 
 afterEach(async () => {
@@ -33,11 +33,10 @@ describe("useNumericAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         await act(async () => {
@@ -80,11 +79,10 @@ describe("useNumericAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         expect(result.current).toBeUndefined();
@@ -101,11 +99,10 @@ describe("useNumericAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}, false), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         expect(result.current).toBeUndefined();

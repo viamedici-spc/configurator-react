@@ -1,9 +1,10 @@
-import {cleanup, renderHook} from "@testing-library/react-hooks";
+import {cleanup, render, renderHook, screen} from "@testing-library/react";
 import {useConfiguration, useConfigurationInitialization} from "../../src";
 import {describe, it, expect, afterEach, vi} from "vitest";
 import {createAtoms} from "../../src/internal/jotai/Atoms";
 import {AtomsContext} from "../../src/internal/contexts";
 import type {PropsWithChildren} from "react";
+import {Suspense} from "react";
 
 afterEach(async () => {
     vi.clearAllMocks();
@@ -15,24 +16,24 @@ function ContextWrapper(props: PropsWithChildren<any>) {
     return (<AtomsContext.Provider value={atoms}>{props.children}</AtomsContext.Provider>);
 }
 
-function useConfigurationWrapper(): "CaughtPromise" | "CaughtError" | "ResolvedSuccessful" {
-    try {
-        useConfiguration();
-    } catch (e) {
-        if (typeof e === "object" && e !== null && "then" in e) {
-            return "CaughtPromise";
-        }
-        return "CaughtError";
-    }
-
-    return "ResolvedSuccessful";
+function ConfigurationReader() {
+    useConfiguration();
+    return <span>resolved</span>;
 }
 
 describe("Hook tests", () => {
-    it("Unsafe hook throws", async () => {
-        const {result} = renderHook(useConfigurationWrapper, {wrapper: ContextWrapper});
+    it("Unsafe hook suspends", async () => {
+        // React 19 no longer throws the promise itself when a component suspends, so the test observes what an app
+        // sees: the Suspense fallback.
+        render(
+            <Suspense fallback={<span>suspended</span>}>
+                <ConfigurationReader />
+            </Suspense>,
+            {wrapper: ContextWrapper},
+        );
 
-        expect(result.current).toBe("CaughtPromise")
+        expect(screen.getByText("suspended")).toBeTruthy();
+        expect(screen.queryByText("resolved")).toBeNull();
     });
 
     it("Safe hook don't throw", () => {

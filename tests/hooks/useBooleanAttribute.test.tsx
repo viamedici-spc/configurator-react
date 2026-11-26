@@ -1,4 +1,4 @@
-import {act, cleanup, renderHook} from "@testing-library/react-hooks";
+import {act, cleanup, renderHook} from "@testing-library/react";
 import {useBooleanAttribute} from "../../src";
 import {describe, it, expect, afterEach, vi} from "vitest";
 import type {
@@ -7,7 +7,7 @@ import type {
 import {
     AttributeType
 } from "@viamedici-spc/configurator-ts";
-import {booleanAttribute, numericAttribute, WrappingComponent} from "./Common";
+import {booleanAttribute, numericAttribute, wrapperWith} from "./Common";
 
 afterEach(async () => {
     vi.clearAllMocks();
@@ -32,11 +32,10 @@ describe("useBooleanAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useBooleanAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         await act(async () => {
@@ -79,11 +78,10 @@ describe("useBooleanAttribute tests", () => {
         } as Configuration;
 
         const {result} = renderHook(() => useBooleanAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         expect(result.current).toBeUndefined();
@@ -100,11 +98,10 @@ describe("useBooleanAttribute tests", () => {
         } as Configuration;
 
         const {result} = renderHook(() => useBooleanAttribute({localId: "A1"}, false), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         expect(result.current).toBeUndefined();

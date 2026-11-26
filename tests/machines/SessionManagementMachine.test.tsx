@@ -1,4 +1,4 @@
-import {cleanup} from "@testing-library/react-hooks";
+import {cleanup} from "@testing-library/react";
 import type {ConfigurationModelNotFound, ConfiguratorError, IConfigurationSession, ISessionFactory, SessionContext} from "@viamedici-spc/configurator-ts";
 import { ConfiguratorErrorType, SessionFactory} from "@viamedici-spc/configurator-ts";
 import {emptyModel, modelWithOneAttribute} from "../hooks/Common";

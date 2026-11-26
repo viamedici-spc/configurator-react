@@ -1,4 +1,4 @@
-import {cleanup} from "@testing-library/react-hooks";
+import {cleanup} from "@testing-library/react";
 import {describe, it, expect, afterEach, vi} from "vitest";
 import {render, waitFor} from "@testing-library/react";
 import {AtomsContext} from "../../src/internal/contexts";

@@ -12,7 +12,7 @@ import {
     Inclusion,
     Selection
 } from "@viamedici-spc/configurator-ts";
-import type {PropsWithChildren} from "react";
+import type {ComponentProps, PropsWithChildren, ReactElement} from "react";
 import { useMemo} from "react";
 import type {Atoms} from "../../src/internal/jotai/Atoms";
 import {AtomsContext, StoreContext} from "../../src/internal/contexts";
@@ -183,3 +183,8 @@ export const modelWithOneAttribute: ConfigurationModelFromPackage = {
         ]
     }
 };
+
+/** A renderHook wrapper with the given props: renderHook passes only the children to its wrapper. */
+export function wrapperWith(props: ComponentProps<typeof WrappingComponent>): (wrapperProps: PropsWithChildren) => ReactElement {
+    return ({children}) => <WrappingComponent {...props}>{children}</WrappingComponent>;
+}

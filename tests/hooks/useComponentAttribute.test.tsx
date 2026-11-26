@@ -1,4 +1,4 @@
-import {act, cleanup, renderHook} from "@testing-library/react-hooks";
+import {act, cleanup, renderHook} from "@testing-library/react";
 import {afterEach, describe, expect, it, vi} from "vitest";
 import type {
     Configuration,
@@ -9,7 +9,7 @@ import {
     AttributeType,
     ComponentDecisionState
 } from "@viamedici-spc/configurator-ts";
-import {componentAttribute, numericAttribute, WrappingComponent} from "./Common";
+import {componentAttribute, numericAttribute, wrapperWith} from "./Common";
 import {useComponentAttribute} from "../../src";
 
 afterEach(async () => {
@@ -35,11 +35,10 @@ describe("useComponentAttribute tests", () => {
         } as Configuration;
 
         const {result} = renderHook(() => useComponentAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         await act(async () => {
@@ -76,11 +75,10 @@ describe("useComponentAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useComponentAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         expect(result.current).toBeUndefined();
@@ -97,11 +95,10 @@ describe("useComponentAttribute tests", () => {
         };
 
         const {result} = renderHook(() => useComponentAttribute({localId: "A1"}, false), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
                 configuration: configuration
-            }
+            }),
         });
 
         expect(result.current).toBeUndefined();
