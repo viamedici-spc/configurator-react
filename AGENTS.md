@@ -7,8 +7,9 @@ session, hooks read it (suspending until it is ready) and send commands. configu
 ## Commands
 
 - `bun install` — install (Bun is the package manager; never npm). The test app in `test-app/` is a workspace package.
-- `bun run verify` — the gate before a change counts as done, its steps in parallel: `bun check` (sources and tests),
-  oxlint, `bun fmt --check`, Vitest, the tsdown build, publint and arethetypeswrong. CI also runs the tests on React 18.
+- `bun run verify` — the gate before a change counts as done, its steps in parallel: `bun check` (sources, tests, the
+  test app against the sources with its Vite configuration, and the configuration files at the root), oxlint,
+  `bun fmt --check`, Vitest, the tsdown build, publint and arethetypeswrong. CI also runs the tests on React 18.
 - Tests on React 18 locally: `bun add --no-save react@18.3.1 react-dom@18.3.1 && bun run test`, then `bun install`.
 - The test app: `bun run build`, then `bun run --filter configurator-react-test-app start`.
 - Dependencies are updated by hand when working on the library: `bun outdated`, then `bun audit`. `bunfig.toml` installs

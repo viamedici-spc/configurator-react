@@ -44,7 +44,7 @@ Browsers with React 18.2 or 19, as ESM through a bundler; not Node.js ([ADR 0001
 | Command | What it does |
 |---|---|
 | `bun install` | Installs the dependencies (Bun is the package manager; the test app is a workspace package). |
-| `bun run verify` | The gate, its steps in parallel: type check of sources and tests, lint, format check, tests, build with package checks. |
+| `bun run verify` | The gate, its steps in parallel: type check of sources, tests, the test app (against the sources, with its Vite configuration) and the configuration files at the root, lint, format check, tests, build with package checks. |
 | `bun run test` | Runs the tests with Vitest (jsdom, Testing Library). |
 | `bun run build` | Builds `dist/`. |
 | `bun run --filter configurator-react-test-app start` | Starts the test app (needs a build of the library). |
