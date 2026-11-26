@@ -74,7 +74,7 @@ creating or changing a document. Every file under `docs/` carries `status:` fron
 | The contract of one public member | TSDoc on it ([code.md](docs/conventions/code.md#tsdoc-on-the-public-api)) |
 | Purpose, contract, invariants, architecture, environments, commands | [docs/overview.md](docs/overview.md) |
 | Goals, non-goals, audiences | [docs/vision.md](docs/vision.md) |
-| A feature whose flow or edge cases need more than TSDoc | [docs/features/](docs/features/) |
+| A feature whose flow or edge cases need more than TSDoc | `docs/features/` (created with the first feature note) |
 | A decision that is hard to reverse, with its why | [docs/adr/](docs/adr/) |
 | What changes for consumers in the next release | [CHANGELOG_DRAFT.md](CHANGELOG_DRAFT.md) |
 | Undecided | [docs/discussion-points.md](docs/discussion-points.md) |
