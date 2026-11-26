@@ -16,13 +16,13 @@ Configuration Engine_ (HCE).
 It offers all the features of the HCE through strongly typed **hooks** and **logic components**, eliminating the need to
 interact directly with the HCE's REST API.
 
-This library is made for the **browser**, with React 18.2 or 19, through a bundler (Vite, webpack 5, Rollup, esbuild, …).
-It ships **ES modules only**. In server-side rendering frameworks, render the configurator on the client only.
+This library is made for the **browser**, with React 18.2 or 19, through a bundler (Vite, webpack 5, Rollup, esbuild,
+…). It ships **ES modules only**. In server-side rendering frameworks, render the configurator on the client only.
 
 ## UI Framework Independence
 
-The library is designed to be UI framework-agnostic, allowing you to use any UI framework or component library of your choice to build your
-configurator application.
+The library is designed to be UI framework-agnostic, allowing you to use any UI framework or component library of your
+choice to build your configurator application.
 
 It provides powerful hooks and logic-only components that can be easily integrated into your styled components.
 
@@ -30,7 +30,8 @@ It provides powerful hooks and logic-only components that can be easily integrat
 
 The library includes additional features that make it even easier to build a configurator.
 
-For a complete list of features, please refer to the base library [configurator-ts](https://github.com/viamedici-spc/configurator-ts).
+For a complete list of features, please refer to the base library
+[configurator-ts](https://github.com/viamedici-spc/configurator-ts).
 
 ## Testing with Vitest
 
@@ -52,8 +53,9 @@ export default defineConfig({
 
 ## Demo App
 
-The [Demo App](https://github.com/viamedici-spc/configurator-react-demo) is a comprehensive showcase of the features provided by this library and the HCE. It demonstrates how to effectively integrate
-and utilize this library within a React-based Single Page Application (SPA).
+The [Demo App](https://github.com/viamedici-spc/configurator-react-demo) is a comprehensive showcase of the features
+provided by this library and the HCE. It demonstrates how to effectively integrate and utilize this library within a
+React-based Single Page Application (SPA).
 
 ## Getting Started
 
@@ -67,9 +69,11 @@ npm install @viamedici-spc/configurator-react @viamedici-spc/configurator-ts rea
 
 ### 2. Define the Session Context
 
-Create a `SessionContext` to set up the connection parameters for the HCE and defining the _Configuration Model_ you want to use.
+Create a `SessionContext` to set up the connection parameters for the HCE and defining the _Configuration Model_ you
+want to use.
 
-**Note:** If defined inside a component, make sure to memorize the session context object, e.g. with `useMemo` or `useRef`.
+**Note:** If defined inside a component, make sure to memorize the session context object, e.g. with `useMemo` or
+`useRef`.
 
 ```typescript
 const sessionContext: SessionContext = {
@@ -92,8 +96,8 @@ This component manages the configuration state and provides a configuration cont
 Use React’s Suspense feature to render configuration-related components only when the configuration is ready.
 
 
-**Note:** Make sure your suspense barrier is located inside the `Configuration` component when using _suspended hooks_. Otherwise,
-the `Configuration` component will freeze forever.
+**Note:** Make sure your suspense barrier is located inside the `Configuration` component when using _suspended hooks_.
+Otherwise, the `Configuration` component will freeze forever.
 
 ```tsx
 <Configuration sessionContext={sessionContext}>
