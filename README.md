@@ -16,7 +16,8 @@ Configuration Engine_ (HCE).
 It offers all the features of the HCE through strongly typed **hooks** and **logic components**, eliminating the need to
 interact directly with the HCE's REST API.
 
-This library is intended for use in a browser environment and is not compatible with server-side rendering.
+This library is made for the **browser**, with React 18.2 or 19, through a bundler (Vite, webpack 5, Rollup, esbuild, …).
+It ships **ES modules only**. In server-side rendering frameworks, render the configurator on the client only.
 
 ## UI Framework Independence
 
@@ -31,6 +32,24 @@ The library includes additional features that make it even easier to build a con
 
 For a complete list of features, please refer to the base library [configurator-ts](https://github.com/viamedici-spc/configurator-ts).
 
+## Testing with Vitest
+
+fp-ts 2.x ships ES modules whose imports have no file extensions, which Node.js cannot load. Test runners that run in
+Node.js, such as Vitest, therefore have to let their bundler transform fp-ts and the SPC packages:
+
+```ts
+// vitest.config.ts
+import {defineConfig} from "vitest/config";
+
+export default defineConfig({
+    test: {
+        server: {deps: {inline: [/fp-ts/, /@viamedici-spc\//]}},
+    },
+});
+```
+
+`bun test` and the bundlers (Vite, webpack 5, Rollup, esbuild) need no such setting.
+
 ## Demo App
 
 The [Demo App](https://github.com/viamedici-spc/configurator-react-demo) is a comprehensive showcase of the features provided by this library and the HCE. It demonstrates how to effectively integrate
@@ -40,12 +59,11 @@ and utilize this library within a React-based Single Page Application (SPA).
 
 ### 1. Install Package
 
-This library supports both **ESM** and **CommonJS**.
+The package is ESM only; React is a peer dependency.
 
-   ```bash
-npm install @viamedici-spc/configurator-react
-yarn add @viamedici-spc/configurator-react
-   ```
+```bash
+npm install @viamedici-spc/configurator-react @viamedici-spc/configurator-ts react
+```
 
 ### 2. Define the Session Context
 

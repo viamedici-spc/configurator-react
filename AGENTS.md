@@ -1,44 +1,96 @@
-# Repository Guidelines
+# Repository guidelines
 
-## Project Structure & Module Organization
-- `src/` contains the library source:
-  - `src/Configuration.tsx` is the provider component: it takes a `SessionContext` and creates/owns the configuration session. It re-creates the session whenever the `SessionContext` changes by referential equality (memoize it on the consumer side).
-  - `src/hooks/` holds the public hooks (`useConfiguration`, `useMakeDecision`, `useDecisions`, `useChoiceAttribute`/`useBooleanAttribute`/`useNumericAttribute`/`useComponentAttribute`, `useExplain`, `useConfigurationStoring`, …).
-  - `src/internal/` is internal: `contexts.tsx`, the Jotai store/atoms (`jotai/`), the XState `sessionManagementMachine.ts`, `SessionManagementInitializer.tsx`, and `EffectLoader.tsx`.
-  - `src/index.ts` is the public entry point (the `Configuration` component and all hooks/types).
-- `tests/` holds Vitest tests: `tests/hooks/` (per-hook), `tests/machines/` (the session-management machine), plus shared setup in `tests/Common.tsx`.
-- `dist/` is the build output (ESM `index.js`, CJS `index.cjs`, types `index.d.ts`).
+configurator-react provides React bindings for configurator-ts: the `Configuration` component owns a configuration
+session, hooks read it (suspending until it is ready) and send commands. configurator-framer builds on it. Start with
+[docs/overview.md](docs/overview.md).
 
-## Architecture Overview
-- SPC uses a backend Configuration Engine (session-based REST API) that solves configuration decisions and returns consequences.
-- `configurator-ts` is the TypeScript client on top of that API (session management, automatic resume, optimistic decisions, wire⇄domain mapping).
-- This package (configurator-react) is the React layer on top of `configurator-ts`: it manages the session lifecycle with Jotai + XState and exposes hooks for UI integration. `configurator-framer` builds on this package.
-- The `Configuration` component forwards the `configurator-ts` `SessionContext` unchanged, so new session options (e.g. `fixedDecisions`) flow through without a change here — bump the `@viamedici-spc/configurator-ts` dependency to pick them up. Consumers import contract types/errors directly from `configurator-ts`; this package intentionally does not re-export them.
+## Commands
 
-## Build, Test, and Development Commands
-- `npm run build` builds the library with Vite and emits bundled type declarations into `dist/`.
-- `npm test` runs a type-check of the tests (`tsc -p ./tsconfig.test.json --noEmit`) followed by Vitest once.
-- `npm run test:watch` runs Vitest in watch mode.
-- `npm run typecheck` runs TypeScript without emitting.
+- `bun install` — install (Bun is the package manager; never npm). The test app in `test-app/` is a workspace package.
+- `bun run verify` — the gate before a change counts as done, its steps in parallel: `bun check` (sources and tests),
+  oxlint, `bun fmt --check`, Vitest, the tsdown build, publint and arethetypeswrong. CI also runs the tests on React 18.
+- Tests on React 18 locally: `bun add --no-save react@18.3.1 react-dom@18.3.1 && bun run test`, then `bun install`.
+- The test app: `bun run build`, then `bun run --filter configurator-react-test-app start`.
+- Dependencies are updated by hand when working on the library: `bun outdated`, then `bun audit`. `bunfig.toml` installs
+  only versions that have been public for three days (our own `@viamedici-spc` packages excepted).
 
-## Coding Style & Naming Conventions
-- TypeScript + React; `.tsx` for components/hooks, `.ts` for utilities; 4-space indentation; semicolons.
-- Functional style with `@viamedici-spc/fp-ts-extensions`/`fp-ts`; state via `jotai` (+ `jotai-effect`, `jotai-xstate`) and `xstate`; stable hook state via `fp-ts-react-stable-hooks`.
-- PascalCase for components (`Configuration.tsx`), camelCase for hooks (`useChoiceAttribute.ts`). Keep the public hook surface in `src/hooks/` and re-export it from `src/index.ts`; keep session/store wiring under `src/internal/`.
-- `react` is a peer dependency (`>=17.0.1`); do not add it as a hard dependency.
+## Code
 
-## Testing Guidelines
-- Vitest with `@testing-library/react`. Tests mock the session/context (via `tests/Common.tsx`) — they do not talk to a real engine, so they run offline and fast.
-- Test files follow `*.test.tsx` naming, grouped under `tests/hooks/` and `tests/machines/`.
-- Run `npm test` before submitting changes.
+- Public hooks in `src/hooks/`, the `Configuration` component in `src/Configuration.tsx`; Jotai atoms and the XState
+  session machine under `src/internal/`. Atom families come from `jotai-family`; new state uses derived atoms or
+  `onMount`, not effects that lose their dependencies.
+- Functional style with `@viamedici-spc/fp-ts-extensions` and `ts-pattern`; type-only imports use `import type`.
+  Conventions: [docs/conventions/code.md](docs/conventions/code.md).
 
-## Commit & Pull Request Guidelines
-- Commit history uses short, sentence-case messages, typically past tense (e.g. “Updated configurator-ts to 4.2.0”).
-- Keep commits focused. PRs should include a brief summary and testing notes.
+## Commits and releases
 
-## Configuration Tips
-- The package version is set by CI at publish time (`package.json` stays `0.0.0`); a push to a branch publishes a prerelease tagged with the branch name.
-- When releasing a change that depends on a new `configurator-ts`, bump the `@viamedici-spc/configurator-ts` dependency to the published (pre)release version first, then release this package.
+- Short, sentence-case messages in the past tense; one concern per commit; issue references as `Fixes #<n>`. Ask
+  before committing.
+- CI (`.github/workflows/main.yml`) runs the shared workflow `viamedici-spc/github-ci` (`build-bun.yml`): it verifies
+  every push and publishes with npm trusted publishing — `main` as release candidates, `feature/*` branches as
+  prereleases under a dist-tag named after the branch, version tags as releases.
+- A change that needs a new configurator-ts pins its exact published (pre)release first, then releases this package.
 
-## Documentation
-- The root `README.md` documents installation and usage. Feature notes and conventions live in the `configurator-framer` docs (e.g. decision immutability & trimming).
+## This repository is public
+
+Everything committed here is public: on GitHub, in the npm package, through jsDelivr. Documents, lists, code comments,
+TSDoc, tests, test fixtures and commit messages describe **only the public API and the behavior a consumer can
+observe**. Never write engine internals (how or why the engine does something behind its documented REST API), internal
+hosts, internal repositories or their contents, tokens, customer names or customer models, internal findings or
+analyses, or a person's name. An engine behavior is described by what a request returns; a workaround by what it does.
+Such material stays outside the repository, with the maintainers. A commit message is public once pushed, so check it
+before pushing. The full rule is in
+[docs/conventions/documentation.md](docs/conventions/documentation.md#this-repository-is-public).
+
+## Supported environments
+
+- **Browsers only**, with React 18.2 or 19 (a peer dependency), as **ESM only** through a bundler.
+- **Not Node.js.** Server-side use goes through the engine's REST API, not this library. No `node:*` imports, no
+  `process` or `Buffer` in `src/`.
+- **SSR frameworks:** the library runs on the client only; a module's top level touches no browser global.
+
+## Verification
+
+`bun run verify` from the repository root, before a change counts as done; CI runs the same gate. A step is green
+when its exit code is 0, and only then. Details: [docs/conventions/code.md](docs/conventions/code.md#verification).
+
+## Documentation map: where what goes
+
+How we document is defined in [docs/conventions/documentation.md](docs/conventions/documentation.md); read it before
+creating or changing a document. Every file under `docs/` carries `status:` frontmatter; `README.md`, `AGENTS.md` and
+`CHANGELOG_DRAFT.md` carry none.
+
+| What | Where |
+|---|---|
+| Install, a first example, links onward (for users) | [README.md](README.md) |
+| The contract of one public member | TSDoc on it ([code.md](docs/conventions/code.md#tsdoc-on-the-public-api)) |
+| Purpose, contract, invariants, architecture, environments, commands | [docs/overview.md](docs/overview.md) |
+| Goals, non-goals, audiences | [docs/vision.md](docs/vision.md) |
+| A feature whose flow or edge cases need more than TSDoc | [docs/features/](docs/features/) |
+| A decision that is hard to reverse, with its why | [docs/adr/](docs/adr/) |
+| What changes for consumers in the next release | [CHANGELOG_DRAFT.md](CHANGELOG_DRAFT.md) |
+| Undecided | [docs/discussion-points.md](docs/discussion-points.md) |
+| Decided, not done | [docs/todo.md](docs/todo.md) |
+| Later, no commitment | [docs/backlog.md](docs/backlog.md) |
+| Waiting on a dependency, with its check | [docs/upstream-watch.md](docs/upstream-watch.md) |
+| How code is written, TSDoc, comments, the gate | [code.md](docs/conventions/code.md) |
+| How a received code review is worked through | [code-review.md](docs/conventions/code-review.md) |
+| The periodic documentation sweep | [documentation-review.md](docs/conventions/documentation-review.md) |
+| How release notes are written | [changelog.md](docs/conventions/changelog.md) |
+| Skeletons for every document | [templates/](docs/conventions/templates/) |
+
+Rules in short: one fact, one home; a state document describes the present and never its own history; no person is
+named; a decision taken over from another project is written as our own, with the constraint it rests on, and its
+source is not named; a code path in a comment or a document is written from the repository root.
+
+## Doc Delta, in the same commit as every substantive change
+
+1. Public API changed → TSDoc on every touched member, README examples that use it, `docs/overview.md` if the contract
+   or an invariant moved, an entry in `CHANGELOG_DRAFT.md`.
+2. Observable behavior changed → its feature note under `docs/features/`, and the changelog entry.
+3. A decision that is hard to reverse → an ADR in `docs/adr/`.
+4. A supported environment, a command or the toolchain changed → `docs/overview.md` and this file.
+5. A point opened or resolved → `docs/discussion-points.md`; decided, not done → `docs/todo.md`; later →
+   `docs/backlog.md`.
+6. A workaround for a dependency's limit → `docs/upstream-watch.md`, with its check.
+7. A borrowed decision → written into its ADR or state document as our own, with its constraint, without its source.
