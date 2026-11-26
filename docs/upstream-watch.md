@@ -38,12 +38,12 @@ yet.
 - **Check** (no errors means jotai-xstate's declarations compile again):
 
   ```bash
-  bunx tsc --noEmit --skipLibCheck false node_modules/jotai-xstate/dist/index.d.ts
+  bunx tsc --noEmit --skipLibCheck false --ignoreConfig node_modules/jotai-xstate/dist/index.d.ts
   ```
 
 - **What it would buy:** the plugin in `tsdown.config.ts` goes away.
 - **Upstream:** not reported.
-- **Last checked:** jotai-xstate 0.6.1 with xstate 5.33, 2026-11-26: errors.
+- **Last checked:** jotai-xstate 0.6.1 with xstate 5.33.4, 2026-11-26: TS2305 (`__ResolvedTypesMetaFrom`) and TS2314.
 
 ## Bun
 
