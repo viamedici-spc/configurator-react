@@ -135,8 +135,9 @@ elsewhere has to be told about a new member.
   state) is computed, not kept beside its source: a derived atom or a selector, never a second atom written in step.
   One source of truth cannot drift.
 
-State lives in Jotai atoms with an XState machine for the session lifecycle; a consumer reaches it through a
-hook, never through a context or an atom directly.
+State lives in Jotai atoms with an XState machine for the session lifecycle. A consumer reads it and sends commands
+through the hooks; `useJotaiAtoms` hands out the atoms behind them, read-only, for the application's own Jotai atoms,
+read with the store of `useConfiguratorStore`. The library's contexts are not public.
 
 ## Dependencies between the libraries
 

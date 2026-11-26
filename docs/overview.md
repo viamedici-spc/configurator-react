@@ -25,7 +25,9 @@ React layer.
 - **At most one session stays open per `Configuration`.** It is created when the component mounts, updated when its
   `sessionContext` changes and closed when it unmounts, also when it unmounts while the session is still being created.
   Under StrictMode, which mounts effects twice, a second session is created and the first one is closed.
-- **State is reached through hooks only**, never through a context or an atom directly.
+- **A consumer reads state and sends commands through the hooks.** `useJotaiAtoms` also hands out the atoms behind them,
+  read-only, for the application's own Jotai atoms, read with the store of `useConfiguratorStore`. The library's
+  contexts are not public.
 - **React, configurator-ts and Jotai are peer dependencies** (`^18.2 || ^19`, `^5.0.0-0`, `^3`): the library uses the
   application's copies ([ADR 0004](adr/0004-peer-dependencies.md)).
 
