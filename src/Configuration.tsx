@@ -12,11 +12,16 @@ export type ConfigurationProps = {
     /**
      * The SessionContext that should be used to create the session. A changed SessionContext is applied to the existing
      * session, which migrates its decisions (`IConfigurationSession.setSessionContext` of configurator-ts).
-     * @remarks A change to the SessionContext is detected using referentially equality. Consider using {@link useMemo} or {@link useRef} to keep the SessionContext unchanged during rendering.
+     * @remarks A change to the SessionContext is detected using referential equality. Consider using {@link useMemo}
+     * or {@link useRef} to keep the SessionContext unchanged during rendering.
      */
     readonly sessionContext: SessionContext;
     /**
-     * An optional Jotai store where all Atoms will be stored in. Defaults to the result of {@link getDefaultStore()}.
+     * The Jotai store that holds the library's atoms.
+     *
+     * @remarks `Configuration` provides the store to its children through a Jotai `Provider`, so the application's own
+     * atoms inside a `Configuration` live in it. Pass the application's store to share one.
+     * @defaultValue the store of an enclosing `Configuration`, otherwise Jotai's default store (`getDefaultStore()`)
      */
     readonly jotaiStore?: ReturnType<typeof createStore>;
 };
