@@ -23,8 +23,7 @@ function ConfigurationReader() {
 
 describe("Hook tests", () => {
     it("Unsafe hook suspends", async () => {
-        // React 19 no longer throws the promise itself when a component suspends, so the test observes what an app
-        // sees: the Suspense fallback.
+        // The test observes what an application sees: the Suspense fallback.
         render(
             <Suspense fallback={<span>suspended</span>}>
                 <ConfigurationReader />
