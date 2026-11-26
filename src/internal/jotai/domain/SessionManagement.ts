@@ -23,7 +23,7 @@ type RetryAction = {type: "register"; retry: () => void} | {type: "retry"};
 
 export function createSessionInitializationAndUpdatingAtom(primitives: Primitives) {
     // The retry callback handed to consumers. Once the atom is mounted, onMount registers a callback that writes to this
-    // atom, which sends Retry to the session management machine (Jotai 3 has no setSelf in read functions anymore).
+    // atom, which sends Retry to the session management machine; a read function has no setter of its own in Jotai 3.
     const retryHolderAtom = atom<{retry: () => void}>({retry: () => {}});
     const retryAtom = atom(
         get => get(retryHolderAtom),

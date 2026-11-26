@@ -8,6 +8,11 @@
 - **Jotai 3:** the library uses Jotai 3 internally (with `jotai-family`); applications are not affected unless they reach
   into the library's atoms.
 
+# Improvements
+
+- **`scheduleTask` returns its result:** the command of `useTaskScheduling` resolves with a `ScheduleTaskResult` (the
+  number of tasks still waiting), as configurator-ts's `scheduleTask` does; its type said `void` before.
+
 # Fixes
 
 - **StrictMode:** a configurator no longer loads forever (or leaks a session) under React's StrictMode, and a session

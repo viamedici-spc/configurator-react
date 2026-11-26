@@ -69,8 +69,7 @@ export function createSubscriberAtom(primitives: Primitives): SubscriberAtomType
 }
 
 // A derived atom, not an effect: mounting it keeps every subscribed atom mounted, and its dependencies stay registered
-// even while one of them suspends or throws. (Effects lost their dependencies in that case with newer Jotai versions,
-// so hooks mounted later never resolved.)
+// while one of them suspends or throws, which an effect's do not (jotai-effect on Jotai 2.18 and newer).
 export function createAtomSubscriberEffect(primitives: Primitives): Atom<void> {
     return atom(get => {
         const subscriptions = get(primitives.subscriptionsAtom);
