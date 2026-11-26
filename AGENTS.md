@@ -1,7 +1,7 @@
 # Repository guidelines
 
 configurator-react provides React bindings for configurator-ts: the `Configuration` component owns a configuration
-session, hooks read it (suspending until it is ready) and send commands. configurator-framer builds on it. Start with
+session, hooks read it (suspending until it is ready) and send commands. Start with
 [docs/overview.md](docs/overview.md).
 
 ## Commands

@@ -11,7 +11,7 @@ status: accepted
 
 ## Non-goals
 
-- UI components and styling; applications bring their own (or use configurator-framer in Framer).
+- UI components and styling; applications bring their own.
 
 ## Audiences
 
@@ -19,6 +19,6 @@ Developers of configurator applications in React, and the coding agents that hel
 
 ## Place among the SPC libraries
 
-The library builds on configurator-ts, and configurator-framer builds on it. It adds the React bindings that
-configurator-ts does not have: the `Configuration` component, which owns a session for its subtree, and the hooks that
-read the configuration and send commands.
+The library builds on configurator-ts. It adds the React bindings that configurator-ts does not have: the
+`Configuration` component, which owns a session for its subtree, and the hooks that read the configuration and send
+commands.

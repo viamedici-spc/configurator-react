@@ -11,8 +11,7 @@ subtree, and hooks read the configuration (attributes, decisions, satisfaction) 
 explain, store and restore, reset). Reading hooks suspend until the session is ready, so an application renders with
 `Suspense` and error boundaries instead of loading flags.
 
-Out of scope: UI components (configurator-framer brings those for Framer), and anything configurator-ts does below the
-React layer.
+Out of scope: UI components, and anything configurator-ts does below the React layer.
 
 ## Public contract
 

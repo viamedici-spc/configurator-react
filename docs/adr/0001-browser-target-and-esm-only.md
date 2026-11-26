@@ -8,9 +8,9 @@ Date: 2026-11-26
 
 ## Context
 
-configurator-react runs in configurator applications in the browser: through a bundler, or inside the self-contained
-bundle of configurator-framer loaded from a CDN. The package used to ship ES modules and CommonJS side by side, without
-`"type": "module"`, to keep older bundlers working; the ES build was not standard ESM.
+configurator-react runs in configurator applications in the browser: through a bundler, or inside a self-contained
+bundle loaded from a CDN. The package used to ship ES modules and CommonJS side by side, without `"type": "module"`, to
+keep older bundlers working; the ES build was not standard ESM.
 
 ## Decision
 
