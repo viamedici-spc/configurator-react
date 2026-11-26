@@ -9,9 +9,8 @@ Date: 2026-11-26
 ## Context
 
 configurator-react runs in configurator applications in the browser: through a bundler, or inside the self-contained
-bundle of configurator-framer loaded from a CDN. The
-package used to ship ES modules and CommonJS side by side, without `"type": "module"`, to keep older bundlers working;
-the ES build was not standard ESM, and consumers asked for plain Node.js support.
+bundle of configurator-framer loaded from a CDN. The package used to ship ES modules and CommonJS side by side, without
+`"type": "module"`, to keep older bundlers working; the ES build was not standard ESM.
 
 ## Decision
 
@@ -21,13 +20,15 @@ through a bundler or a CDN bundle. Node.js is not a supported runtime. All depen
 ## Consequences
 
 - No CommonJS build; `require` is not supported.
-- Plain Node.js cannot import the package (fp-ts's ES files are not ES modules to Node.js). Tests run in Bun.
+- Plain Node.js cannot import the package: it loads fp-ts's ES files, but cannot resolve their imports, which have no
+  file extension. The tests run on Vitest in Node.js, with `server.deps.inline` (below).
 - In server-side rendering frameworks the library runs on the client only.
 - Test runners that run in Node.js (Vitest) must let their bundler transform fp-ts and the SPC packages
-  (`server.deps.inline`, see the README); the alternative, inlining fp-ts into this package, was not chosen: fp-ts is
-  expected to leave the libraries, which removes the setting.
+  (`server.deps.inline`, see the README); the alternative, inlining fp-ts into this package, was not chosen: it would
+  duplicate fp-ts for consumers that use it directly.
 
 ## Alternatives considered
 
 - **Keep CommonJS beside ESM:** no supported environment needs it, and it made the ES build non-standard.
-- **Support Node.js:** a runtime no consumer of this library uses.
+- **Support Node.js:** not a runtime this library targets: it renders in the browser, and in server-side rendering
+  frameworks on the client only.
