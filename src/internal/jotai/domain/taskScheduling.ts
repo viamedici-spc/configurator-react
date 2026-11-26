@@ -10,8 +10,10 @@ export type UseTaskSchedulingResult = {
      * decisions made so far are processed.
      *
      * @param signal Aborts the wait; the promise then rejects with the signal's reason.
-     * @returns The number of tasks still waiting for execution.
+     * @returns The {@link ScheduleTaskResult}; its `pendingTasks` counts the tasks still waiting.
      * @throws `TaskCancelled` if the session is closed while the task waits.
+     * @throws `SessionClosed` if the session is already closed.
+     * @throws `ConfiguratorError` if a general configuration error occurs.
      */
     readonly scheduleTask: (signal?: AbortSignal | null) => Promise<ScheduleTaskResult>;
 };

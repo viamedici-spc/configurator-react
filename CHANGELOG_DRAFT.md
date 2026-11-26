@@ -24,8 +24,8 @@
 
 # Improvements
 
-- **`scheduleTask` returns its result:** the command of `useTaskScheduling` resolves with a `ScheduleTaskResult` (the
-  number of tasks still waiting), as configurator-ts's `scheduleTask` does; its type said `void` before.
+- **`scheduleTask` returns its result:** the command of `useTaskScheduling` resolves with a `ScheduleTaskResult`, whose
+  `pendingTasks` counts the tasks still waiting, as configurator-ts's `scheduleTask` does; its type said `void` before.
 
 # Fixes
 
