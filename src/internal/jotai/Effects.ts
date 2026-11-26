@@ -3,7 +3,7 @@ import {Logger} from "@viamedici-spc/configurator-ts";
 import type {Primitives} from "./PrimitveAtoms";
 import type {Selectors} from "./Selectors";
 import type {Atom} from "jotai";
-import {createAtomSubscriptionCleanupEffect, createAtomSubscriberEffect} from "./domain/AtomSubscription";
+import {createAtomSubscriberAtom, createAtomSubscriptionCleanupEffect} from "./domain/AtomSubscription";
 import type {SuspendedAtoms} from "./SuspendedAtoms";
 import {createAddSessionListenersEffect} from "./domain/SessionSubscription";
 
@@ -12,7 +12,7 @@ const atomFamilyCleanupTimeout = 30 * 1000;
 export type Effects = {
     addSessionListenersEffect: Atom<void>;
     cleanupAtomFamiliesEffect: Atom<void>;
-    atomSubscriberEffect: Atom<void>;
+    atomSubscriberAtom: Atom<void>;
     atomSubscriptionCleanupEffect: Atom<void>;
 };
 
@@ -79,7 +79,7 @@ export function createEffects(primitives: Primitives, selectors: Selectors, susp
     return {
         addSessionListenersEffect: createAddSessionListenersEffect(primitives, selectors),
         cleanupAtomFamiliesEffect: createCleanupAtomFamiliesEffect(primitives, selectors, suspended),
-        atomSubscriberEffect: createAtomSubscriberEffect(primitives),
+        atomSubscriberAtom: createAtomSubscriberAtom(primitives),
         atomSubscriptionCleanupEffect: createAtomSubscriptionCleanupEffect(primitives),
     };
 }
