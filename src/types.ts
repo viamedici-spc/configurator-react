@@ -14,7 +14,11 @@ export const ConfigurationUninitialized: ConfigurationUninitialized = "Configura
  */
 export type ConfiguratorErrorWithRetry = ConfiguratorError & {
     /**
-     * Retry the failed operation.
+     * Retries the failed session creation or update.
+     *
+     * It works while the state that carries the error is subscribed, which `useConfigurationInitialization` and
+     * `useConfigurationUpdating` always do. Read with `store.get` alone from an atom of `useJotaiAtoms`, without a
+     * subscription, it does nothing.
      */
     readonly retry?: () => void;
 };

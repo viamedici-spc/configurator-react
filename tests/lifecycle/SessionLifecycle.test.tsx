@@ -9,7 +9,7 @@ import {
     useStoredConfiguration,
 } from "../../src";
 import type {IConfigurationSession, ISessionFactory, SessionContext} from "@viamedici-spc/configurator-ts";
-import {DecisionKind, SessionFactory} from "@viamedici-spc/configurator-ts";
+import {ConfiguratorErrorType, DecisionKind, SessionFactory} from "@viamedici-spc/configurator-ts";
 import {choiceAttribute, emptyModel} from "../hooks/Common";
 
 // The session lifecycle as an application drives it: mount, suspend until the session exists, mount more readers later,
@@ -95,6 +95,15 @@ function Initialization() {
     return <div>init:{String(initialization.isInitializing)}</div>;
 }
 
+function RetryOnError() {
+    const initialization = useConfigurationInitialization();
+    return initialization.error ? (
+        <button onClick={() => initialization.error?.retry?.()}>retry</button>
+    ) : (
+        <div>init:{String(initialization.isInitializing)}</div>
+    );
+}
+
 function App(props: {initializationOutside?: boolean}) {
     const [late, setLate] = useState(false);
     return (
@@ -178,6 +187,29 @@ describe(`Session lifecycle on React ${reactVersion}`, () => {
         });
         expect(sessions.created).toBe(2);
         expect(sessions.closed).toBe(2);
+    });
+
+    it("retry through useConfigurationInitialization creates the session after a failed creation", async () => {
+        createSessionMock
+            .mockImplementationOnce(() => Promise.reject({type: ConfiguratorErrorType.ConnectionError}))
+            .mockImplementation(c => sleep(10).then(() => fakeSession(c)));
+        await renderAndSettle(
+            <Configuration sessionContext={sessionContext}>
+                <RetryOnError />
+                <Suspense fallback={<div>loading</div>}>
+                    <Decisions />
+                </Suspense>
+            </Configuration>,
+            false,
+        );
+
+        expect(await waitForText("retry")).toBe(true);
+        await act(async () => {
+            fireEvent.click(screen.getByText("retry"));
+        });
+
+        expect(await waitForText("decisions:0")).toBe(true);
+        expect(createSessionMock).toHaveBeenCalledTimes(2);
     });
 
     it("unmounting while the session is being created closes it once created", async () => {
