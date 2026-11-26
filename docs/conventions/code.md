@@ -140,8 +140,10 @@ hook, never through a context or an atom directly.
 
 ## Dependencies between the libraries
 
-A library that builds on another pins its **exact published version**, released first. A change that needs a change
-below it is released bottom-up: `fp-ts-extensions`, `configurator-ts`, `configurator-react`, `configurator-framer`.
+A library that builds on another pins its **exact published version**, released first. configurator-react takes
+configurator-ts as a peer dependency instead, because applications import configurator-ts themselves and must share one
+copy with the library; the exact version stays a dev dependency for its tests. A change that needs a change below it is
+released bottom-up: `fp-ts-extensions`, `configurator-ts`, `configurator-react`, `configurator-framer`.
 
 ## Tests
 

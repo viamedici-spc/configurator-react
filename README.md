@@ -61,10 +61,11 @@ React-based Single Page Application (SPA).
 
 ### 1. Install Package
 
-The package is ESM only; React is a peer dependency.
+The package is ESM only. React, configurator-ts and Jotai are peer dependencies: install them next to it, and the
+library uses your application's copies, so each exists once.
 
 ```bash
-npm install @viamedici-spc/configurator-react @viamedici-spc/configurator-ts react
+npm install @viamedici-spc/configurator-react @viamedici-spc/configurator-ts jotai react
 ```
 
 ### 2. Define the Session Context

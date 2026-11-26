@@ -5,8 +5,16 @@
 - **React baseline:** React is a peer dependency of `^18.2 || ^19`; React 17 is no longer supported.
 - **ES modules only:** the package ships one ES module with its type declarations and no CommonJS build anymore. Use it
   through a bundler. Applications that test with Vitest need one setting for fp-ts (see the README).
-- **Jotai 3:** the library uses Jotai 3 internally (with `jotai-family`); applications are not affected unless they
-  reach into the library's atoms.
+
+## Peer dependencies
+
+- **configurator-ts and Jotai are peer dependencies:** install `@viamedici-spc/configurator-ts` 5 and `jotai` 3 next to
+  this package. The library uses your application's copies, so each exists once; before, an application with a
+  different version got a second copy.
+- **configurator-ts 5:** the configurator-ts types in this library's API are those of version 5; its own changes are in
+  the [configurator-ts releases](https://github.com/viamedici-spc/configurator-ts/releases).
+- **Jotai 3:** an application that passes its own store (`jotaiStore`), or uses `useConfiguratorStore` or
+  `useJotaiAtoms`, works with Jotai 3, and the atom families of `useJotaiAtoms` come from `jotai-family`.
 
 # Improvements
 

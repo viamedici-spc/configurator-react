@@ -37,7 +37,9 @@ session, hooks read it (suspending until it is ready) and send commands. configu
 - Publishing runs in the GitHub environment `npm`, whose rules admit `main`, `feature/*`, `release/*`, `hotfix/*`,
   `support/*` and version tags; npm accepts a publish of this package only from that environment.
 - Only repository admins create, move or delete version tags; a tag ruleset enforces it.
-- A change that needs a new configurator-ts pins its exact published (pre)release first, then releases this package.
+- configurator-ts and Jotai are peer dependencies, like React ([ADR 0004](docs/adr/0004-peer-dependencies.md)). A change
+  that needs a new configurator-ts takes its published (pre)release as the exact dev dependency, raises the peer range
+  to it, and then releases this package.
 
 ## This repository is public
 

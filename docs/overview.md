@@ -26,7 +26,8 @@ React layer.
   `sessionContext` changes and closed when it unmounts, also when it unmounts while the session is still being created.
   Under StrictMode, which mounts effects twice, a second session is created and the first one is closed.
 - **State is reached through hooks only**, never through a context or an atom directly.
-- **React is a peer dependency** (`^18.2 || ^19`).
+- **React, configurator-ts and Jotai are peer dependencies** (`^18.2 || ^19`, `^5.0.0-0`, `^3`): the library uses the
+  application's copies ([ADR 0004](adr/0004-peer-dependencies.md)).
 
 ## Architecture
 
