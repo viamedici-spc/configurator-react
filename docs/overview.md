@@ -36,8 +36,9 @@ session's change events into atoms; suspending atoms resolve once the session is
 
 ## Supported environments
 
-Browsers with React 18.2 or 19, as ESM through a bundler; not Node.js ([ADR 0001](adr/0001-browser-target-and-esm-only.md),
-[ADR 0003](adr/0003-react-baseline.md)). Test runners in Node.js need the setting described in the README.
+Browsers with React 18.2 or 19, as ESM through a bundler; not Node.js
+([ADR 0001](adr/0001-browser-target-and-esm-only.md), [ADR 0003](adr/0003-react-baseline.md)). Test runners in Node.js
+need the setting described in the README.
 
 ## Commands
 

@@ -23,7 +23,7 @@ artifact; on its own it proves nothing. `bun fmt` is not a verdict either: it re
 succeeds; the format check is the one that answers.
 
 The test step is Vitest with jsdom and Testing Library (React 19; CI runs the tests on React 18 as well).
-The tests mock the session; behaviour of the engine is tested in configurator-ts.
+The tests mock the session; behavior of the engine is tested in configurator-ts.
 **A step is green when its exit code is 0, and only then.** Silence is not green. Never wrap a check so that failing
 produces *less* output than passing: `… && echo ok` prints nothing at all on a failure, so the result is one missing
 line in a list of green ones. Run each step on its own and let its status be seen. **A suite that did not run is not a

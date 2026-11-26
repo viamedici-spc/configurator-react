@@ -26,7 +26,7 @@ the second mount.
 ## Consequences
 
 - React 17 is no longer supported.
-- The suspend-and-resume behaviour is tested the way an application sees it, through a `Suspense` boundary.
+- The suspend-and-resume behavior is tested the way an application sees it, through a `Suspense` boundary.
 
 ## Alternatives considered
 

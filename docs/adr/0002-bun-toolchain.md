@@ -20,7 +20,8 @@ drift, and the published package mixed formats.
 - **Vitest** runs the tests, with jsdom: they need a DOM and React rendering.
 - **oxlint** lints, until Bun ships a linter of its own.
 - **tsdown** builds the package: one ES module bundle with the dependencies external, and its declarations from the
-  TypeScript 7 compiler (`typescript` is a dev dependency for that alone), as in configurator-ts. publint and arethetypeswrong check the packed result.
+  TypeScript 7 compiler (`typescript` is a dev dependency for that alone), as in configurator-ts. publint and
+  arethetypeswrong check the packed result.
 - **`bun run verify`** is the one gate, locally and in CI; its independent steps run in parallel
   (`bun run --parallel`).
 - **Publishing** goes through the shared CI workflow: Bun packs the tarball, `npm publish` uploads it with npm trusted
