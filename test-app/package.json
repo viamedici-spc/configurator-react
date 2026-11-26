@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@viamedici-spc/configurator-react": "workspace:*",
-    "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126112243",
+    "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126114204",
     "clsx": "^2.1.1",
     "jotai": "^3.0.2",
     "react": "^19.3.1",

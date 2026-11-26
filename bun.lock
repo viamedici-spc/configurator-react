@@ -5,7 +5,7 @@
     "": {
       "name": "@viamedici-spc/configurator-react",
       "dependencies": {
-        "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126112243",
+        "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126114204",
         "@viamedici-spc/fp-ts-extensions": "2.0.0-modern-toolchain-20261126094931",
         "dyna-guid": "^2.3.3",
         "fp-ts-react-stable-hooks": "^2.0.0",
@@ -39,7 +39,7 @@
       "name": "configurator-react-test-app",
       "dependencies": {
         "@viamedici-spc/configurator-react": "workspace:*",
-        "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126112243",
+        "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126114204",
         "clsx": "^2.1.1",
         "jotai": "^3.0.2",
         "react": "^19.3.1",
@@ -261,7 +261,7 @@
 
     "@viamedici-spc/configurator-react": ["@viamedici-spc/configurator-react@root:", {}],
 
-    "@viamedici-spc/configurator-ts": ["@viamedici-spc/configurator-ts@5.0.0-modern-toolchain-20261126112243", "", { "dependencies": { "@morphic-ts/batteries": "^3.0.0", "@morphic-ts/model-algebras": "^3.0.0", "@viamedici-spc/fp-ts-extensions": "2.0.0-modern-toolchain-20261126094931", "dyna-guid": "^2.3.3", "fast-equals": "^6.4.1", "fp-ts": "^2.16.11", "memize": "^2.1.1", "monocle-ts": "^2.3.13", "openapi-fetch": "0.17.0", "p-defer": "^4.0.1", "spark-md5": "^3.0.2", "ts-pattern": "^5.9.2", "tslib": "^2.7.0", "xstate": "^5.33.4" } }, "sha512-/C/couirVH2pYE8YLYp/Gy7k/aSsIIhfoa5qPtXZG3sa3pZW1+Gaf3i9R96ChwRS4EDM4L+7GR65xX86j+zV2g=="],
+    "@viamedici-spc/configurator-ts": ["@viamedici-spc/configurator-ts@5.0.0-modern-toolchain-20261126114204", "", { "dependencies": { "@morphic-ts/batteries": "^3.0.0", "@morphic-ts/model-algebras": "^3.0.0", "@viamedici-spc/fp-ts-extensions": "2.0.0-modern-toolchain-20261126094931", "dyna-guid": "^2.3.3", "fast-equals": "^6.4.1", "fp-ts": "^2.16.11", "memize": "^2.1.1", "monocle-ts": "^2.3.13", "openapi-fetch": "0.17.0", "p-defer": "^4.0.1", "spark-md5": "^3.0.2", "ts-pattern": "^5.9.2", "tslib": "^2.7.0", "xstate": "^5.33.4" } }, "sha512-lnK6F9q9ybfOhh5QmP7iefiHxcqPNr9c6+6Ji++Q0gqDymKOGCAaXKThMeCS9nydWkqv4J8vigm5eEjMDLmvoQ=="],
 
     "@viamedici-spc/fp-ts-extensions": ["@viamedici-spc/fp-ts-extensions@2.0.0-modern-toolchain-20261126094931", "", { "peerDependencies": { "fp-ts": "2.*" } }, "sha512-ywpE+ue+AHBscDs6IHjiTd0m4uVFvtP4suatHbRRYGf3poYiZZOmSMaul/owVe7PrPpxXrwZHaW0/LK83KoN2g=="],
 
