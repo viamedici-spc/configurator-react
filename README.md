@@ -18,6 +18,7 @@ interact directly with the HCE's REST API.
 
 This library is made for the **browser**, with React 18.2 or 19, through a bundler (Vite, webpack 5, Rollup, esbuild,
 …). It ships **ES modules only**. In server-side rendering frameworks, render the configurator on the client only.
+TypeScript resolves it with `moduleResolution` `bundler`, `node16` or `nodenext`.
 
 ## UI Framework Independence
 

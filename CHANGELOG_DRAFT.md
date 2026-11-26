@@ -5,6 +5,8 @@
 - **React baseline:** React is a peer dependency of `^18.2 || ^19`; React 17 is no longer supported.
 - **ES modules only:** the package ships one ES module with its type declarations and no CommonJS build anymore. Use it
   through a bundler. Applications that test with Vitest need one setting for fp-ts (see the README).
+- **TypeScript resolution:** TypeScript finds the package with `moduleResolution` `bundler`, `node16` or `nodenext`;
+  `node10` (`node`) no longer finds it, since the package has an `exports` map and no `main` or `types` field.
 
 ## Peer dependencies
 
