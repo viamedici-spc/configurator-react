@@ -66,6 +66,54 @@ describe("SessionManagementMachine tests", () => {
         await waitFor(() => expect(closeMock).toBeCalledTimes(1));
     });
 
+    it("A new session context after Shutdown creates a session again", async () => {
+        createSessionMock.mockImplementation(sessionContext =>
+            Promise.resolve({
+                getSessionContext: () => sessionContext,
+                close: () => Promise.resolve(),
+            } as IConfigurationSession),
+        );
+        const sessionContext: SessionContext = {
+            sessionInitialisationOptions: {accessToken: ""},
+            configurationModelSource: emptyModel,
+        };
+
+        sut.start();
+        sut.send({type: "SessionContextChanged", sessionContext});
+        await waitFor(() => expect(createSessionMock).toBeCalledTimes(1));
+
+        // React's StrictMode, or a remount, runs the cleanup and then the effect again.
+        sut.send({type: "Shutdown"});
+        sut.send({type: "SessionContextChanged", sessionContext});
+        await waitFor(() => expect(createSessionMock).toBeCalledTimes(2));
+    });
+
+    it("A session whose creation completes after Shutdown is closed", async () => {
+        const closeMock = vi.fn(() => Promise.resolve());
+        let completeCreation: () => void = () => {};
+        createSessionMock.mockImplementation(
+            sessionContext =>
+                new Promise(resolve => {
+                    completeCreation = () =>
+                        resolve({
+                            getSessionContext: () => sessionContext,
+                            close: () => closeMock(),
+                        } as IConfigurationSession);
+                }),
+        );
+
+        sut.start();
+        sut.send({
+            type: "SessionContextChanged",
+            sessionContext: {sessionInitialisationOptions: {accessToken: ""}, configurationModelSource: emptyModel},
+        });
+        await waitFor(() => expect(createSessionMock).toBeCalledTimes(1));
+
+        sut.send({type: "Shutdown"});
+        completeCreation();
+        await waitFor(() => expect(closeMock).toBeCalledTimes(1));
+    });
+
     it("Session gets updated on Context change", async () => {
         createSessionMock.mockImplementation(sessionContext => {
             let currentContext = sessionContext;
