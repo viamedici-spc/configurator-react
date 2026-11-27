@@ -2,73 +2,80 @@
   "name": "@viamedici-spc/configurator-react",
   "version": "0.0.0",
   "description": "React library to build configurator web applications based on the Viamedici Headless Configuration Engine (HCE).",
+  "keywords": [
+    "configuration",
+    "constraint",
+    "csp",
+    "hce",
+    "problem",
+    "product",
+    "react",
+    "satisfaction",
+    "solver",
+    "spc",
+    "viamedici"
+  ],
+  "license": "MIT",
+  "author": "Viamedici Software GmbH",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/viamedici-spc/configurator-react.git"
   },
-  "sideEffects": false,
+  "workspaces": [
+    "test-app"
+  ],
   "files": [
     "dist"
   ],
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "sideEffects": false,
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "vite build",
-    "test": "tsc -p ./tsconfig.test.json --noEmit && vitest --run",
-    "test:watch": "vitest watch --reporter default",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "npm-sort"
-  },
-  "keywords": [
-    "viamedici",
-    "product",
-    "configuration",
-    "spc",
-    "hce",
-    "csp",
-    "constraint",
-    "satisfaction",
-    "problem",
-    "solver",
-    "react"
-  ],
-  "author": "Viamedici Software GmbH",
-  "license": "MIT",
-  "devDependencies": {
-    "@testing-library/react": "^12.1.5",
-    "@testing-library/react-hooks": "^8.0.1",
-    "@types/react": "^17.0.2",
-    "@vitest/coverage-istanbul": "^2.1.1",
-    "jsdom": "^22.1.0",
-    "npm-sort": "^0.0.4",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.7",
-    "vite-plugin-dts": "^4.2.2",
-    "vite-plugin-externalize-deps": "^0.8.0",
-    "vitest": "^2.1.1"
+    "build": "tsdown",
+    "format:check": "bun fmt --check",
+    "lint": "oxlint --deny-warnings",
+    "test": "vitest run",
+    "typecheck": "bun check && bun check -p tests && bun check -p test-app && bun check -p package-check",
+    "verify": "bun run --parallel typecheck lint format:check test verify:package",
+    "verify:package": "bun package-check/build.ts && bun package-check/consumer.ts && publint --strict && attw --pack . --profile esm-only --format table-flipped"
   },
   "dependencies": {
-    "@viamedici-spc/configurator-ts": "4.2.0",
-    "@viamedici-spc/fp-ts-extensions": "^1.2.0",
-    "dyna-guid": "^2.2.1",
-    "fp-ts-react-stable-hooks": "^1.5.0",
-    "jotai": "^2.10.0",
-    "jotai-effect": "^1.0.3",
-    "jotai-xstate": "^0.5.0",
+    "@viamedici-spc/fp-ts-extensions": "2.0.0",
+    "dyna-guid": "^2.3.3",
+    "fp-ts-react-stable-hooks": "^2.0.0",
+    "jotai-effect": "^2",
+    "jotai-family": "^1.1.0",
+    "jotai-xstate": "^0.6",
+    "memize": "^2.1.1",
     "p-defer": "^4.0.1",
-    "xstate": "^5.18.2"
+    "ts-pattern": "^5.9.2",
+    "xstate": "^5.33.4"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/bun": "^1.4.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19.3.0",
+    "@viamedici-spc/configurator-ts": "5.0.0-modern-toolchain-20261126215538",
+    "jotai": "^3.0.2",
+    "jsdom": "^31.0.1",
+    "oxlint": "^1.94.0",
+    "publint": "^0.3.25",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tsdown": "^0.23.7",
+    "typescript": "7.0.2",
+    "vitest": "^5.1.1"
   },
   "peerDependencies": {
-    "react": ">=17.0.1"
-  }
+    "@viamedici-spc/configurator-ts": "^5.0.0-0",
+    "jotai": "^3",
+    "react": "^18.2 || ^19"
+  },
+  "packageManager": "bun@1.4.5"
 }

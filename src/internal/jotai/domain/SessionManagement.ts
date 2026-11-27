@@ -1,9 +1,10 @@
-import {atom, Atom} from "jotai";
+import type {Atom} from "jotai";
+import {atom} from "jotai";
 import {atomWithMachine} from "jotai-xstate";
 import {sessionManagementMachine} from "../../sessionManagementMachine";
-import {IConfigurationSession} from "@viamedici-spc/configurator-ts";
-import {Primitives} from "../PrimitveAtoms";
-import {SessionInitialization, SessionUpdating} from "../../Types";
+import type {IConfigurationSession} from "@viamedici-spc/configurator-ts";
+import type {Primitives} from "../PrimitveAtoms";
+import type {SessionInitialization, SessionUpdating} from "../../Types";
 
 export type SessionManagementMachineAtomType = ReturnType<typeof atomWithMachine<typeof sessionManagementMachine>>;
 export type ConfigurationSessionAtomType = Atom<IConfigurationSession | null>;
@@ -18,30 +19,48 @@ export function createConfigurationSessionAtom(primitives: Primitives): Configur
     return atom(get => get(primitives.sessionManagementMachineAtom).context.configurationSession);
 }
 
+type RetryAction = {type: "register"; retry: () => void} | {type: "retry"};
+
 export function createSessionInitializationAndUpdatingAtom(primitives: Primitives) {
-    const baseAtom = atom((get, options) => {
+    // The retry callback handed to consumers. Once the atom is mounted, onMount registers a callback that writes to this
+    // atom, which sends Retry to the session management machine; a read function has no setter of its own in Jotai 3.
+    const retryHolderAtom = atom<{retry: () => void}>({retry: () => {}});
+    const retryAtom = atom(
+        get => get(retryHolderAtom),
+        (_, set, action: RetryAction) => {
+            if (action.type === "register") {
+                set(retryHolderAtom, {retry: action.retry});
+            } else {
+                set(primitives.sessionManagementMachineAtom, {type: "Retry"});
+            }
+        },
+    );
+    retryAtom.onMount = setAtom => {
+        setAtom({type: "register", retry: () => setAtom({type: "retry"})});
+    };
+
+    const baseAtom = atom(get => {
         const sessionManagementMachine = get(primitives.sessionManagementMachineAtom);
         const isProcessing = sessionManagementMachine.matches("Processing");
         const hasSession = sessionManagementMachine.context.configurationSession != null;
+        const {retry} = get(retryAtom);
         const error = sessionManagementMachine.context.sessionCreateOrUpdateError?.configurationError
             ? {
-                ...sessionManagementMachine.context.sessionCreateOrUpdateError.configurationError,
-                retry: () => {
-                    options.setSelf();
-                }
-            } : null;
+                  ...sessionManagementMachine.context.sessionCreateOrUpdateError.configurationError,
+                  retry: () => {
+                      retry();
+                  },
+              }
+            : null;
 
         return {
             isProcessing,
             hasSession,
             error,
         };
-    }, (_, set) => {
-        // Triggers a retry on write
-        set(primitives.sessionManagementMachineAtom, {type: "Retry"});
     });
 
-    const sessionInitializationAtom: SessionInitializationAtomType = atom<SessionInitialization>((get) => {
+    const sessionInitializationAtom: SessionInitializationAtomType = atom<SessionInitialization>(get => {
         const {hasSession, error, isProcessing} = get(baseAtom);
 
         return {
@@ -50,7 +69,7 @@ export function createSessionInitializationAndUpdatingAtom(primitives: Primitive
         } satisfies SessionInitialization;
     });
 
-    const sessionUpdatingAtom: SessionUpdatingAtomType = atom<SessionUpdating>((get) => {
+    const sessionUpdatingAtom: SessionUpdatingAtomType = atom<SessionUpdating>(get => {
         const {hasSession, error, isProcessing} = get(baseAtom);
 
         return {

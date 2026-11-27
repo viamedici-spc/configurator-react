@@ -1,11 +1,8 @@
-import {act, cleanup, renderHook} from "@testing-library/react-hooks";
+import {act, cleanup, renderHook} from "@testing-library/react";
 import {useNumericAttribute} from "../../src";
-import {
-    AttributeType,
-    Configuration,
-    IConfigurationSession, ExplicitNumericDecision
-} from "@viamedici-spc/configurator-ts";
-import {booleanAttribute, numericAttribute, WrappingComponent} from "./Common";
+import type {Configuration, IConfigurationSession, ExplicitNumericDecision} from "@viamedici-spc/configurator-ts";
+import {AttributeType} from "@viamedici-spc/configurator-ts";
+import {booleanAttribute, numericAttribute, wrapperWith} from "./Common";
 import {describe, it, expect, afterEach, vi} from "vitest";
 
 afterEach(async () => {
@@ -25,17 +22,14 @@ describe("useNumericAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map([
-                [numericAttribute.key, numericAttribute]
-            ])
+            attributes: new Map([[numericAttribute.key, numericAttribute]]),
         };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         await act(async () => {
@@ -50,22 +44,22 @@ describe("useNumericAttribute tests", () => {
         expect(session.makeDecision).toHaveBeenNthCalledWith(1, {
             type: AttributeType.Numeric,
             attributeId: {localId: "A1"},
-            state: 1
+            state: 1,
         } as ExplicitNumericDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(2, {
             type: AttributeType.Numeric,
             attributeId: {localId: "A1"},
-            state: 2
+            state: 2,
         } as ExplicitNumericDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(3, {
             type: AttributeType.Numeric,
             attributeId: {localId: "A1"},
-            state: null
+            state: null,
         } as ExplicitNumericDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(4, {
             type: AttributeType.Numeric,
             attributeId: {localId: "A1"},
-            state: undefined
+            state: undefined,
         } as ExplicitNumericDecision);
     });
 
@@ -74,15 +68,14 @@ describe("useNumericAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map()
+            attributes: new Map(),
         };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         expect(result.current).toBeUndefined();
@@ -93,17 +86,14 @@ describe("useNumericAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map([
-                [booleanAttribute.key, booleanAttribute]
-            ])
+            attributes: new Map([[booleanAttribute.key, booleanAttribute]]),
         };
 
         const {result} = renderHook(() => useNumericAttribute({localId: "A1"}, false), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         expect(result.current).toBeUndefined();

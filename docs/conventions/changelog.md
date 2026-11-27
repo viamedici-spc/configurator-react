@@ -1,3 +1,7 @@
+---
+status: accepted
+---
+
 # Changelog Convention
 
 This convention defines changelog creation for the **Configurator React** library (a JavaScript/TypeScript package).
@@ -10,8 +14,8 @@ Notes:
 - Level 2 headings (`##`) are used for concrete items under each section (feature titles or grouped entries).
 - New Features use short paragraphs under `##` headings; Improvements, Changes, and Fixes are bullet lists under their
   `##` headings.
-- Target audience: configurator application developers using React and the Smart Product Configuration (SPC) plattform to
-  implement a product configurator. Avoid overly technical or internal-only details.
+- Target audience: configurator application developers using React and the Smart Product Configuration (SPC) plattform
+  to implement a product configurator. Avoid overly technical or internal-only details.
 
 Template:
 

@@ -1,6 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {UseSessionReinitializationResult} from "../internal/jotai/domain/sessionReinitialization";
+import type {UseSessionReinitializationResult} from "../internal/jotai/domain/sessionReinitialization";
 
 const useSessionReinitialization: {
     /**
@@ -13,6 +13,9 @@ const useSessionReinitialization: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseSessionReinitializationResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseSessionReinitializationResult>(s => s.sessionReinitializationAtom, s => s.sessionReinitializationAtom);
+} = prepareAtomValueUsageWithSuspense<UseSessionReinitializationResult>(
+    s => s.sessionReinitializationAtom,
+    s => s.sessionReinitializationAtom,
+);
 
 export default useSessionReinitialization;

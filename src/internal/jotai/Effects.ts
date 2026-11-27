@@ -1,10 +1,10 @@
 import {atomEffect} from "jotai-effect";
 import {Logger} from "@viamedici-spc/configurator-ts";
-import {Primitives} from "./PrimitveAtoms";
-import {Selectors} from "./Selectors";
-import {Atom} from "jotai";
-import {createAtomSubscriptionCleanupEffect, createAtomSubscriberEffect} from "./domain/AtomSubscription";
-import {SuspendedAtoms} from "./SuspendedAtoms";
+import type {Primitives} from "./PrimitveAtoms";
+import type {Selectors} from "./Selectors";
+import type {Atom} from "jotai";
+import {createAtomSubscriberAtom, createAtomSubscriptionCleanupEffect} from "./domain/AtomSubscription";
+import type {SuspendedAtoms} from "./SuspendedAtoms";
 import {createAddSessionListenersEffect} from "./domain/SessionSubscription";
 
 const atomFamilyCleanupTimeout = 30 * 1000;
@@ -12,7 +12,7 @@ const atomFamilyCleanupTimeout = 30 * 1000;
 export type Effects = {
     addSessionListenersEffect: Atom<void>;
     cleanupAtomFamiliesEffect: Atom<void>;
-    atomSubscriberEffect: Atom<void>;
+    atomSubscriberAtom: Atom<void>;
     atomSubscriptionCleanupEffect: Atom<void>;
 };
 
@@ -33,7 +33,7 @@ function createCleanupAtomFamiliesEffect(primitives: Primitives, selectors: Sele
         suspended.componentAttributeAtomFamily,
     ];
 
-    return atomEffect((get) => {
+    return atomEffect(get => {
         // Subscribe to configuration so that every change to the configuration reschedules the timeout.
         get(primitives.configurationAtom);
 
@@ -47,6 +47,8 @@ function createCleanupAtomFamiliesEffect(primitives: Primitives, selectors: Sele
             Logger.debug("Cleaning up atomFamilies");
 
             // Clear attributes family
+            // The params are copied first because members are removed inside the loops.
+            // oxlint-disable-next-line unicorn/no-useless-spread
             for (const param of [...attributes.getParams()]) {
                 const atom = attributes(param) as Atom<any>;
                 if (get.peek(atom) == null) {
@@ -58,6 +60,7 @@ function createCleanupAtomFamiliesEffect(primitives: Primitives, selectors: Sele
 
             // Remove all family members that point non-existent attributes.
             for (const family of families) {
+                // oxlint-disable-next-line unicorn/no-useless-spread
                 for (const param of [...family.getParams()]) {
                     if (!existingAttributeKeys.includes(param)) {
                         family.remove(param);
@@ -76,7 +79,7 @@ export function createEffects(primitives: Primitives, selectors: Selectors, susp
     return {
         addSessionListenersEffect: createAddSessionListenersEffect(primitives, selectors),
         cleanupAtomFamiliesEffect: createCleanupAtomFamiliesEffect(primitives, selectors, suspended),
-        atomSubscriberEffect: createAtomSubscriberEffect(primitives),
+        atomSubscriberAtom: createAtomSubscriberAtom(primitives),
         atomSubscriptionCleanupEffect: createAtomSubscriptionCleanupEffect(primitives),
     };
 }

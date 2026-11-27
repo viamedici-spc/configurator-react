@@ -1,7 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
-import {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {UseTaskSchedulingResult} from "../internal/jotai/domain/taskScheduling";
+import type {UseTaskSchedulingResult} from "../internal/jotai/domain/taskScheduling";
 
 const useTaskScheduling: {
     /**
@@ -14,6 +13,9 @@ const useTaskScheduling: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseTaskSchedulingResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseTaskSchedulingResult>(s => s.taskSchedulingAtom, s => s.taskSchedulingAtom);
+} = prepareAtomValueUsageWithSuspense<UseTaskSchedulingResult>(
+    s => s.taskSchedulingAtom,
+    s => s.taskSchedulingAtom,
+);
 
 export default useTaskScheduling;

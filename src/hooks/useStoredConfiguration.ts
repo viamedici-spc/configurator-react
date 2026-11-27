@@ -1,7 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
-import {UseConfigurationStoringResult} from "../internal/jotai/domain/configurationStoring";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {StoredConfiguration} from "@viamedici-spc/configurator-ts";
+import type {StoredConfiguration} from "@viamedici-spc/configurator-ts";
 
 const useStoredConfiguration: {
     /**
@@ -14,6 +13,9 @@ const useStoredConfiguration: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): StoredConfiguration | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<StoredConfiguration>(s => s.guardedStoredConfigurationAtom, s => s.storedConfigurationAtom);
+} = prepareAtomValueUsageWithSuspense<StoredConfiguration>(
+    s => s.guardedStoredConfigurationAtom,
+    s => s.storedConfigurationAtom,
+);
 
 export default useStoredConfiguration;

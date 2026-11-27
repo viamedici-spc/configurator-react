@@ -24,7 +24,8 @@ export default function ValueSelection() {
                 await handleDecisionResponse(() => makeDecision(null));
             }
         } else {
-            const state = valueId === includedValueId ? ComponentDecisionState.Included : ComponentDecisionState.Excluded;
+            const state =
+                valueId === includedValueId ? ComponentDecisionState.Included : ComponentDecisionState.Excluded;
 
             if (attribute.possibleDecisionStates.includes(state)) {
                 console.info("Make decision for %s: %s", attributeIdToString(attribute.id), state.toString());
@@ -33,16 +34,20 @@ export default function ValueSelection() {
             } else {
                 console.info("Explain blocked value for %s: %s", attributeIdToString(attribute.id), state.toString());
 
-                handleExplain(() => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: state}, "full"), applySolution);
+                handleExplain(
+                    () => explain({question: ExplainQuestionType.whyIsStateNotPossible, state: state}, "full"),
+                    applySolution,
+                );
             }
         }
     };
 
-    const selectedValue = attribute.decision?.state === ComponentDecisionState.Included
-        ? includedValueId
-        : attribute.decision?.state === ComponentDecisionState.Excluded
-            ? excludedValueId
-            : nothingValueId;
+    const selectedValue =
+        attribute.decision?.state === ComponentDecisionState.Included
+            ? includedValueId
+            : attribute.decision?.state === ComponentDecisionState.Excluded
+              ? excludedValueId
+              : nothingValueId;
 
     const isIncludedStatePossible = attribute.possibleDecisionStates.includes(ComponentDecisionState.Included);
     const isExcludedStatePossible = attribute.possibleDecisionStates.includes(ComponentDecisionState.Excluded);
@@ -50,21 +55,19 @@ export default function ValueSelection() {
     const excludedValue: Value<string> = {
         id: excludedValueId,
         name: "excluded",
-        isImplicit: attribute.decision?.state === ComponentDecisionState.Excluded && attribute.decision?.kind === DecisionKind.Implicit
+        isImplicit:
+            attribute.decision?.state === ComponentDecisionState.Excluded &&
+            attribute.decision?.kind === DecisionKind.Implicit,
     };
     const includedValue: Value<string> = {
         id: includedValueId,
         name: "included",
-        isImplicit: attribute.decision?.state === ComponentDecisionState.Included && attribute.decision?.kind === DecisionKind.Implicit
+        isImplicit:
+            attribute.decision?.state === ComponentDecisionState.Included &&
+            attribute.decision?.kind === DecisionKind.Implicit,
     };
-    const allowedValues = [
-        isExcludedStatePossible && excludedValue,
-        isIncludedStatePossible && includedValue
-    ];
-    const blockedValues = [
-        (!isExcludedStatePossible) && excludedValue,
-        (!isIncludedStatePossible) && includedValue
-    ];
+    const allowedValues = [isExcludedStatePossible && excludedValue, isIncludedStatePossible && includedValue];
+    const blockedValues = [!isExcludedStatePossible && excludedValue, !isIncludedStatePossible && includedValue];
 
     return (
         <CommonValueSelection

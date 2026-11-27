@@ -1,11 +1,11 @@
-import {
+import type {
     CollectedDecision,
     CollectedExplicitDecision,
     CollectedImplicitDecision,
-    DecisionKind
+    DecisionKind,
 } from "@viamedici-spc/configurator-ts";
-import {Selectors} from "../Selectors";
-import {GuardedAtom} from "../../../types";
+import type {Selectors} from "../Selectors";
+import type {GuardedAtom} from "../../../types";
 import atomWithGuard from "../helper/atomWithGuard";
 
 export type UseDecisionQueriesResult = {
@@ -17,7 +17,9 @@ export type UseDecisionQueriesResult = {
     getDecisions(queue: true): Promise<ReadonlyArray<CollectedDecision>>;
 };
 
-export function createDecisionQueriesAtom(configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"]): GuardedAtom<UseDecisionQueriesResult> {
+export function createDecisionQueriesAtom(
+    configurationSessionAtom: Selectors["guardedConfigurationSessionAtom"],
+): GuardedAtom<UseDecisionQueriesResult> {
     return atomWithGuard((_, getGuarded) => {
         const session = getGuarded(configurationSessionAtom);
 

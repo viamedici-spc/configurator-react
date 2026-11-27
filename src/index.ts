@@ -5,31 +5,44 @@ import {
     useComponentAttribute,
     useNumericAttribute,
 } from "./hooks/attribute";
-import Configuration, {ConfigurationProps} from "./Configuration";
+import type {ConfigurationProps} from "./Configuration";
+import Configuration from "./Configuration";
 import {useConfigurationInitialization, useConfigurationUpdating} from "./hooks/configurationLifecycle";
 import useExplain from "./hooks/useExplain";
-import {ConfigurationInitialization, ConfigurationUninitialized, ConfigurationUpdating, ConfiguratorErrorWithRetry, GuardedAtom} from "./types";
+import type {
+    ConfigurationInitialization,
+    ConfigurationUpdating,
+    ConfiguratorErrorWithRetry,
+    GuardedAtom,
+} from "./types";
+import {ConfigurationUninitialized} from "./types";
 import useConfiguration from "./hooks/useConfiguration";
 import useConfigurationSatisfaction from "./hooks/useConfigurationSatisfaction";
 import useConfigurationStoring from "./hooks/useConfigurationStoring";
-import {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "./internal/jotai/domain/attribute";
-import {UseExplainResult} from "./internal/jotai/domain/explain";
-import {UseConfigurationSatisfactionResult} from "./internal/jotai/domain/configurationSatisfaction";
-import {UseConfigurationStoringResult} from "./internal/jotai/domain/configurationStoring";
+import type {
+    UseBooleanAttributeResult,
+    UseChoiceAttributeResult,
+    UseComponentAttributeResult,
+    UseNumericAttributeResult,
+} from "./internal/jotai/domain/attribute";
+import type {UseExplainResult} from "./internal/jotai/domain/explain";
+import type {UseConfigurationSatisfactionResult} from "./internal/jotai/domain/configurationSatisfaction";
+import type {UseConfigurationStoringResult} from "./internal/jotai/domain/configurationStoring";
 import useConfigurationReset from "./hooks/useConfigurationReset";
-import {UseConfigurationResetResult} from "./internal/jotai/domain/configurationReset";
-import {UseSessionReinitializationResult} from "./internal/jotai/domain/sessionReinitialization";
+import type {UseConfigurationResetResult} from "./internal/jotai/domain/configurationReset";
+import type {UseSessionReinitializationResult} from "./internal/jotai/domain/sessionReinitialization";
 import useSessionReinitialization from "./hooks/useSessionReinitialization";
 import {useConfiguratorStore} from "./internal/contexts";
 import useTaskScheduling from "./hooks/useTaskScheduling";
-import {UseTaskSchedulingResult} from "./internal/jotai/domain/taskScheduling";
+import type {UseTaskSchedulingResult} from "./internal/jotai/domain/taskScheduling";
 import useStoredConfiguration from "./hooks/useStoredConfiguration";
-import {UseMakeDecisionResult} from "./internal/jotai/domain/makeDecision";
+import type {UseMakeDecisionResult} from "./internal/jotai/domain/makeDecision";
 import useMakeDecision from "./hooks/useMakeDecision";
-import {UseDecisionQueriesResult} from "./internal/jotai/domain/decisionQueries";
+import type {UseDecisionQueriesResult} from "./internal/jotai/domain/decisionQueries";
 import useDecisionQueries from "./hooks/useDecisionQueries";
 import useDecisions from "./hooks/useDecisions";
-import {useJotaiAtoms, UseJotaiAtomsResult} from "./hooks/useJotaiAtoms";
+import type {UseJotaiAtomsResult} from "./hooks/useJotaiAtoms";
+import {useJotaiAtoms} from "./hooks/useJotaiAtoms";
 import {isConfigurationInitialized} from "./helper";
 
 export {
@@ -99,11 +112,8 @@ export {
 
     // useConfiguration
     useConfiguration,
-
     useConfiguratorStore,
-
     type UseJotaiAtomsResult,
     useJotaiAtoms,
-
     isConfigurationInitialized,
 };

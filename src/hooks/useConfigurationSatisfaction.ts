@@ -1,6 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/configurationSatisfaction";
+import type {UseConfigurationSatisfactionResult} from "../internal/jotai/domain/configurationSatisfaction";
 
 const useConfigurationSatisfaction: {
     /**
@@ -13,6 +13,9 @@ const useConfigurationSatisfaction: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseConfigurationSatisfactionResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseConfigurationSatisfactionResult>(s => s.configurationSatisfactionAtom, s => s.configurationSatisfactionAtom);
+} = prepareAtomValueUsageWithSuspense<UseConfigurationSatisfactionResult>(
+    s => s.configurationSatisfactionAtom,
+    s => s.configurationSatisfactionAtom,
+);
 
 export default useConfigurationSatisfaction;

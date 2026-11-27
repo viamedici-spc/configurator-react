@@ -1,12 +1,15 @@
-import {SessionContext} from "@viamedici-spc/configurator-ts";
+import type {SessionContext} from "@viamedici-spc/configurator-ts";
 import {useEffect} from "react";
 import {useSetAtom} from "jotai";
 import {useAtomsContext} from "./contexts";
 
-export const sessionContextNullishWarningText = "The session context is null or undefined. This will dispose the session that may exist. If this was not intended, make sure you pass valid session context data.";
+export const sessionContextNullishWarningText =
+    "The session context is null or undefined. This will dispose the session that may exist. If this was not intended, make sure you pass valid session context data.";
 
-export default function SessionManagementInitializer(props: { sessionContext: SessionContext }) {
-    const {primitives: {sessionManagementMachineAtom}} = useAtomsContext();
+export default function SessionManagementInitializer(props: {sessionContext: SessionContext}) {
+    const {
+        primitives: {sessionManagementMachineAtom},
+    } = useAtomsContext();
     const send = useSetAtom(sessionManagementMachineAtom);
 
     useEffect(() => {
@@ -15,13 +18,13 @@ export default function SessionManagementInitializer(props: { sessionContext: Se
         if (!props.sessionContext) {
             console.warn(sessionContextNullishWarningText);
         }
-    }, [props.sessionContext]);
+    }, [send, props.sessionContext]);
 
     useEffect(() => {
         return () => {
             send({type: "Shutdown"});
         };
-    }, []);
+    }, [send]);
 
     return null;
 }

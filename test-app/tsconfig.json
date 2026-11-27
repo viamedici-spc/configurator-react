@@ -1,26 +1,14 @@
 {
   "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "noImplicitAny": false,
-    "noEmitOnError": false,
-    "removeComments": true,
-    "sourceMap": false,
-    "target": "es6",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "pretty": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "esModuleInterop": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
     "skipLibCheck": true,
-    "lib": [
-      "ESNext",
-      "dom"
-    ]
+    "strict": false,
+    "paths": {"@viamedici-spc/configurator-react": ["../src/index.ts"]}
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["wwwroot", "vite.config.ts"]
 }

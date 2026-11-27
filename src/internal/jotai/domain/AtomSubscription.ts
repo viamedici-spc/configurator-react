@@ -1,9 +1,9 @@
-import {Atom, PrimitiveAtom} from "jotai";
-import {Subscription} from "../../Types";
+import type {Atom, PrimitiveAtom} from "jotai";
+import type {Subscription} from "../../Types";
 import {atom} from "jotai";
 import {RA, RM} from "@viamedici-spc/fp-ts-extensions";
-import {WritableAtom} from "jotai/vanilla/atom";
-import {Primitives} from "../PrimitveAtoms";
+import type {WritableAtom} from "jotai";
+import type {Primitives} from "../PrimitveAtoms";
 import {guid} from "dyna-guid";
 import {atomEffect} from "jotai-effect";
 import {Logger} from "@viamedici-spc/configurator-ts";
@@ -11,20 +11,21 @@ import {Logger} from "@viamedici-spc/configurator-ts";
 const atomSubscriptionCleanupInterval = 30 * 1000;
 
 export type WeakSubscription = {
-    deref: () => Subscription | undefined
+    deref: () => Subscription | undefined;
 };
 
-const createWeakRef: (subscription: Subscription) => WeakSubscription = WeakRef != null
-    ? ((subscription) => new WeakRef(subscription))
-    : ((subscription) => ({
-        deref: () => subscription,
-    }));
+const createWeakRef: (subscription: Subscription) => WeakSubscription =
+    WeakRef != null
+        ? subscription => new WeakRef(subscription)
+        : subscription => ({
+              deref: () => subscription,
+          });
 
 export type AtomSubscriptionsAtomType = PrimitiveAtom<ReadonlyMap<Atom<any>, ReadonlyMap<string, WeakSubscription>>>;
 export type SubscriberAtomType = WritableAtom<unknown, [atomToSubscribeTo: Atom<any>], Subscription>;
 
 export function createAtomSubscriptionAtom(): AtomSubscriptionsAtomType {
-    return atom(RM.empty);
+    return atom<ReadonlyMap<Atom<any>, ReadonlyMap<string, WeakSubscription>>>(RM.empty);
 }
 
 export function createSubscriberAtom(primitives: Primitives): SubscriberAtomType {
@@ -51,7 +52,7 @@ export function createSubscriberAtom(primitives: Primitives): SubscriberAtomType
         };
 
         const subscription = {
-            unsubscribe: unsubscribe
+            unsubscribe: unsubscribe,
         } satisfies Subscription;
 
         set(primitives.subscriptionsAtom, m => {
@@ -67,13 +68,19 @@ export function createSubscriberAtom(primitives: Primitives): SubscriberAtomType
     });
 }
 
-export function createAtomSubscriberEffect(primitives: Primitives) {
-    return atomEffect((get) => {
+// A derived atom, not an effect: while it is mounted, every subscribed atom stays mounted, also while one of them
+// suspends or throws, and that does not depend on when effects run.
+export function createAtomSubscriberAtom(primitives: Primitives): Atom<void> {
+    return atom(get => {
         const subscriptions = get(primitives.subscriptionsAtom);
         const atoms = [...subscriptions.keys()];
         Logger.debug("AtomSubscriber:", "There are", atoms.length, "Atoms to subscribe to.");
-        for (const atom of atoms) {
-            get(atom);
+        for (const subscribedAtom of atoms) {
+            try {
+                get(subscribedAtom);
+            } catch {
+                // The dependency is registered even when the atom throws; the reading component gets the error.
+            }
         }
     });
 }
@@ -85,12 +92,20 @@ export function createAtomSubscriptionCleanupEffect(primitives: Primitives) {
             let didChange = false;
             set(primitives.subscriptionsAtom, existingSubscriptions => {
                 const newSubscriptions = new Map(existingSubscriptions);
+                // The keys are copied first because entries are deleted inside the loops.
+                // oxlint-disable-next-line unicorn/no-useless-spread
                 for (const atom of [...newSubscriptions.keys()]) {
                     const atomSubscriptions = new Map(newSubscriptions.get(atom) ?? RM.empty);
+                    // oxlint-disable-next-line unicorn/no-useless-spread
                     for (const subscriptionId of [...atomSubscriptions.keys()]) {
                         const subscription = atomSubscriptions.get(subscriptionId);
                         if (subscription === undefined || subscription.deref() === undefined) {
-                            Logger.debug("AtomSubscriptionCleanup:", "Deleting subscription", subscriptionId, "because it got garbage collected.");
+                            Logger.debug(
+                                "AtomSubscriptionCleanup:",
+                                "Deleting subscription",
+                                subscriptionId,
+                                "because it got garbage collected.",
+                            );
                             atomSubscriptions.delete(subscriptionId);
                             didChange = true;
                         }
@@ -104,7 +119,14 @@ export function createAtomSubscriptionCleanupEffect(primitives: Primitives) {
                     }
                 }
 
-                Logger.debug("AtomSubscriptionCleanup:", "There are", newSubscriptions.size, "Atoms with", [...newSubscriptions.values(), RA.flatten].length, "subscriptions left.");
+                Logger.debug(
+                    "AtomSubscriptionCleanup:",
+                    "There are",
+                    newSubscriptions.size,
+                    "Atoms with",
+                    [...newSubscriptions.values(), RA.flatten].length,
+                    "subscriptions left.",
+                );
 
                 return didChange ? newSubscriptions : existingSubscriptions;
             });

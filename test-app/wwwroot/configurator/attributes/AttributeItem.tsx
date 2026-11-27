@@ -1,5 +1,5 @@
 import {Attribute, AttributeType, GlobalAttributeId} from "@viamedici-spc/configurator-ts";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import NumericAttribute from "./numeric/NumericAttribute";
 import ChoiceAttribute from "./choice/ChoiceAttribute";
 import BooleanAttribute from "./boolean/BooleanAttribute";
@@ -24,33 +24,33 @@ const Label = styled.label`
 const activeAttributeContext = createContext<GlobalAttributeId>(null);
 export const useActiveAttribute = () => useContext(activeAttributeContext);
 
-export default function AttributeItem({attributeId}: { attributeId: GlobalAttributeId }) {
+export default function AttributeItem({attributeId}: {attributeId: GlobalAttributeId}) {
     const [attribute] = useAttributes([attributeId], false);
 
     return (
         <Root>
             <Label>{attributeIdToString(attributeId)}</Label>
             <activeAttributeContext.Provider value={attributeId}>
-                <AttributeTypeSelector attribute={attribute}/>
+                <AttributeTypeSelector attribute={attribute} />
             </activeAttributeContext.Provider>
         </Root>
     );
 }
 
-function AttributeTypeSelector(props: { attribute: Attribute }) {
+function AttributeTypeSelector(props: {attribute: Attribute}) {
     switch (props.attribute?.type) {
         case AttributeType.Choice:
-            return (<ChoiceAttribute/>);
+            return <ChoiceAttribute />;
         case AttributeType.Numeric:
-            return (<NumericAttribute/>);
+            return <NumericAttribute />;
         case AttributeType.Boolean:
-            return (<BooleanAttribute/>);
+            return <BooleanAttribute />;
         case AttributeType.Component:
-            return (<ComponentAttribute/>);
+            return <ComponentAttribute />;
         case null:
         case undefined:
-            return (<span>Attribute not found</span>);
+            return <span>Attribute not found</span>;
         default:
-            return (<span>Unknown attribute type</span>);
+            return <span>Unknown attribute type</span>;
     }
 }

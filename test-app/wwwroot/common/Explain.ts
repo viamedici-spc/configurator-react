@@ -6,28 +6,35 @@ import {
     DecisionExplanation,
     DecisionsExplainAnswer,
     ExplainAnswer,
-    ExplainSolution, MakeManyDecisionsResult
+    ExplainSolution,
+    MakeManyDecisionsResult,
 } from "@viamedici-spc/configurator-ts";
 import {attributeIdToString, constraintIdToString} from "./Naming";
 import {handleError} from "./PromiseErrorHandling";
 
-export function handleExplain(explain: () => Promise<ExplainAnswer>, applySolution: (solution: ExplainSolution) => Promise<MakeManyDecisionsResult>) {
+export function handleExplain(
+    explain: () => Promise<ExplainAnswer>,
+    applySolution: (solution: ExplainSolution) => Promise<MakeManyDecisionsResult>,
+) {
     return handleError(explain, r => processExplainAnswer(r, applySolution));
 }
 
-export async function processExplainAnswer(answer: ExplainAnswer, applySolution: (solution: ExplainSolution) => Promise<MakeManyDecisionsResult>) {
+export async function processExplainAnswer(
+    answer: ExplainAnswer,
+    applySolution: (solution: ExplainSolution) => Promise<MakeManyDecisionsResult>,
+) {
     const decisionsExplainAnswer = answer as DecisionsExplainAnswer;
     const constraintsExplainAnswer = answer as ConstraintsExplainAnswer;
 
-    const decisionExplanations = decisionsExplainAnswer != null ? mapDecisionExplanations(decisionsExplainAnswer) : null;
-    const constraintExplanations = constraintsExplainAnswer != null ? mapConstraintExplanations(constraintsExplainAnswer) : null;
+    const decisionExplanations =
+        decisionsExplainAnswer != null ? mapDecisionExplanations(decisionsExplainAnswer) : null;
+    const constraintExplanations =
+        constraintsExplainAnswer != null ? mapConstraintExplanations(constraintsExplainAnswer) : null;
 
-    const numberedExplanations = [decisionExplanations, constraintExplanations]
-        .flat()
-        .map((e, i) => ({
-            ...e,
-            number: i + 1
-        }));
+    const numberedExplanations = [decisionExplanations, constraintExplanations].flat().map((e, i) => ({
+        ...e,
+        number: i + 1,
+    }));
     const hasAnyExplanationASolution = numberedExplanations.find(e => e.solution) != null;
     const message = numberedExplanations
         .map(e => {
@@ -39,7 +46,8 @@ export async function processExplainAnswer(answer: ExplainAnswer, applySolution:
 
     while (true) {
         if (hasAnyExplanationASolution) {
-            const messageWithActionRecommendation = message + "\n\nPlease enter the explanation number to apply the solution for:";
+            const messageWithActionRecommendation =
+                message + "\n\nPlease enter the explanation number to apply the solution for:";
             const solutionToApply = prompt(messageWithActionRecommendation);
             if (solutionToApply != null) {
                 const parsedSolutionToApply = parseInt(solutionToApply);
@@ -74,24 +82,19 @@ export async function processExplainAnswer(answer: ExplainAnswer, applySolution:
 }
 
 type Explanation = {
-    text: string,
-    solution: ExplainSolution | null
-}
+    text: string;
+    solution: ExplainSolution | null;
+};
 
-function mapDecisionExplanations(answer: { decisionExplanations: ReadonlyArray<DecisionExplanation> }): Explanation[] {
-    return answer.decisionExplanations
-        .map(e => {
-            const causingDecisions = e.causedByDecisions.map(mapCausedByDecision);
-            const text = [
-                "Decisions:",
-                indent(causingDecisions.join("\n"))
-            ]
-                .join("\n");
-            return {
-                text: text,
-                solution: e.solution
-            } satisfies  Explanation;
-        });
+function mapDecisionExplanations(answer: {decisionExplanations: ReadonlyArray<DecisionExplanation>}): Explanation[] {
+    return answer.decisionExplanations.map(e => {
+        const causingDecisions = e.causedByDecisions.map(mapCausedByDecision);
+        const text = ["Decisions:", indent(causingDecisions.join("\n"))].join("\n");
+        return {
+            text: text,
+            solution: e.solution,
+        } satisfies Explanation;
+    });
 }
 
 function mapCausedByDecision(cause: CausedByDecision) {
@@ -107,31 +110,26 @@ function mapCausedByDecision(cause: CausedByDecision) {
     }
 }
 
-function mapConstraintExplanations(answer: { constraintExplanations: ReadonlyArray<ConstraintExplanation>; }): Explanation[] {
-    return answer.constraintExplanations
-        .map(e => {
-            const causingCardinalities = e.causedByCardinalities.map(attributeIdToString);
-            const causingRules = e.causedByRules.map(constraintIdToString);
+function mapConstraintExplanations(answer: {
+    constraintExplanations: ReadonlyArray<ConstraintExplanation>;
+}): Explanation[] {
+    return answer.constraintExplanations.map(e => {
+        const causingCardinalities = e.causedByCardinalities.map(attributeIdToString);
+        const causingRules = e.causedByRules.map(constraintIdToString);
 
-            const text = [
-                causingCardinalities.length > 0 && [
-                    "Cardinalities:",
-                    indent(causingCardinalities.join("\n"))
-                ],
-                causingRules.length > 0 && [
-                    "Rules:",
-                    indent(causingRules.join("\n"))
-                ]
-            ]
-                .filter(Boolean)
-                .map(a => a.join("\n"))
-                .join("\n\n");
+        const text = [
+            causingCardinalities.length > 0 && ["Cardinalities:", indent(causingCardinalities.join("\n"))],
+            causingRules.length > 0 && ["Rules:", indent(causingRules.join("\n"))],
+        ]
+            .filter(Boolean)
+            .map(a => a.join("\n"))
+            .join("\n\n");
 
-            return {
-                text: text,
-                solution: null
-            } satisfies  Explanation;
-        });
+        return {
+            text: text,
+            solution: null,
+        } satisfies Explanation;
+    });
 }
 
 function indent(str: string, indent: number = 2): string {

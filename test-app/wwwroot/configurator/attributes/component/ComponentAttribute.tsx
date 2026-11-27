@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled from "styled-components";
 import ValueSelection from "./ValueSelection";
 import SatisfactionIndicator from "../SatisfactionIndicator";
 
@@ -14,14 +14,13 @@ const Indicators = styled.div`
     font-size: 0.8em;
 `;
 
-
 export default function ComponentAttribute() {
     return (
         <>
             <Root>
-                <ValueSelection/>
+                <ValueSelection />
                 <Indicators>
-                    <SatisfactionIndicator/>
+                    <SatisfactionIndicator />
                 </Indicators>
             </Root>
         </>

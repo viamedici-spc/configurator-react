@@ -1,13 +1,8 @@
-import {act, cleanup, renderHook} from "@testing-library/react-hooks";
+import {act, cleanup, renderHook} from "@testing-library/react";
 import {afterEach, describe, expect, it, vi} from "vitest";
-import {
-    AttributeType,
-    ComponentDecisionState,
-    Configuration,
-    ExplicitComponentDecision,
-    IConfigurationSession
-} from "@viamedici-spc/configurator-ts";
-import {componentAttribute, numericAttribute, WrappingComponent} from "./Common";
+import type {Configuration, ExplicitComponentDecision, IConfigurationSession} from "@viamedici-spc/configurator-ts";
+import {AttributeType, ComponentDecisionState} from "@viamedici-spc/configurator-ts";
+import {componentAttribute, numericAttribute, wrapperWith} from "./Common";
 import {useComponentAttribute} from "../../src";
 
 afterEach(async () => {
@@ -27,17 +22,14 @@ describe("useComponentAttribute tests", () => {
 
         const configuration = {
             isSatisfied: true,
-            attributes: new Map([
-                [componentAttribute.key, componentAttribute]
-            ])
+            attributes: new Map([[componentAttribute.key, componentAttribute]]),
         } as Configuration;
 
         const {result} = renderHook(() => useComponentAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         await act(async () => {
@@ -51,17 +43,17 @@ describe("useComponentAttribute tests", () => {
         expect(session.makeDecision).toHaveBeenNthCalledWith(1, {
             type: AttributeType.Component,
             attributeId: {localId: "A1"},
-            state: ComponentDecisionState.Included
+            state: ComponentDecisionState.Included,
         } as ExplicitComponentDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(2, {
             type: AttributeType.Component,
             attributeId: {localId: "A1"},
-            state: ComponentDecisionState.Excluded
+            state: ComponentDecisionState.Excluded,
         } as ExplicitComponentDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(3, {
             type: AttributeType.Component,
             attributeId: {localId: "A1"},
-            state: null
+            state: null,
         } as ExplicitComponentDecision);
     });
 
@@ -70,15 +62,14 @@ describe("useComponentAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map()
+            attributes: new Map(),
         };
 
         const {result} = renderHook(() => useComponentAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         expect(result.current).toBeUndefined();
@@ -89,17 +80,14 @@ describe("useComponentAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map([
-                [numericAttribute.key, numericAttribute]
-            ])
+            attributes: new Map([[numericAttribute.key, numericAttribute]]),
         };
 
         const {result} = renderHook(() => useComponentAttribute({localId: "A1"}, false), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         expect(result.current).toBeUndefined();

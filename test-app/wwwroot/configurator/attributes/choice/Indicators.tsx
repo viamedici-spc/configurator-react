@@ -1,7 +1,5 @@
 import {useActiveAttribute} from "../AttributeItem";
-import {
-    AttributeInterpreter
-} from "@viamedici-spc/configurator-ts";
+import {AttributeInterpreter} from "@viamedici-spc/configurator-ts";
 import {useAttributes, useChoiceAttribute} from "@viamedici-spc/configurator-react";
 
 export function MandatoryIndicator() {
@@ -9,11 +7,7 @@ export function MandatoryIndicator() {
     const [attribute] = useAttributes([activeAttribute], false);
     const color = AttributeInterpreter.isMandatory(attribute) ? "var(--color-mandatory)" : "var(--color-optional)";
 
-    return (
-        <span style={{color: color}}>
-            {AttributeInterpreter.isMandatory(attribute) ? "mandatory" : "optional"}
-        </span>
-    )
+    return <span style={{color: color}}>{AttributeInterpreter.isMandatory(attribute) ? "mandatory" : "optional"}</span>;
 }
 
 export function SelectionModeIndicator() {
@@ -21,10 +15,8 @@ export function SelectionModeIndicator() {
     const {isMultiSelect} = useChoiceAttribute(activeAttribute);
 
     return (
-        <span style={{color: "var(--color-selection-mode)"}}>
-            {isMultiSelect() ? "multi-select" : "single-select"}
-        </span>
-    )
+        <span style={{color: "var(--color-selection-mode)"}}>{isMultiSelect() ? "multi-select" : "single-select"}</span>
+    );
 }
 
 export function AvailableValuesIndicator() {
@@ -32,9 +24,5 @@ export function AvailableValuesIndicator() {
     const {getAllowedChoiceValues} = useChoiceAttribute(activeAttribute);
     const allowed = getAllowedChoiceValues();
 
-    return (
-        <span style={{color: "var(--color-allowed-values)"}}>
-            {`${allowed.length} allowed values`}
-        </span>
-    )
+    return <span style={{color: "var(--color-allowed-values)"}}>{`${allowed.length} allowed values`}</span>;
 }

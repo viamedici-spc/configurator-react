@@ -1,5 +1,5 @@
-import {Configuration} from "@viamedici-spc/configurator-ts";
-import {ConfigurationUninitialized} from "../types";
+import type {Configuration} from "@viamedici-spc/configurator-ts";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
 const useConfiguration: {
@@ -13,6 +13,9 @@ const useConfiguration: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): Configuration | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<Configuration>(s => s.guardedConfigurationAtom, s => s.configurationAtom);
+} = prepareAtomValueUsageWithSuspense<Configuration>(
+    s => s.guardedConfigurationAtom,
+    s => s.configurationAtom,
+);
 
 export default useConfiguration;

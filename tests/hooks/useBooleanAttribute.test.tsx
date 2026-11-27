@@ -1,11 +1,9 @@
-import {act, cleanup, renderHook} from "@testing-library/react-hooks";
+import {act, cleanup, renderHook} from "@testing-library/react";
 import {useBooleanAttribute} from "../../src";
 import {describe, it, expect, afterEach, vi} from "vitest";
-import {
-    AttributeType,
-    Configuration, ExplicitBooleanDecision, IConfigurationSession
-} from "@viamedici-spc/configurator-ts";
-import {booleanAttribute, numericAttribute, WrappingComponent} from "./Common";
+import type {Configuration, ExplicitBooleanDecision, IConfigurationSession} from "@viamedici-spc/configurator-ts";
+import {AttributeType} from "@viamedici-spc/configurator-ts";
+import {booleanAttribute, numericAttribute, wrapperWith} from "./Common";
 
 afterEach(async () => {
     vi.clearAllMocks();
@@ -24,17 +22,14 @@ describe("useBooleanAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map([
-                [booleanAttribute.key, booleanAttribute]
-            ])
+            attributes: new Map([[booleanAttribute.key, booleanAttribute]]),
         };
 
         const {result} = renderHook(() => useBooleanAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         await act(async () => {
@@ -49,22 +44,22 @@ describe("useBooleanAttribute tests", () => {
         expect(session.makeDecision).toHaveBeenNthCalledWith(1, {
             type: AttributeType.Boolean,
             attributeId: {localId: "A1"},
-            state: true
+            state: true,
         } as ExplicitBooleanDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(2, {
             type: AttributeType.Boolean,
             attributeId: {localId: "A1"},
-            state: false
+            state: false,
         } as ExplicitBooleanDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(3, {
             type: AttributeType.Boolean,
             attributeId: {localId: "A1"},
-            state: null
+            state: null,
         } as ExplicitBooleanDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(4, {
             type: AttributeType.Boolean,
             attributeId: {localId: "A1"},
-            state: undefined
+            state: undefined,
         } as ExplicitBooleanDecision);
     });
 
@@ -73,15 +68,14 @@ describe("useBooleanAttribute tests", () => {
 
         const configuration = {
             isSatisfied: true,
-            attributes: new Map()
+            attributes: new Map(),
         } as Configuration;
 
         const {result} = renderHook(() => useBooleanAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         expect(result.current).toBeUndefined();
@@ -92,17 +86,14 @@ describe("useBooleanAttribute tests", () => {
 
         const configuration = {
             isSatisfied: true,
-            attributes: new Map([
-                [numericAttribute.key, numericAttribute]
-            ])
+            attributes: new Map([[numericAttribute.key, numericAttribute]]),
         } as Configuration;
 
         const {result} = renderHook(() => useBooleanAttribute({localId: "A1"}, false), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         expect(result.current).toBeUndefined();

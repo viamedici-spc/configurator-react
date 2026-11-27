@@ -1,12 +1,19 @@
-import {
-    Attribute,
-    GlobalAttributeId, globalAttributeIdEq, GlobalAttributeIdKey, GlobalAttributeIdKeyBuilder, globalAttributeIdKeyEq
-} from "@viamedici-spc/configurator-ts";
-import {UseBooleanAttributeResult, UseChoiceAttributeResult, UseComponentAttributeResult, UseNumericAttributeResult} from "../internal/jotai/domain/attribute";
+import type {Attribute, GlobalAttributeId, GlobalAttributeIdKey} from "@viamedici-spc/configurator-ts";
+import {globalAttributeIdEq, globalAttributeIdKeyEq} from "@viamedici-spc/configurator-ts";
+import type {
+    UseBooleanAttributeResult,
+    UseChoiceAttributeResult,
+    UseComponentAttributeResult,
+    UseNumericAttributeResult,
+} from "../internal/jotai/domain/attribute";
 import {createAttributesAtom} from "../internal/jotai/domain/dynamic";
-import {Bool, Eq, EqT, O, pipe, RA, Str} from "@viamedici-spc/fp-ts-extensions";
-import {ConfigurationUninitialized} from "../types";
-import {prepareAttributeUsageWithSuspense, prepareParameterizedAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
+import type {EqT} from "@viamedici-spc/fp-ts-extensions";
+import {Bool, Eq, RA, Str} from "@viamedici-spc/fp-ts-extensions";
+import type {ConfigurationUninitialized} from "../types";
+import {
+    prepareAttributeUsageWithSuspense,
+    prepareParameterizedAtomValueUsageWithSuspense,
+} from "./AtomValueUsageHelper";
 import atomWithSuspend from "../internal/jotai/helper/atomWithSuspend";
 
 const attributeIdOrKeyEq = Eq.union<GlobalAttributeId | GlobalAttributeIdKey>()
@@ -14,12 +21,22 @@ const attributeIdOrKeyEq = Eq.union<GlobalAttributeId | GlobalAttributeIdKey>()
     .with((x): x is GlobalAttributeId => typeof x === "object", globalAttributeIdEq);
 const arrayOrAllEq = Eq.union<ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> | "all">()
     .with((x): x is "all" => x === "all", Str.Eq as EqT<"all">)
-    .with((x): x is ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> => Array.isArray(x), RA.getEq(attributeIdOrKeyEq));
+    .with(
+        (x): x is ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> => Array.isArray(x),
+        RA.getEq(attributeIdOrKeyEq),
+    );
 
-const preparedUseAttributes = prepareParameterizedAtomValueUsageWithSuspense<ReadonlyArray<Attribute | undefined>, [attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> | "all", filterMissingAttributes: boolean | undefined]>(
+const preparedUseAttributes = prepareParameterizedAtomValueUsageWithSuspense<
+    ReadonlyArray<Attribute | undefined>,
+    [
+        attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> | "all",
+        filterMissingAttributes: boolean | undefined,
+    ]
+>(
     (s, attributes, filterMissingAttributes) => createAttributesAtom(s.selectors)(attributes, filterMissingAttributes),
-    (s, attributes, filterMissingAttributes) => atomWithSuspend(createAttributesAtom(s.selectors)(attributes, filterMissingAttributes)),
-    Eq.tuple(arrayOrAllEq, Eq.eqNullable(Bool.Eq))
+    (s, attributes, filterMissingAttributes) =>
+        atomWithSuspend(createAttributesAtom(s.selectors)(attributes, filterMissingAttributes)),
+    Eq.tuple(arrayOrAllEq, Eq.eqNullable(Bool.Eq)),
 );
 
 /**
@@ -27,13 +44,13 @@ const preparedUseAttributes = prepareParameterizedAtomValueUsageWithSuspense<Rea
  * @param attributes Set to "all" to retrieve all existing attributes.
  * @remarks Will suspend until the Configuration is fully initialized.
  */
-export function useAttributes(attributes: "all"): ReadonlyArray<Attribute>
+export function useAttributes(attributes: "all"): ReadonlyArray<Attribute>;
 /**
  * Retrieves all existing attributes.
  * @param attributes Set to "all" to retrieve all existing attributes.
  * @param suspend Whether to disable the Suspense API.
  */
-export function useAttributes(attributes: "all", suspend: false): ReadonlyArray<Attribute> | ConfigurationUninitialized
+export function useAttributes(attributes: "all", suspend: false): ReadonlyArray<Attribute> | ConfigurationUninitialized;
 /**
  * Retrieves the requested attributes.
  * @param attributes The attributes to return.
@@ -41,7 +58,10 @@ export function useAttributes(attributes: "all", suspend: false): ReadonlyArray<
  * @returns The requested attributes in the order of the {@link attributes} parameter.
  * @remarks Will suspend until the Configuration is fully initialized.
  */
-export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: true): ReadonlyArray<Attribute>
+export function useAttributes(
+    attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>,
+    filterMissingAttributes: true,
+): ReadonlyArray<Attribute>;
 /**
  * Retrieves the requested attributes.
  * @param attributes The attributes to return.
@@ -49,7 +69,10 @@ export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | Glob
  * @returns The requested attributes in the order of the {@link attributes} parameter.
  * @remarks Will suspend until the Configuration is fully initialized.
  */
-export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: false): ReadonlyArray<Attribute | undefined>
+export function useAttributes(
+    attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>,
+    filterMissingAttributes: false,
+): ReadonlyArray<Attribute | undefined>;
 /**
  * Retrieves the requested attributes.
  * @param attributes The attributes to return.
@@ -57,7 +80,11 @@ export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | Glob
  * @returns The requested attributes in the order of the {@link attributes} parameter.
  * @param suspend Whether to disable the Suspense API.
  */
-export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: true, suspend: false): ReadonlyArray<Attribute | undefined> | ConfigurationUninitialized
+export function useAttributes(
+    attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>,
+    filterMissingAttributes: true,
+    suspend: false,
+): ReadonlyArray<Attribute | undefined> | ConfigurationUninitialized;
 /**
  * Retrieves the requested attributes.
  * @param attributes The attributes to return.
@@ -65,8 +92,16 @@ export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | Glob
  * @returns The requested attributes in the order of the {@link attributes} parameter.
  * @param suspend Whether to disable the Suspense API.
  */
-export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>, filterMissingAttributes: false, suspend: false): ReadonlyArray<Attribute> | ConfigurationUninitialized
-export function useAttributes(attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> | "all", suspendOrFilterMissingAttributesOrUndefined?: boolean, suspendOrUndefined?: boolean): ReadonlyArray<Attribute | undefined> | ConfigurationUninitialized {
+export function useAttributes(
+    attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey>,
+    filterMissingAttributes: false,
+    suspend: false,
+): ReadonlyArray<Attribute> | ConfigurationUninitialized;
+export function useAttributes(
+    attributes: ReadonlyArray<GlobalAttributeId | GlobalAttributeIdKey> | "all",
+    suspendOrFilterMissingAttributesOrUndefined?: boolean,
+    suspendOrUndefined?: boolean,
+): ReadonlyArray<Attribute | undefined> | ConfigurationUninitialized {
     const suspend = attributes == "all" ? suspendOrFilterMissingAttributesOrUndefined : suspendOrUndefined;
     const filterMissingAttributes = attributes == "all" ? undefined : suspendOrFilterMissingAttributesOrUndefined;
 
@@ -87,8 +122,14 @@ export const useChoiceAttribute: {
      * @param suspend Whether to disable the Suspense API.
      * @returns Undefined if attribute doesn't exist, or it is not a choice attribute.
      */
-    (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseChoiceAttributeResult | undefined | ConfigurationUninitialized;
-} = prepareAttributeUsageWithSuspense<UseChoiceAttributeResult | undefined>(s => s.choiceAttributeAtomFamily, s => s.choiceAttributeAtomFamily);
+    (
+        attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey,
+        suspend: false,
+    ): UseChoiceAttributeResult | undefined | ConfigurationUninitialized;
+} = prepareAttributeUsageWithSuspense<UseChoiceAttributeResult | undefined>(
+    s => s.choiceAttributeAtomFamily,
+    s => s.choiceAttributeAtomFamily,
+);
 
 export const useNumericAttribute: {
     /**
@@ -104,8 +145,14 @@ export const useNumericAttribute: {
      * @param suspend Whether to disable the Suspense API.
      * @returns Undefined if attribute doesn't exist, or it is not a numeric attribute.
      */
-    (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseNumericAttributeResult | undefined | ConfigurationUninitialized;
-} = prepareAttributeUsageWithSuspense<UseNumericAttributeResult | undefined>(s => s.numericAttributeAtomFamily, s => s.numericAttributeAtomFamily);
+    (
+        attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey,
+        suspend: false,
+    ): UseNumericAttributeResult | undefined | ConfigurationUninitialized;
+} = prepareAttributeUsageWithSuspense<UseNumericAttributeResult | undefined>(
+    s => s.numericAttributeAtomFamily,
+    s => s.numericAttributeAtomFamily,
+);
 
 export const useBooleanAttribute: {
     /**
@@ -121,8 +168,14 @@ export const useBooleanAttribute: {
      * @param suspend Whether to disable the Suspense API.
      * @returns Undefined if attribute doesn't exist, or it is not a boolean attribute.
      */
-    (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseBooleanAttributeResult | undefined | ConfigurationUninitialized;
-} = prepareAttributeUsageWithSuspense<UseBooleanAttributeResult | undefined>(s => s.booleanAttributeAtomFamily, s => s.booleanAttributeAtomFamily);
+    (
+        attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey,
+        suspend: false,
+    ): UseBooleanAttributeResult | undefined | ConfigurationUninitialized;
+} = prepareAttributeUsageWithSuspense<UseBooleanAttributeResult | undefined>(
+    s => s.booleanAttributeAtomFamily,
+    s => s.booleanAttributeAtomFamily,
+);
 
 export const useComponentAttribute: {
     /**
@@ -138,5 +191,11 @@ export const useComponentAttribute: {
      * @param suspend Whether to disable the Suspense API.
      * @returns Undefined if attribute doesn't exist, or it is not a component attribute.
      */
-    (attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey, suspend: false): UseComponentAttributeResult | undefined | ConfigurationUninitialized;
-} = prepareAttributeUsageWithSuspense<UseComponentAttributeResult | undefined>(s => s.componentAttributeAtomFamily, s => s.componentAttributeAtomFamily);
+    (
+        attributeIdOrKey: GlobalAttributeId | GlobalAttributeIdKey,
+        suspend: false,
+    ): UseComponentAttributeResult | undefined | ConfigurationUninitialized;
+} = prepareAttributeUsageWithSuspense<UseComponentAttributeResult | undefined>(
+    s => s.componentAttributeAtomFamily,
+    s => s.componentAttributeAtomFamily,
+);

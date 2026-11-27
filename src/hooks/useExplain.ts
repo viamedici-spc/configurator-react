@@ -1,5 +1,5 @@
-import {UseExplainResult} from "../internal/jotai/domain/explain";
-import {ConfigurationUninitialized} from "../types";
+import type {UseExplainResult} from "../internal/jotai/domain/explain";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
 
 const useExplain: {
@@ -13,6 +13,9 @@ const useExplain: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseExplainResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseExplainResult>(s => s.explainAtom, s => s.explainAtom);
+} = prepareAtomValueUsageWithSuspense<UseExplainResult>(
+    s => s.explainAtom,
+    s => s.explainAtom,
+);
 
 export default useExplain;

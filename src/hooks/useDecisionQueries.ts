@@ -1,6 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {UseDecisionQueriesResult} from "../internal/jotai/domain/decisionQueries";
+import type {UseDecisionQueriesResult} from "../internal/jotai/domain/decisionQueries";
 
 const useDecisionQueries: {
     /**
@@ -13,6 +13,9 @@ const useDecisionQueries: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseDecisionQueriesResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseDecisionQueriesResult>(s => s.decisionQueriesAtom, s => s.decisionQueriesAtom);
+} = prepareAtomValueUsageWithSuspense<UseDecisionQueriesResult>(
+    s => s.decisionQueriesAtom,
+    s => s.decisionQueriesAtom,
+);
 
 export default useDecisionQueries;

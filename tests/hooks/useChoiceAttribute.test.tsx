@@ -1,12 +1,8 @@
-import {act, cleanup, renderHook} from "@testing-library/react-hooks";
+import {act, cleanup, renderHook} from "@testing-library/react";
 import {useChoiceAttribute} from "../../src";
-import {
-    AttributeType,
-    ChoiceValueDecisionState,
-    Configuration,
-    ExplicitChoiceDecision, IConfigurationSession
-} from "@viamedici-spc/configurator-ts";
-import {booleanAttribute, choiceAttribute, WrappingComponent} from "./Common";
+import type {Configuration, ExplicitChoiceDecision, IConfigurationSession} from "@viamedici-spc/configurator-ts";
+import {AttributeType, ChoiceValueDecisionState} from "@viamedici-spc/configurator-ts";
+import {booleanAttribute, choiceAttribute, wrapperWith} from "./Common";
 import {afterEach, describe, expect, it, vi} from "vitest";
 
 afterEach(async () => {
@@ -26,17 +22,14 @@ describe("useChoiceAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map([
-                [choiceAttribute.key, choiceAttribute]
-            ])
+            attributes: new Map([[choiceAttribute.key, choiceAttribute]]),
         };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         await act(async () => {
@@ -57,19 +50,19 @@ describe("useChoiceAttribute tests", () => {
             type: AttributeType.Choice,
             attributeId: {localId: "A1"},
             choiceValueId: "V1",
-            state: ChoiceValueDecisionState.Included
+            state: ChoiceValueDecisionState.Included,
         } as ExplicitChoiceDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(2, {
             type: AttributeType.Choice,
             attributeId: {localId: "A1"},
             choiceValueId: "V1",
-            state: ChoiceValueDecisionState.Excluded
+            state: ChoiceValueDecisionState.Excluded,
         } as ExplicitChoiceDecision);
         expect(session.makeDecision).toHaveBeenNthCalledWith(3, {
             type: AttributeType.Choice,
             attributeId: {localId: "A1"},
             choiceValueId: "V1",
-            state: null
+            state: null,
         } as ExplicitChoiceDecision);
     });
 
@@ -78,15 +71,14 @@ describe("useChoiceAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map()
+            attributes: new Map(),
         };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         expect(result.current).toBeUndefined();
@@ -97,17 +89,14 @@ describe("useChoiceAttribute tests", () => {
 
         const configuration: Configuration = {
             isSatisfied: true,
-            attributes: new Map([
-                [booleanAttribute.key, booleanAttribute]
-            ])
+            attributes: new Map([[booleanAttribute.key, booleanAttribute]]),
         };
 
         const {result} = renderHook(() => useChoiceAttribute({localId: "A1"}, false), {
-            wrapper: WrappingComponent,
-            initialProps: {
+            wrapper: wrapperWith({
                 session: session,
-                configuration: configuration
-            }
+                configuration: configuration,
+            }),
         });
 
         expect(result.current).toBeUndefined();

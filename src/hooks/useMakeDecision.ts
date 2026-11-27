@@ -1,6 +1,6 @@
-import {ConfigurationUninitialized} from "../types";
+import type {ConfigurationUninitialized} from "../types";
 import {prepareAtomValueUsageWithSuspense} from "./AtomValueUsageHelper";
-import {UseMakeDecisionResult} from "../internal/jotai/domain/makeDecision";
+import type {UseMakeDecisionResult} from "../internal/jotai/domain/makeDecision";
 
 const useMakeDecision: {
     /**
@@ -13,6 +13,9 @@ const useMakeDecision: {
      * @param suspend Whether to disable the Suspense API.
      */
     (suspend: false): UseMakeDecisionResult | ConfigurationUninitialized;
-} = prepareAtomValueUsageWithSuspense<UseMakeDecisionResult>(s => s.makeDecisionAtom, s => s.makeDecisionAtom);
+} = prepareAtomValueUsageWithSuspense<UseMakeDecisionResult>(
+    s => s.makeDecisionAtom,
+    s => s.makeDecisionAtom,
+);
 
 export default useMakeDecision;
